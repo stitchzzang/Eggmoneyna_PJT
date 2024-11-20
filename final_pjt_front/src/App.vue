@@ -116,10 +116,10 @@
             </button>
           </div>
           
-          <div v-if="isLoggedIn" class="user-menu">
+          <div v-if="auth.isAuthenticated" class="user-menu">
             <div class="user-info">
               <router-link to="/mypage" class="username">
-                <strong>{{ username }}</strong> 님
+                <strong>{{ auth.username }}</strong> 님
               </router-link>
               <div class="greeting">안녕하세요!</div>
             </div>
@@ -187,53 +187,17 @@
   </div>
 </template>
 
-<script>
-import { RouterLink, RouterView } from 'vue-router'
+<script setup>
+import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
 
-export default {
-  name: 'App',
-  data() {
-    return {
-      isLoggedIn: false,
-      username: 'User',
-      isMobile: false,
-      isMenuOpen: false,
-      activeSubmenu: null
-    }
-  },
-  created() {
-    this.checkMobile()
-    window.addEventListener('resize', this.checkMobile)
-  },
-  destroyed() {
-    window.removeEventListener('resize', this.checkMobile)
-  },
-  methods: {
-    logout() {
-      this.isLoggedIn = false;
-      // 로그아웃 로직 추가 예정
-    },
-    checkMobile() {
-      this.isMobile = window.innerWidth <= 768
-      if (!this.isMobile) {
-        this.isMenuOpen = false
-        this.activeSubmenu = null
-      }
-    },
-    toggleMenu() {
-      this.isMenuOpen = !this.isMenuOpen
-      if (!this.isMenuOpen) {
-        this.activeSubmenu = null
-      }
-    },
-    toggleSubmenu(menu) {
-      this.activeSubmenu = this.activeSubmenu === menu ? null : menu
-    },
-    closeMenu() {
-      this.isMenuOpen = false
-      this.activeSubmenu = null
-    }
-  }
+const auth = useAuthStore()
+const router = useRouter()
+
+// isLoggedIn 대신 auth.isAuthenticated 사용
+const logout = () => {
+  auth.logout()
+  router.push('/login')
 }
 </script>
 
@@ -429,15 +393,12 @@ body {
   flex-wrap: nowrap;
 }
 
-.login-button, .signup-button {
+.login-button, .signup-button, .logout-button {
   padding: 0.5rem 1.5rem;
   border-radius: 20px;
   text-decoration: none;
   font-weight: 600;
   white-space: nowrap;
-}
-
-.login-button {
   background-color: rgba(5, 104, 0, 1);
   color: rgb(255, 255, 255);
   border: 1px solid rgba(5, 104, 0, 1);
@@ -452,7 +413,6 @@ body {
 .login-button:hover, .signup-button:hover {
   opacity: 0.9;
 }
-
 
 
 /* 반응형 디자일을 위한 미디어 쿼리 수정 */

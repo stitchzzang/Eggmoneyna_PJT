@@ -1,3 +1,4 @@
+# views/SignupView.vue
 <template>
   <div class="signup-container">
     <div class="logo-container">

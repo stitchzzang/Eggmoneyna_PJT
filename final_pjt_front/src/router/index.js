@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import MainPageView from '@/views/MainPageView.vue'  // 메인 컴포넌트 import
 import LoginView from '@/views/LoginView.vue'
 import SignupView from '@/views/SignupView.vue'
 
@@ -8,7 +9,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'main',
-      component: () => import('@/views/MainPageView.vue')
+      component: MainPageView
     },
     {
       path: '/financial-products',
