@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import MainPageView from '@/views/MainPageView.vue'  // 메인 컴포넌트 import
 import LoginView from '@/views/LoginView.vue'
 import SignupView from '@/views/SignupView.vue'
+import UtilitiesMapView from '@/views/UtilitiesMapView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,7 +9,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'main',
-      component: MainPageView
+      component: () => import('@/views/MainPageView.vue')
     },
     {
       path: '/financial-products',
@@ -44,7 +44,7 @@ const router = createRouter({
     {
       path: '/utilities/findbanks',
       name: 'utilities-findbanks',
-      component: () => import('@/views/UtilitiesMapView.vue')
+      component: UtilitiesMapView
     },
     {
       path: '/login',

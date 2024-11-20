@@ -10,6 +10,8 @@ $ cd final_pjt_front
 ```bash
 $ npm i
 $ npm i axios
+$ npm i -g vue
+$ npm i -g @vue/cli
 ```
 
 3. vue 실행하기

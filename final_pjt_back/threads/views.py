@@ -32,7 +32,7 @@ def thread_list(request):
 # 모두 허용
 @api_view(['GET'])
 def thread_detail(request, thread_pk):
-    thread = get_object_or_404(Thread, pk=thread_pk)
+    thread = get_object_or_404(Thread, pk=thread_pk)    
 
     if request.method == 'GET':
         serializer = ThreadSerializer(thread)

@@ -1,54 +1,218 @@
 <template>
   <div class="map-container">
     <h2>주변 은행 찾기</h2>
-    <div class="search-box">
-      <input 
-        type="text" 
-        v-model="searchQuery" 
-        placeholder="지역을 입력하세요"
-        @keyup.enter="searchLocation"
-      >
-      <button @click="searchLocation" class="search-btn">검색</button>
+    <br>
+    <div class="option">
+      <div>
+        <form @submit.prevent="searchPlaces">
+          지역 검색: <input type="text" v-model="keyword" size="15" placeholder="지역명을 입력하세요"> 
+          <button type="submit">은행 찾기</button> 
+        </form>
+      </div>
     </div>
-    <div id="map" class="map"></div>
-    <div v-if="banks.length" class="bank-list">
-      <h3>주변 은행 목록</h3>
-      <ul>
-        <li v-for="bank in banks" :key="bank.id" class="bank-item">
-          <h4>{{ bank.name }}</h4>
-          <p>{{ bank.address }}</p>
-          <p>{{ bank.distance }}m</p>
-        </li>
-      </ul>
+    <hr>
+    <div class="map_wrap">
+      <div id="map" style="width:100%;height:700px;position:relative;overflow:hidden;"></div>
+
+      <div id="menu_wrap" class="bg_white">
+        <ul id="placesList">
+          <li v-for="(place, index) in places" :key="index" 
+              class="item"
+              @mouseover="displayInfowindow(markers[index], place.place_name)"
+              @mouseout="closeInfowindow">
+            <span :class="['markerbg', `marker_${index + 1}`]"></span>
+            <div class="info">
+              <h5>{{ place.place_name }}</h5>
+              <template v-if="place.road_address_name">
+                <span>{{ place.road_address_name }}</span>
+                <span class="jibun gray">{{ place.address_name }}</span>
+              </template>
+              <span v-else>{{ place.address_name }}</span>
+              <span class="tel">{{ place.phone }}</span>
+            </div>
+          </li>
+        </ul>
+        <div id="pagination">
+          <a v-for="page in totalPages" 
+            :key="page"
+            href="#"
+            :class="{ on: page === currentPage }"
+            @click.prevent="goToPage(page)">
+            {{ page }}
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'UtilitiesMap',
-  data() {
-    return {
-      searchQuery: '',
-      banks: [],
-      map: null
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+
+// 상태 관리를 위한 ref 선언
+const map = ref(null)
+const markers = ref([])
+const infowindow = ref(null)
+const places = ref([])
+const keyword = ref('') // 초기값 제거
+const BANK_CATEGORY_CODE = 'BK9' // 은행 카테고리 코드
+const ps = ref(null)
+const currentPage = ref(1)
+const totalPages = ref(1)
+const pagination = ref(null)
+
+// 지도 초기화
+const initMap = () => {
+  console.log('initMap called')
+  console.log('API Key:', import.meta.env.VITE_KAKAO_MAP_API_KEY) // API 키 확인용
+  
+  const script = document.createElement('script')
+  script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${import.meta.env.VITE_KAKAO_MAP_API_KEY}&libraries=services`
+  script.async = false // async를 false로 변경
+  
+  script.onload = () => {
+    console.log('Script loaded')
+    window.kakao.maps.load(() => {
+      console.log('Kakao maps loaded')
+      loadMap()
+    })
+  }
+  
+  script.onerror = (error) => {
+    console.error('Script loading error:', error)
+  }
+  
+  document.head.appendChild(script)
+}
+
+const loadMap = () => {
+  console.log('loadMap called')
+  try {
+    const mapContainer = document.getElementById('map')
+    const mapOption = {
+      center: new window.kakao.maps.LatLng(37.566826, 126.9786567),
+      level: 3
     }
-  },
-  mounted() {
-    // TODO: 카카오맵 또는 네이버맵 API 초기화
-    this.initializeMap();
-  },
-  methods: {
-    initializeMap() {
-      // TODO: 지도 초기화 로직 구현
-      console.log('지도 초기화');
-    },
-    searchLocation() {
-      // TODO: 위치 검색 및 주변 은행 검색 로직 구현
-      console.log('위치 검색:', this.searchQuery);
-    }
+
+    map.value = new window.kakao.maps.Map(mapContainer, mapOption)
+    ps.value = new window.kakao.maps.services.Places()
+    infowindow.value = new window.kakao.maps.InfoWindow({ zIndex: 1 })
+
+    console.log('Map initialized successfully')
+  } catch (error) {
+    console.error('Map initialization error:', error)
   }
 }
+
+// 장소 검색
+const searchPlaces = () => {
+  if (!keyword.value.trim()) {
+    alert('지역명을 입력해주세요.')
+    return
+  }
+
+  // 장소검색 객체를 통해 키워드로 장소검색을 요청
+  ps.value.keywordSearch(keyword.value, placesSearchCB)
+}
+
+// 검색 콜백
+const placesSearchCB = (data, status, paginationResult) => {
+  if (status === window.kakao.maps.services.Status.OK) {
+    displayPlaces(data)
+    displayPagination(paginationResult)
+    pagination.value = paginationResult
+    totalPages.value = paginationResult.last
+    currentPage.value = paginationResult.current
+  } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
+    alert('검색 결과가 존재하지 않습니다.')
+  } else if (status === window.kakao.maps.services.Status.ERROR) {
+    alert('검색 결과 중 오류가 발생했습니다.')
+  }
+}
+
+// 검색 결과 표시
+const displayPlaces = (placesData) => {
+  const bounds = new window.kakao.maps.LatLngBounds()
+  removeMarker()
+  places.value = placesData.filter(place => place.category_group_code === BANK_CATEGORY_CODE)
+
+  placesData.forEach((place, index) => {
+    const placePosition = new window.kakao.maps.LatLng(place.y, place.x)
+    const marker = addMarker(placePosition, index)
+    bounds.extend(placePosition)
+
+    // 마커와 검색결과 항목에 이벤트 추가
+    window.kakao.maps.event.addListener(marker, 'mouseover', () => {
+      displayInfowindow(marker, place.place_name)
+    })
+
+    window.kakao.maps.event.addListener(marker, 'mouseout', () => {
+      infowindow.value.close()
+    })
+  })
+
+  map.value.setBounds(bounds)
+}
+
+// 페이지네이션 표시
+const displayPagination = (paginationResult) => {
+  totalPages.value = paginationResult.last
+  currentPage.value = paginationResult.current
+}
+
+// 페이지 이동
+const goToPage = (page) => {
+  pagination.value.gotoPage(page)
+}
+
+// 마커 추가
+const addMarker = (position, idx) => {
+  const imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png'
+  const imageSize = new window.kakao.maps.Size(36, 37)
+  const imgOptions = {
+    spriteSize: new window.kakao.maps.Size(36, 691),
+    spriteOrigin: new window.kakao.maps.Point(0, (idx * 46) + 10),
+    offset: new window.kakao.maps.Point(13, 37)
+  }
+  const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions)
+  const marker = new window.kakao.maps.Marker({
+    position: position,
+    image: markerImage
+  })
+
+  marker.setMap(map.value)
+  markers.value.push(marker)
+  return marker
+}
+
+// 마커 제거
+const removeMarker = () => {
+  markers.value.forEach(marker => marker.setMap(null))
+  markers.value = []
+}
+
+// 인포윈도우 표시
+const displayInfowindow = (marker, content) => {
+  infowindow.value.setContent(content)
+  infowindow.value.open(map.value, marker)
+}
+
+// 인포윈도우 닫기
+const closeInfowindow = () => {
+  infowindow.value.close()
+}
+
+// 컴포넌트 마운트 시 지도 초기화
+onMounted(() => {
+  initMap()
+})
+
+onUnmounted(() => {
+  removeMarker()
+  if (infowindow.value) {
+    infowindow.value.close()
+  }
+})
 </script>
 
 <style scoped>
@@ -58,63 +222,102 @@ export default {
   padding: 20px;
 }
 
-.search-box {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+.map-container form input[type="text"] {
+  padding: 8px;
+  margin: 0 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 300px;  
 }
 
-.search-box input {
-  flex: 1;
-  padding: 10px;
+.info h5 {
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.info .category {
+  color: #666;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+input[type="text"] {
+  padding: 5px;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-.search-btn {
+.map-container form button {
   padding: 10px 20px;
-  background-color: #056800;
+  background: linear-gradient(45deg, #4CAF50, #45a049);  /* 그라데이션 */
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 25px;
   cursor: pointer;
+  margin-left: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-.search-btn:hover {
-  background-color: #045500;
+.map-container form button:hover {
+  background: linear-gradient(45deg, #45a049, #388E3C);  /* 호버 시 약간 어두운 초록 */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
 }
 
-.map {
-  width: 100%;
-  height: 400px;
-  background-color: #f5f5f5;
-  margin-bottom: 20px;
-  border-radius: 8px;
+.map-container form button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.bank-list {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+.map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
+.map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
+.map_wrap {position:relative;width:100%;height:700px;}
+#menu_wrap {position:absolute;top:0;left:0;bottom:0;width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
+.bg_white {background:#fff;}
+#menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
+/* #menu_wrap .option{text-align: center;}
+#menu_wrap .option p {margin:10px 0;}  
+#menu_wrap .option button {margin-left:5px;} */
+#map-container .option{text-align: center;}
+#map-container .option p {margin:10px 0;}  
+#map-container .option button {margin-left:5px;}
+#placesList li {list-style: none;}
+#placesList .item {position:relative;border-bottom:1px solid #888;overflow: hidden;cursor: pointer;min-height: 65px;}
+#placesList .item span {display: block;margin-top:4px;}
+#placesList .item h5, #placesList .item .info {text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+#placesList .item .info{padding:10px 0 10px 55px;}
+#placesList .info .gray {color:#8a8a8a;}
+#placesList .info .jibun {padding-left:26px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;}
+#placesList .info .tel {color:#009900;}
+#placesList .item .markerbg {float:left;position:absolute;width:36px; height:37px;margin:10px 0 0 10px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;}
 
-.bank-item {
-  padding: 15px;
-  border-bottom: 1px solid #eee;
-}
+.marker_1 { background-position: 0 -10px; }
+.marker_2 { background-position: 0 -56px; }
+.marker_3 { background-position: 0 -102px }
+.marker_4 { background-position: 0 -148px; }
+.marker_5 { background-position: 0 -194px; }
+.marker_6 { background-position: 0 -240px; }
+.marker_7 { background-position: 0 -286px; }
+.marker_8 { background-position: 0 -332px; }
+.marker_9 { background-position: 0 -378px; }
+.marker_10 { background-position: 0 -423px; }
+.marker_11 { background-position: 0 -470px; }
+.marker_12 { background-position: 0 -516px; }
+.marker_13 { background-position: 0 -562px; }
+.marker_14 { background-position: 0 -608px; }
+.marker_15 { background-position: 0 -654px; }
 
-.bank-item:last-child {
-  border-bottom: none;
-}
+#pagination {margin:10px auto;text-align: center;position: absolute;bottom: 0;left: 0;right: 0;padding: 10px 0;border-radius: 0 0 10px 10px;}
+#pagination a {display:inline-block;margin-right:10px;}
+#pagination .on {font-weight: bold; cursor: default;color:#777;}
 
-.bank-item h4 {
-  color: #056800;
-  margin-bottom: 5px;
-}
 
-.bank-item p {
-  color: #666;
-  margin: 5px 0;
-}
+
+
+
 </style>
