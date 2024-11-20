@@ -1,0 +1,102 @@
+[
+  {
+    "model": "threads.thread",
+    "pk": 1,
+    "fields": {
+      "title": "첫 번째 쓰레드",
+      "content": "이것은 첫 번째 쓰레드의 내용입니다.",
+      "created_at": "2024-11-19T10:00:00Z",
+      "updated_at": "2024-11-19T10:00:00Z"
+    }
+  },
+  {
+    "model": "threads.thread",
+    "pk": 2,
+    "fields": {
+      "title": "두 번째 쓰레드",
+      "content": "두 번째 쓰레드의 내용입니다.",
+      "created_at": "2024-11-19T11:00:00Z",
+      "updated_at": "2024-11-19T11:00:00Z"
+    }
+  },
+  {
+    "model": "threads.thread",
+    "pk": 3,
+    "fields": {
+      "title": "세 번째 쓰레드",
+      "content": "세 번째 쓰레드의 내용입니다.",
+      "created_at": "2024-11-19T12:00:00Z",
+      "updated_at": "2024-11-19T12:00:00Z"
+    }
+  },
+  {
+    "model": "threads.thread",
+    "pk": 4,
+    "fields": {
+      "title": "네 번째 쓰레드",
+      "content": "네 번째 쓰레드의 내용입니다.",
+      "created_at": "2024-11-19T13:00:00Z",
+      "updated_at": "2024-11-19T13:00:00Z"
+    }
+  },
+  {
+    "model": "threads.thread",
+    "pk": 5,
+    "fields": {
+      "title": "다섯 번째 쓰레드",
+      "content": "다섯 번째 쓰레드의 내용입니다.",
+      "created_at": "2024-11-19T14:00:00Z",
+      "updated_at": "2024-11-19T14:00:00Z"
+    }
+  },
+  {
+    "model": "threads.thread",
+    "pk": 6,
+    "fields": {
+      "title": "여섯 번째 쓰레드",
+      "content": "여섯 번째 쓰레드의 내용입니다.",
+      "created_at": "2024-11-19T15:00:00Z",
+      "updated_at": "2024-11-19T15:00:00Z"
+    }
+  },
+  {
+    "model": "threads.thread",
+    "pk": 7,
+    "fields": {
+      "title": "일곱 번째 쓰레드",
+      "content": "일곱 번째 쓰레드의 내용입니다.",
+      "created_at": "2024-11-19T16:00:00Z",
+      "updated_at": "2024-11-19T16:00:00Z"
+    }
+  },
+  {
+    "model": "threads.thread",
+    "pk": 8,
+    "fields": {
+      "title": "여덟 번째 쓰레드",
+      "content": "여덟 번째 쓰레드의 내용입니다.",
+      "created_at": "2024-11-19T17:00:00Z",
+      "updated_at": "2024-11-19T17:00:00Z"
+    }
+  },
+  {
+    "model": "threads.thread",
+    "pk": 9,
+    "fields": {
+      "title": "아홉 번째 쓰레드",
+      "content": "아홉 번째 쓰레드의 내용입니다.",
+      "created_at": "2024-11-19T18:00:00Z",
+      "updated_at": "2024-11-19T18:00:00Z"
+    }
+  },
+  {
+    "model": "threads.thread",
+    "pk": 10,
+    "fields": {
+      "title": "열 번째 쓰레드",
+      "content": "열 번째 쓰레드의 내용입니다.",
+      "created_at": "2024-11-19T19:00:00Z",
+      "updated_at": "2024-11-19T19:00:00Z"
+    }
+  }
+]

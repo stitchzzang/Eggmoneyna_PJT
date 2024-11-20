@@ -8,22 +8,22 @@
     <!-- 회원 유형 선택 -->
     <div class="member-type-selection">
       <button 
-        :class="['type-btn', { active: memberType === 'regular' }]"
-        @click="memberType = 'regular'"
+        :class="['type-btn', { active: formData.memberType === 'regular' }]"
+        @click="changeType('regular')"
       >
         일반회원
       </button>
       <button 
-        :class="['type-btn', { active: memberType === 'expert' }]"
-        @click="memberType = 'expert'"
+        :class="['type-btn', { active: formData.memberType === 'expert' }]"
+        @click="changeType('expert')"
       >
         전문가회원
       </button>
     </div>
 
-    <form @submit.prevent="submitForm" class="signup-form">
-<!-- 약관 동의 -->
-<div class="agreement-section">
+    <form @submit.prevent="signUp" class="signup-form">
+      <!-- 약관 동의 -->
+      <div class="agreement-section">
         <div class="form-group checkbox">
           <input 
             type="checkbox" 
@@ -62,36 +62,36 @@
       <!-- 기본 정보 -->
       <div class="form-group">
         <label for="username">아이디</label>
-        <input placeholder="영문 소문자, 숫자" type="text" id="username" v-model="formData.username" required>
+        <input placeholder="영문 소문자, 숫자" type="text" id="username" v-model.trim="formData.username" required>
       </div>
 
       <div class="form-group">
         <label for="password1">비밀번호</label>
-        <input placeholder="영문 소문자, 대문자, 특수문자, 숫자" type="password" id="password1" v-model="formData.password1" required>
+        <input placeholder="영문 소문자, 대문자, 특수문자, 숫자" type="password" id="password1" v-model.trim="formData.password1" required>
       </div>
 
       <div class="form-group">
         <label for="password2">비밀번호 확인</label>
-        <input placeholder="영문 소문자, 대문자, 특수문자, 숫자" type="password" id="password2" v-model="formData.password2" required>
+        <input placeholder="영문 소문자, 대문자, 특수문자, 숫자" type="password" id="password2" v-model.trim="formData.password2" required>
       </div>
 
       <div class="form-group">
         <label for="email">이메일</label>
-        <input placeholder="example@site.com" type="email" id="email" v-model="formData.email" required>
+        <input placeholder="example@site.com" type="email" id="email" v-model.trim="formData.email" required>
       </div>
 
       <div class="form-group">
         <label for="name">이름</label>
-        <input type="text" id="name" v-model="formData.name" required>
+        <input type="text" id="name" v-model.trim="formData.name" required>
       </div>
 
       <div class="form-group">
         <label for="birthdate">생년월일</label>
-        <input type="date" id="birthdate" v-model="formData.birthdate" required>
+        <input type="date" id="birthdate" v-model.trim="formData.birth_date" required>
       </div>
 
       <!-- 전문가 회원 추가 정보 -->
-      <div v-if="memberType === 'expert'" class="expert-info">
+      <div v-if="formData.memberType === 'expert'" class="expert-info">
         <h5>자격증 등록</h5>
         <div class="form-group">
           <label for="certification">자격증 종류</label>
@@ -123,25 +123,28 @@
 
 <script setup>
 import { ref, reactive, watch } from 'vue'
+import { useCounterStore } from '@/stores/counter';
+import { useRouter } from 'vue-router';
 
-const memberType = ref('regular') // 'regular' 또는 'expert'
+const router = useRouter()
+const store = useCounterStore()
+const allAgreed = ref(false)
 
 const formData = reactive({
+  memberType: 'regular',
   username: '',
   password1: '',
   password2: '',
   email: '',
   name: '',
-  birthdate: '',
+  birth_date: '',
   termsAgreed: false,
   privacyAgreed: false,
-  // 전문가 회원 추가 필드
+
   certificationType: '',
   certificationDate: '',
-  certificationNumber: ''
+  certificationNumber: '',
 })
-
-const allAgreed = ref(false)
 
 // 전체 동의 토글 함수
 const toggleAllAgreements = () => {
@@ -159,22 +162,50 @@ watch([() => formData.termsAgreed, () => formData.privacyAgreed], () => {
   checkAgreements()
 })
 
-const submitForm = () => {
-  // 비밀번호 일치 확인
-  if (formData.password1 !== formData.password2) {
-    alert('비밀번호가 일치하지 않습니다.')
-    return
-  }
 
-  // 필수 약관 동의 확인
-  if (!formData.termsAgreed || !formData.privacyAgreed) {
-    alert('필수 약관에 동의해주세요.')
-    return
+const changeType = (type) => {
+  formData.memberType = type
+  if (type === 'regular') {
+    formData.certificationType = ''
+    formData.certificationDate = ''
+    formData.certificationNumber = ''
   }
-
-  console.log('회원가입 데이터:', { memberType: memberType.value, ...formData })
-  // API 호출 로직 추가 예정
 }
+
+const signUp = async function () {
+  // 날짜 형식을 YYYY-MM-DD로 변환
+  const formattedBirthDate = formData.birth_date ? new Date(formData.birth_date).toISOString().split('T')[0] : null;
+
+  const payload = {
+    username: formData.username,
+    password1: formData.password1,
+    password2: formData.password2,
+    email: formData.email,
+    name: formData.name,
+    birth_date: formattedBirthDate,
+    member_type: formData.memberType,
+    terms_agreement: formData.termsAgreed,
+    privacy_agreement: formData.privacyAgreed,
+  }
+
+  // 전문가 회원인 경우 자격증 정보 추가
+  if (formData.memberType === 'expert') {
+    payload.certification_type = formData.certificationType;
+    payload.certification_date = formData.certificationDate;
+    payload.certification_number = formData.certificationNumber;
+  }
+
+  try {
+    await store.signUp(payload)
+    alert('회원가입이 완료되었습니다.')
+    router.push({ name: 'LoginView' })  // 로그인 페이지로 이동
+  } catch (error) {
+    alert('회원가입 중 오류가 발생했습니다: ' + error.message)
+    console.error('회원가입 오류:', error)
+  }
+}
+
+
 </script>
 
 <style scoped>

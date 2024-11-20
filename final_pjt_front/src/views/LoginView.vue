@@ -3,13 +3,13 @@
     <div class="login-modal">
       <h1>Log in</h1>
       
-      <form @submit.prevent="submitForm" class="login-form">
+      <form @submit.prevent="login" class="login-form">
         <div class="form-group">
           <label for="username">ID</label>
           <input 
             type="text" 
             id="username" 
-            v-model="username"
+            v-model.trim="username"
             required
           >
         </div>
@@ -20,7 +20,7 @@
             <input 
               :type="showPassword ? 'text' : 'password'"
               id="password" 
-              v-model="password"
+              v-model.trim="password"
               required
             >
             <span 
@@ -43,7 +43,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import { useCounterStore } from '@/stores/counter';
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
+const store = useCounterStore()
+
 
 const username = ref('')
 const password = ref('')
@@ -53,10 +59,30 @@ const togglePassword = () => {
   showPassword.value = !showPassword.value
 }
 
-const submitForm = () => {
-  // 로그인 로직 구현 예정
-  console.log('로그인 시도:', { username: username.value, password: password.value })
+const login = async () => {
+  console.log('로그인 함수 호출')
+  if (!username.value || !password.value) {
+    alert('아이디와 비밀번호를 모두 입력해주세요.')
+    return
+  }
+
+  try {
+    console.log('로그인 시도:', {
+      username: username.value,
+      password: password.value
+    })
+    await store.logIn({
+      username: username.value,
+      password: password.value
+    })
+    console.log('로그인 성공!')
+    router.push({ name: 'main' })
+  } catch (error) {
+    // 에러 처리: store에서 이미 에러 처리를 하므로 여기서는 추가 처리 불필요
+    console.error('로그인 실패:', error)
+  }
 }
+
 </script>
 
 <style scoped>
@@ -64,8 +90,7 @@ const submitForm = () => {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  margin: 20px auto;  /* center에서 flex-start로 변경 */
+  align-items: flex-start;  /* center에서 flex-start로 변경 */
 }
 
 .login-modal {
