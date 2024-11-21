@@ -43,33 +43,6 @@ def signup(request):
         print(e)  # 디버깅용 로그
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-# @api_view(['POST'])
-# @permission_classes([AllowAny])
-# def login(request):
-#     try:
-#         User = get_user_model()
-#         user = get_object_or_404(User, username=request.data.get('username'))
-        
-#         # 비밀번호 확인
-#         if not user.check_password(request.data.get('password')):
-#             return Response({'error': '비밀번호가 일치하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
-        
-#         # 토큰 생성
-#         token = RefreshToken.for_user(user)
-#         serializer = UserSerializer(user)
-        
-#         return Response({
-#             'user': serializer.data,
-#             'token': {
-#                 'refresh': str(token),
-#                 'access': str(token.access_token),
-#             }
-#         }, status=status.HTTP_200_OK)
-        
-#     except Exception as e:
-#         print(e)  # 디버깅용 로그
-#         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -92,3 +65,35 @@ def login(request):
     else:
         return Response({'error': '아이디 또는 비밀번호가 잘못되었습니다.'}, 
                       status=status.HTTP_401_UNAUTHORIZED)
+
+
+@api_view(['POST'])
+def logout(request):
+    user = request.user
+    if not user.is_authenticated:
+        return Response({'error': '인증되지 않은 사용자입니다.'}, 
+                      status=status.HTTP_401_UNAUTHORIZED)
+    
+    # 사용자의 토큰 삭제
+    Token.objects.filter(user=user).delete()
+    
+    return Response({'message': '로그아웃되었습니다.'}, 
+                  status=status.HTTP_200_OK)
+
+
+@api_view(['DELETE'])
+def delete(request):
+    user = request.user
+    if not user.is_authenticated:
+        return Response({'error': '인증되지 않은 사용자입니다.'}, 
+                      status=status.HTTP_401_UNAUTHORIZED)
+    
+    # 토큰 삭제
+    Token.objects.filter(user=user).delete()
+    # 사용자 삭제
+    user.delete()
+    
+    return Response({'message': '계정이 성공적으로 삭제되었습니다.'}, 
+                  status=status.HTTP_204_NO_CONTENT)
+
+
