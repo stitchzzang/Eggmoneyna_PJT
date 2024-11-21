@@ -65,6 +65,7 @@ const currentComponent = computed(() => {
 
 .sidebar {
   width: 250px;
+  min-width: 250px;
   background-color: #f8f9fa;
   padding: 1.5rem;
   border-radius: 8px;
@@ -90,6 +91,7 @@ const currentComponent = computed(() => {
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .menu-item:hover {
@@ -117,5 +119,21 @@ const currentComponent = computed(() => {
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-width: auto;
+    margin-bottom: 1rem;
+  }
+
+  .menu-item {
+    text-align: center;
+  }
 }
 </style>

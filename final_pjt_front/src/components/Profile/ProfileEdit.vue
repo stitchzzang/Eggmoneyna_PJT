@@ -192,7 +192,7 @@ const handleSubmit = async () => {
 .button-group {
   display: flex;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 5px;
 }
 
 button {
@@ -206,21 +206,42 @@ button {
 }
 
 .edit-btn, .save-btn {
-  background-color: #247927;
+  padding: 10px 20px;
+  background: linear-gradient(45deg, #00bf0a, #007500) !important;
   color: white;
+  border: 2px solid #128004;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .edit-btn:hover, .save-btn:hover {
-  background-color: #45a049;
+  padding: 10px 20px;
+  background: linear-gradient(45deg, #e9eea7, #d6e227) !important;
+  color: rgb(0, 0, 0);
+  border: 2px solid #989b0d;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .cancel-btn {
-  background-color: #6c757d;
-  color: white;
-}
-
-.cancel-btn:hover {
-  background-color: #5a6268;
+  padding: 10px 20px;
+  background: linear-gradient(45deg, #a5a5a5, #4e4e4e) !important;
+  color: rgb(255, 255, 255);
+  border: 2px solid #363633;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 input:focus {
