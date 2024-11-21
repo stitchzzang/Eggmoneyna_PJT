@@ -167,3 +167,13 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+
+import os
+from dotenv import load_dotenv
+
+# .env 파일 로드
+env_path = os.path.join(BASE_DIR, '.env')
+load_dotenv(env_path)
+
+# 환경변수에서 API 키 가져오기
+KOREAEXIM_API_KEY = os.getenv('KOREAEXIM_API_KEY')
