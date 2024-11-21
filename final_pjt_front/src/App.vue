@@ -109,19 +109,19 @@
         </div>
         
         <div class="nav-right">
-          <div class="search-container">
+          <!-- <div class="search-container">
             <input type="text" placeholder="검색" class="search-input">
             <button class="search-button">
               🔍
             </button>
-          </div>
+          </div> -->
           
           <div v-if="auth.isAuthenticated" class="user-menu">
             <div class="user-info">
-              <router-link to="/mypage" class="username">
-                <strong>{{ auth.username }}</strong> 님
+              <router-link to="/profilepage" class="username">
+                <strong>{{ auth.user }}</strong> 님 안녕하세요!
               </router-link>
-              <div class="greeting">안녕하세요!</div>
+              <!-- <div class="greeting">안녕하세요!</div> -->
             </div>
             <button @click="logout" class="logout-button">로그아웃</button>
           </div>
@@ -190,9 +190,47 @@
 <script setup>
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 const auth = useAuthStore()
 const router = useRouter()
+
+// 모바일 메뉴 관련 상태 추가
+const isMobile = ref(false)
+const isMenuOpen = ref(false)
+const activeSubmenu = ref(null)
+
+// 화면 크기에 따른 모바일 상태 업데이트
+const checkMobile = () => {
+  isMobile.value = window.innerWidth <= 768
+}
+
+// 모바일 메뉴 토글
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value
+}
+
+// 서브메뉴 토글
+const toggleSubmenu = (menuName) => {
+  activeSubmenu.value = activeSubmenu.value === menuName ? null : menuName
+}
+
+// 메뉴 닫기
+const closeMenu = () => {
+  isMenuOpen.value = false
+  activeSubmenu.value = null
+}
+
+// 컴포넌트 마운트 시 이벤트 리스너 등록
+onMounted(() => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+})
+
+// 컴포넌트 언마운트 시 이벤트 리스너 제거
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile)
+})
 
 // isLoggedIn 대신 auth.isAuthenticated 사용
 const logout = () => {
@@ -358,13 +396,13 @@ body {
 
 .user-info {
   text-align: left;
-  margin-right: 15px;
+  margin-right: 20px;
 }
 
 .username {
   text-decoration: none;
   color: #333;
-  font-size: 0.95rem;
+  font-size: 15px;
 }
 
 .username strong {

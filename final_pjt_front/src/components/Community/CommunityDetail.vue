@@ -1,123 +1,111 @@
 <template>
-  <div v-if="post" class="detail-container">
-    <div class="post-header">
-      <h1 class="post-title">{{ post.title }}</h1>
-      <small class="post-author">작성자: {{ post.author }}</small>
+  <div class="community-detail">
+    <div class="detail-header">
+      <h2>{{ post.title }}</h2>
+      <div class="post-info">
+        <span>작성자: {{ post.author }}</span>
+        <span>작성일: {{ formatDate(post.created_at) }}</span>
+      </div>
     </div>
-    
+
     <div class="post-content">
-      <p>{{ post.content }}</p>
+      {{ post.content }}
     </div>
 
-    <div class="action-buttons">
-      <button @click="goToEdit" class="edit-btn">수정</button>
-      <button @click="openDeleteModal" class="delete-btn">삭제</button>
+    <div class="button-group">
+      <button @click="$emit('close')" class="btn-close">목록으로</button>
+      <div v-if="isAuthor" class="author-buttons">
+        <button @click="$emit('edit', post)" class="btn-edit">수정</button>
+        <button @click="$emit('delete', post)" class="btn-delete">삭제</button>
+      </div>
     </div>
-
-    <CommunityDeleteModal
-      v-if="showDeleteModal"
-      @confirm="deletePost"
-      @cancel="closeDeleteModal"
-    />
   </div>
 </template>
 
-<script>
-import CommunityDeleteModal from './CommunityDeleteModal.vue';
+<script setup>
+import { computed } from 'vue'
+import { useAuthStore } from '@/stores/auth'
 
-export default {
-  components: { CommunityDeleteModal },
-  data() {
-    return {
-      post: null,
-      showDeleteModal: false,
-    };
-  },
-  methods: {
-    async fetchPost() {
-      const response = await fetch(`/api/posts/${this.$route.params.id}`);
-      this.post = await response.json();
-    },
-    goToEdit() {
-      this.$router.push(`/community/${this.post.id}/edit`);
-    },
-    openDeleteModal() {
-      this.showDeleteModal = true;
-    },
-    closeDeleteModal() {
-      this.showDeleteModal = false;
-    },
-    async deletePost() {
-      await fetch(`/api/posts/${this.post.id}`, { method: 'DELETE' });
-      this.$router.push('/community');
-    },
-  },
-  mounted() {
-    this.fetchPost();
-  },
-};
+const props = defineProps({
+  post: {
+    type: Object,
+    required: true
+  }
+})
+
+defineEmits(['close', 'edit', 'delete'])
+
+const auth = useAuthStore()
+const isAuthor = computed(() => auth.user === props.post.author)
+
+const formatDate = (date) => {
+  return new Date(date).toLocaleDateString('ko-KR')
+}
 </script>
 
 <style scoped>
-.detail-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  background: white;
+.community-detail {
+  background-color: white;
+  padding: 30px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.post-header {
-  margin-bottom: 30px;
-  padding-bottom: 20px;
+.detail-header {
   border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
 }
 
-.post-title {
-  margin: 0 0 10px 0;
-  color: #333;
-}
-
-.post-author {
+.post-info {
+  display: flex;
+  gap: 20px;
   color: #666;
+  font-size: 0.9em;
+  margin-top: 10px;
 }
 
 .post-content {
+  min-height: 200px;
   line-height: 1.6;
-  color: #444;
-  margin-bottom: 30px;
+  white-space: pre-wrap;
 }
 
-.action-buttons {
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.author-buttons {
   display: flex;
   gap: 10px;
-  justify-content: flex-end;
 }
 
-.edit-btn, .delete-btn {
+button {
   padding: 8px 16px;
-  border: none;
   border-radius: 4px;
+  border: none;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.edit-btn {
-  background-color: #007bff;
+.btn-close {
+  background-color: #6c757d;
   color: white;
 }
 
-.delete-btn {
+.btn-edit {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-delete {
   background-color: #dc3545;
   color: white;
 }
 
-.edit-btn:hover {
-  background-color: #0056b3;
-}
-
-.delete-btn:hover {
-  background-color: #c82333;
+button:hover {
+  opacity: 0.9;
 }
 </style>
