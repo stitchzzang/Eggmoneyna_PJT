@@ -119,7 +119,7 @@
           <div v-if="auth.isAuthenticated" class="user-menu">
             <div class="user-info">
               <router-link to="/profilepage" class="username">
-                <strong>{{ auth.user }}</strong> 님 안녕하세요!
+                <strong>🐣 {{ auth.user }}</strong> 님 안녕하세요!
               </router-link>
               <!-- <div class="greeting">안녕하세요!</div> -->
             </div>
@@ -397,12 +397,16 @@ body {
 .user-info {
   text-align: left;
   margin-right: 20px;
+  font-size: 18px;
+  background-color: #e7e7e773;
+  border-radius: 20px;
+  padding: 5px 10px;
 }
 
 .username {
   text-decoration: none;
   color: #333;
-  font-size: 15px;
+  font-size: 20px;
 }
 
 .username strong {
