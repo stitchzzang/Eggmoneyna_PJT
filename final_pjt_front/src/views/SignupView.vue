@@ -73,7 +73,10 @@
 
       <div class="form-group">
         <label for="password2">비밀번호 확인</label>
-        <input placeholder="영문 소문자, 대문자, 특수문자, 숫자" type="password" id="password2" v-model.trim="formData.password2" required>
+        <input v-model="formData.password2" type="password" placeholder="비밀번호 확인">
+        <p v-if="formData.password2" :style="{ color: passwordMatch ? '#2196F3' : '#F44336' }">
+          {{ passwordMatch ? '비밀번호가 일치합니다.' : '비밀번호가 일치하지 않습니다.' }}
+        </p>
       </div>
 
       <div class="form-group">
@@ -123,7 +126,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, computed } from 'vue'
 import { useCounterStore } from '@/stores/counter';
 import { useRouter } from 'vue-router';
 
@@ -174,6 +177,12 @@ const changeType = (type) => {
 }
 
 const signUp = async function () {
+  // 비밀번호 일치 여부 확인
+  if (formData.password1 !== formData.password2) {
+    alert('비밀번호가 일치하지 않습니다.')
+    return  // 함수 실행 중단
+  }
+
   // 날짜 형식을 YYYY-MM-DD로 변환
   const formattedBirthDate = formData.birth_date ? new Date(formData.birth_date).toISOString().split('T')[0] : null;
 
@@ -197,15 +206,23 @@ const signUp = async function () {
   }
 
   try {
-    await store.signUp(payload)
-    alert('회원가입이 완료되었습니다.')
-    router.push({ name: 'LoginView' })  // 로그인 페이지로 이동
+    const success = await store.signUp(payload)
+    if (success) {
+      alert('회원가입이 완료되었습니다.')
+      router.push({ name: 'LoginView' })  // 여기서 라우팅 처리
+    }
   } catch (error) {
     alert('회원가입 중 오류가 발생했습니다: ' + error.message)
     console.error('회원가입 오류:', error)
   }
 }
 
+const passwordMatch = computed(() => {
+  if (formData.password1 && formData.password2) {
+    return formData.password1 === formData.password2
+  }
+  return true  // 둘 다 비어있을 때는 true 반환
+})
 
 </script>
 

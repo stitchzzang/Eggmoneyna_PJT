@@ -39,8 +39,12 @@
 <script setup>
 import { ref } from 'vue'
 import { useProfileStore } from '@/stores/profile'
+import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
 
 const store = useProfileStore()
+const auth = useAuthStore()
+const router = useRouter()
 const isAgreed = ref(false)
 
 const handleQuit = async () => {
@@ -48,9 +52,13 @@ const handleQuit = async () => {
 
   if (confirm('정말로 탈퇴하시겠습니까?')) {
     try {
-      await store.deleteAccount()
-      // 탈퇴 성공 후 처리 (예: 홈페이지로 리다이렉트)
+      const success = await auth.deleteAccount()
+      if (success) {
+        alert('회원탈퇴가 완료되었습니다.')
+        router.push('/')
+      }
     } catch (error) {
+      alert('탈퇴 처리 중 오류가 발생했습니다.')
       console.error('탈퇴 처리 중 오류가 발생했습니다:', error)
     }
   }

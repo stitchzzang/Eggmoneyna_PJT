@@ -23,31 +23,16 @@ export const useCounterStore = defineStore('counter', () => {
   }
 
   // 회원가입 요청을 보내는 함수
-  const signUp = function (payload) {
-    const { username, password1, password2, email, name, birth_date } = payload
-    
-    // 기본적인 유효성 검사 추가
-    if (password1 !== password2) {
-      throw new Error('비밀번호가 일치하지 않습니다')
-    }
-
-    axios({
-      method: 'post',
-      url: `${API_URL}/accounts/signup/`,
-      data: {
-        username, password1, password2, email, name, birth_date
+  const signUp = async function (payload) {
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/accounts/signup/', payload)
+      if (response.status === 201) {
+        return true  // 성공 시 true 반환
       }
-    })
-    .then((res) => {
-      console.log(res)
-      console.log('회원가입 성공')
-      router.push({ name: 'LoginView' })
-    })
-    .catch((err) => {
-      const errorMessage = err.response?.data?.message || err.message || '회원가입 중 오류가 발생했습니다'
-      console.error('회원가입 실패:', errorMessage)
-      throw new Error(errorMessage)
-    })
+    } catch (error) {
+      console.error('회원가입 실패:', error)
+      throw error
+    }
   }
 
   // 로그인 요청을 보내는 함수

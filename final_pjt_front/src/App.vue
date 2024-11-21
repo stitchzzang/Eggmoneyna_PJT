@@ -233,9 +233,15 @@ onUnmounted(() => {
 })
 
 // isLoggedIn 대신 auth.isAuthenticated 사용
-const logout = () => {
-  auth.logout()
-  router.push('/login')
+const logout = async () => {
+  try {
+    await auth.logout()
+    router.push('/login')
+    alert('로그아웃되었습니다.')
+  } catch (error) {
+    console.error('로그아웃 중 오류 발생:', error)
+    alert('로그아웃 중 오류가 발생했습니다.')
+  }
 }
 </script>
 
