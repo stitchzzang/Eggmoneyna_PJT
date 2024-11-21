@@ -1,55 +1,61 @@
 <template>
-  <li class="post-item" @click="handleClick">
-    <div class="post-content">
-      <h3 class="post-title">{{ post.title }}</h3>
-      <p class="post-summary">{{ post.summary }}</p>
-      <div class="post-meta">
-        <small class="author">작성자: {{ post.author }}</small>
-      </div>
+  <div class="post-item" @click="$emit('select')">
+    <h3 class="post-title">{{ post.title }}</h3>
+    <div class="post-info">
+      <span class="author">{{ post.author }}</span>
+      <span class="date">{{ formatDate(post.created_at) }}</span>
     </div>
-  </li>
+  </div>
 </template>
 
-<script>
-export default {
-  props: ['post'],
-  methods: {
-    handleClick() {
-      this.$emit('select', this.post.id);
-    },
-  },
-};
+<script setup>
+defineProps({
+  post: {
+    type: Object,
+    required: true
+  }
+})
+
+defineEmits(['select'])
+
+const formatDate = (date) => {
+  return new Date(date).toLocaleDateString('ko-KR')
+}
 </script>
 
 <style scoped>
 .post-item {
-  background-color: white;
+  padding: 15px;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 15px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 10px;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.3s ease;
 }
 
 .post-item:hover {
+  background-color: #f8f9fa;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .post-title {
-  margin: 0 0 10px 0;
-  color: #333;
+  margin: 0 0 8px 0;
+  font-size: 1.1em;
 }
 
-.post-summary {
-  color: #666;
-  margin: 0 0 15px 0;
-  line-height: 1.5;
-}
-
-.post-meta {
-  color: #888;
+.post-info {
+  display: flex;
+  gap: 15px;
   font-size: 0.9em;
+  color: #666;
+}
+
+.author {
+  font-weight: 500;
+}
+
+.date {
+  color: #888;
 }
 </style>

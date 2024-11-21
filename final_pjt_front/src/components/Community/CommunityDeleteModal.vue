@@ -1,17 +1,18 @@
 <template>
   <div class="modal-overlay">
-    <div class="modal">
-      <p class="modal-message">정말로 삭제하시겠습니까?</p>
-      <div class="modal-buttons">
-        <button @click="$emit('confirm')" class="confirm-btn">확인</button>
-        <button @click="$emit('cancel')" class="cancel-btn">취소</button>
+    <div class="modal-content">
+      <h3>게시글 삭제</h3>
+      <p>정말로 이 게시글을 삭제하시겠습니까?</p>
+      <div class="button-group">
+        <button @click="$emit('confirm')" class="btn-delete">삭제</button>
+        <button @click="$emit('cancel')" class="btn-cancel">취소</button>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-export default {};
+<script setup>
+defineEmits(['confirm', 'cancel'])
 </script>
 
 <style scoped>
@@ -23,54 +24,54 @@ export default {};
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
-.modal {
-  background: white;
+.modal-content {
+  background-color: white;
   padding: 30px;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 400px;
   text-align: center;
-  min-width: 300px;
 }
 
-.modal-message {
+h3 {
+  margin-bottom: 15px;
+}
+
+p {
   margin-bottom: 20px;
-  font-size: 1.1em;
-  color: #333;
+  color: #666;
 }
 
-.modal-buttons {
+.button-group {
   display: flex;
   gap: 10px;
   justify-content: center;
 }
 
-.confirm-btn, .cancel-btn {
-  padding: 8px 20px;
-  border: none;
+button {
+  padding: 8px 16px;
   border-radius: 4px;
+  border: none;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.confirm-btn {
+.btn-delete {
   background-color: #dc3545;
   color: white;
 }
 
-.cancel-btn {
+.btn-cancel {
   background-color: #6c757d;
   color: white;
 }
 
-.confirm-btn:hover {
-  background-color: #c82333;
-}
-
-.cancel-btn:hover {
-  background-color: #5a6268;
+button:hover {
+  opacity: 0.9;
 }
 </style>

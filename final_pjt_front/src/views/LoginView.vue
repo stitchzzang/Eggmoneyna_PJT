@@ -68,9 +68,18 @@ const submitForm = async () => {
     console.log('로그인 응답:', response.data)
 
     if (response.data.key) {
-      auth.saveToken(response.data.key)
-      auth.saveUser(username.value)
-      router.push('/')
+      await auth.login({
+        username: username.value,
+        password: password.value
+      })
+      
+      const redirectPath = localStorage.getItem('redirectPath')
+      if (redirectPath) {
+        localStorage.removeItem('redirectPath')
+        router.push(redirectPath)
+      } else {
+        router.push('/')
+      }
     }
     
   } catch (error) {
