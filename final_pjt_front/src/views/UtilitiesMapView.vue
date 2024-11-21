@@ -285,6 +285,7 @@ onUnmounted(() => {
   max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
+  margin-top: 65px;
 }
 
 .map-container form input[type="text"] {
@@ -417,6 +418,13 @@ input[type="text"] {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+h2 {
+  color: #056800;
+  margin-bottom: 20px;
+  font-size: 30px;
+  font-weight: bold;
 }
 
 </style>
