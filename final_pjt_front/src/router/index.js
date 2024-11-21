@@ -31,9 +31,9 @@ const routes = [
     component: () => import('@/views/NewsBooksPageView.vue')
   },
   {
-    path: '/education',
-    name: 'education',
-    component: () => import('@/views/EducationPageView.vue')
+    path: '/education/contents',
+    name: 'educationcontents',
+    component: () => import('@/views/EducationContentsPageView.vue')
   },
   {
     path: '/community',

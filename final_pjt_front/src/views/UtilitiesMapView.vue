@@ -1,6 +1,7 @@
 <template>
+<div class="whole">
   <div class="map-container">
-    <h2>주변 은행 찾기</h2>
+    <h2>🏡 주변 은행 찾기</h2>
     <br>
     <div class="option">
       <div class="search-container">
@@ -45,6 +46,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script setup>
@@ -281,11 +283,28 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.whole {
+  background-color: #ffffff7a;
+  border-radius: 20px;
+  margin: 20px auto;  /* 상하 여백 20px, 좌우 자동 중앙 정렬 */
+  padding: 20px;
+  max-width: 90%;    /* 전체 너비를 90%로 제한 */
+  width: 1200px;     /* 최대 너비 설정 */
+}
+
+h2 {
+  color: #056800;
+  margin-bottom: 10px;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+}
+
+
 .map-container {
   max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
-  margin-top: 65px;
 }
 
 .map-container form input[type="text"] {
@@ -420,11 +439,5 @@ input[type="text"] {
   gap: 10px;
 }
 
-h2 {
-  color: #056800;
-  margin-bottom: 20px;
-  font-size: 30px;
-  font-weight: bold;
-}
 
 </style>
