@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
-
+from rest_framework.permissions import IsAuthenticated
 
 @api_view(['POST'])
 # @permission_classes([AllowAny])
@@ -82,6 +82,7 @@ def logout(request):
 
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def delete(request):
     user = request.user
     if not user.is_authenticated:

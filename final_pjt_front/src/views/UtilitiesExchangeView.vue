@@ -102,8 +102,12 @@ export default {
     async getExchangeRates() {
       try {
         const response = await axios.get('/finlife/utilities/exchange/')
-        this.exchangeRates = response.data
-        this.filterMainExchangeRates()  // 주요 통화 필터링
+        this.exchangeRates = response.data.sort((a, b) => {
+          const nameA = this.getCurrencyName(a.currency_code)
+          const nameB = this.getCurrencyName(b.currency_code)
+          return nameA.localeCompare(nameB, 'ko')
+        })
+        this.filterMainExchangeRates()
       } catch (error) {
         console.error('환율 정보 로드 오류:', error)
       }
@@ -146,8 +150,9 @@ export default {
           result = result * 100
         }
 
-        this.convertedAmount = result
-        console.log('변환 결과:', this.convertedAmount)
+        // 결과값 반올림 처리 (소수점 둘째자리까지)
+        this.convertedAmount = Math.round(result * 100) / 100
+        
       } catch (error) {
         console.error('환율 변환 오류:', error)
         alert('환율 변환 중 오류가 발생했습니다.')
@@ -230,32 +235,32 @@ export default {
     },
 
     getCurrencyName(code) {
-      const currencyNames = {
-        'KRW': '한국 원화 (KRW)',
-        'USD': '미국 달러 (USD)',
-        'EUR': '유로 (EUR)',
-        'JPY(100)': '일본 엔화 (JPY)',
-        'CNH': '중국 위안 (CNH)',
-        'HKD': '홍콩 달러 (HKD)',
-        'IDR(100)': '인도네시아 루피아 (IDR)',
-        'AUD': '호주 달러 (AUD)',
-        'CAD': '캐나다 달러 (CAD)',
-        'CHF': '스위스 프랑 (CHF)',
-        'GBP': '영국 파운드 (GBP)',
-        'SGD': '싱가포르 달러 (SGD)',
-        'THB': '태국 바트 (THB)',
-        'AED': '아랍에미리트 디르함 (AED)',
-        'BHD': '바레인 디나르 (BHD)',
-        'BND': '브루나이 달러 (BND)',
-        'DKK': '덴마크 크로네 (DKK)',
-        'KWD': '쿠웨이트 디나르 (KWD)',
-        'MYR': '말레이시아 링깃 (MYR)',
-        'NOK': '노르웨이 크로네 (NOK)',
-        'NZD': '뉴질랜드 달러 (NZD)',
-        'SAR': '사우디 리얄 (SAR)',
-        'SEK': '스웨덴 크로나 (SEK)'
+      const currencyMap = {
+        'KRW': '대한민국',
+        'USD': '미국',
+        'EUR': '유럽연합',
+        'JPY(100)': '일본',
+        'CNH': '중국',
+        'HKD': '홍콩',
+        'THB': '태국',
+        'IDR(100)': '인도네시아',
+        'AUD': '호주',
+        'CAD': '캐나다',
+        'CHF': '스위스',
+        'GBP': '영국',
+        'SGD': '싱가포르',
+        'AED': '아랍에미리트',
+        'BHD': '바레인',
+        'BND': '브루나이',
+        'DKK': '덴마크',
+        'KWD': '쿠웨이트',
+        'MYR': '말레이시아',
+        'NOK': '노르웨이',
+        'NZD': '뉴질랜드',
+        'SAR': '사우디아라비아',
+        'SEK': '스웨덴'
       }
-      return currencyNames[code] || code
+      return currencyMap[code] ? `${currencyMap[code]} (${code})` : code
     },
 
     getCurrencySymbol(currencyCode) {
@@ -300,19 +305,6 @@ export default {
       return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`
     },
 
-    // 통화 이름 가져오기
-    getCurrencyName(code) {
-      const names = {
-        'USD': '미국 달러',
-        'EUR': '유럽 유로',
-        'JPY(100)': '일본 엔화',
-        'CNH': '중국 위안',
-        'GBP': '영국 파운드',
-        'AUD': '호주 달러',
-        'CAD': '캐나다 달러'
-      }
-      return names[code] || code
-    },
 
     // 환율 포맷팅
     formatExchangeRate(rate) {
