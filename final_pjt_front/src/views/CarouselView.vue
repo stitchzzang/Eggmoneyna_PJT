@@ -163,6 +163,7 @@
   background-color: rgba(0, 114, 0, 0.493);
   padding: 25px;
   border-radius: 10px;
+  border: 1px solid #198322;
 }
 
 /* 호버 효과 추가 */

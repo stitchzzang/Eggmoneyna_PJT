@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div class="login-modal">
-      <h1>Log in</h1>
+      <h1>로그인</h1>
       
       <form @submit.prevent="submitForm" class="login-form">
         <div class="form-group">
@@ -96,21 +96,22 @@ const submitForm = async () => {
 
 <style scoped>
 .login-container {
-  min-height: 100vh;
+  min-height: 80vh;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  margin: 20px auto;  /* center에서 flex-start로 변경 */
+  margin: 0 auto;
+  padding-top: 40px; /* 세 번째 레이어 - 더 넓은 영역 */
 }
 
 .login-modal {
   background-color: rgba(143, 188, 143, 0.7);
-  padding: 40px;
+  padding: 30px;
   border-radius: 40px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px;
-  margin: 60px auto;
+  max-width: 360px;
+  margin: 20px auto;
 }
 
 h1 {
@@ -122,11 +123,11 @@ h1 {
 
 .login-form {
   background-color: white;
-  padding: 40px;
+  padding: 30px;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 }
 
 .form-group {
@@ -168,16 +169,18 @@ h1 {
 }
 
 .login-btn {
-  background-color: #247927;  /* 초록색 */
+  transition: all 0.3s ease;
+  text-decoration: none;
+  padding: 10px 20px;
+  background: linear-gradient(45deg, #98d49a, #338133) !important;
   color: white;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
+  border: 2px solid #4b9e40;
+  border-radius: 25px;
   cursor: pointer;
-  transition: background-color 0.3s;
-  margin-top: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .login-btn:hover {
@@ -201,27 +204,23 @@ h1 {
 .signup-section p {
   color: #000000;
   font-weight: 500;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
   font-size: 16px;
 }
 
 .signup-btn {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #fff;
-  color: #4CAF50;
-  border: 1px solid #4CAF50;
-  border-radius: 8px;
   text-decoration: none;
-  font-size: 15px;
-  font-weight: 600;
-  transition: all 0.3s ease;
+  padding: 10px 20px;
+  background: linear-gradient(45deg, #0bb68b, #1adaaa) !important;
+  color: white;
+  border: 2px solid #0fad86;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.signup-btn:hover {
-  background-color: #4CAF50;
-  color: white;
-}
 
 /* 반응형 디자인 */
 @media (max-width: 480px) {

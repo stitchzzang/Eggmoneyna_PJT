@@ -1,72 +1,74 @@
 <template>
-  <div class="exchange-container">
-    <h2>환율 계산기</h2>
-    <p class="notice">* 엔화 / 인도네시아 루피아는 100단위, 나머지는 모두 1단위 입니다.</p>
-    <div class="exchange-form">
-      <!-- 입력 금액 및 통화 선택 -->
-      <div class="currency-group">
-        <div class="currency-select">
-          <select v-model="fromCurrency">
-            <option 
-              v-for="rate in exchangeRates" 
-              :key="rate.currency_code"
-              :value="rate.currency_code"
+  <div class="whole">
+    <div class="exchange-container">
+      <h2>💸 환율 계산기</h2>
+      <p class="notice">* 엔화 / 인도네시아 루피아는 100단위, 나머지는 모두 1단위 입니다.</p>
+      <div class="exchange-form">
+        <!-- 입력 금액 및 통화 선택 -->
+        <div class="currency-group">
+          <div class="currency-select">
+            <select v-model="fromCurrency">
+              <option 
+                v-for="rate in exchangeRates" 
+                :key="rate.currency_code"
+                :value="rate.currency_code"
+              >
+                {{ getCurrencyName(rate.currency_code) }}
+              </option>
+            </select>
+          </div>
+          <div class="amount-input">
+            <input 
+              type="text"
+              v-model="displayAmount"
+              @input="handleInput"
+              placeholder="금액을 입력하세요"
+              class="text-right"
             >
-              {{ getCurrencyName(rate.currency_code) }}
-            </option>
-          </select>
+            <div class="currency-display">
+              {{ formatKoreanReadable(amount, true) }} {{ getCurrencySymbol(fromCurrency) }}
+            </div>
+          </div>
         </div>
-        <div class="amount-input">
-          <input 
-            type="text"
-            v-model="displayAmount"
-            @input="handleInput"
-            placeholder="금액을 입력하세요"
-            class="text-right"
-          >
+
+        <!-- 변환 기호 -->
+        <div class="conversion-symbol">
+          <span>=</span>
+        </div>
+
+        <!-- 변환 결과 -->
+        <div class="currency-group">
+          <div class="currency-select">
+            <select v-model="toCurrency">
+              <option 
+                v-for="rate in exchangeRates" 
+                :key="rate.currency_code"
+                :value="rate.currency_code"
+              >
+                {{ getCurrencyName(rate.currency_code) }}
+              </option>
+            </select>
+          </div>
+          <div class="result-amount" v-if="convertedAmount">
+            {{ formatNumberWithCommas(convertedAmount) }}
+          </div>
+          <div class="result-amount placeholder" v-else>
+            변환된 금액이 표시됩니다
+          </div>
           <div class="currency-display">
-            {{ formatKoreanReadable(amount, true) }} {{ getCurrencySymbol(fromCurrency) }}
+            💸 {{ formatKoreanReadable(convertedAmount) }} {{ getCurrencySymbol(toCurrency) }}
           </div>
         </div>
       </div>
 
-      <!-- 변환 기호 -->
-      <div class="conversion-symbol">
-        <span>=</span>
-      </div>
-
-      <!-- 변환 결과 -->
-      <div class="currency-group">
-        <div class="currency-select">
-          <select v-model="toCurrency">
-            <option 
-              v-for="rate in exchangeRates" 
-              :key="rate.currency_code"
-              :value="rate.currency_code"
-            >
-              {{ getCurrencyName(rate.currency_code) }}
-            </option>
-          </select>
-        </div>
-        <div class="result-amount" v-if="convertedAmount">
-          {{ formatNumberWithCommas(convertedAmount) }}
-          <div class="currency-display">
-            {{ formatKoreanReadable(convertedAmount) }} {{ getCurrencySymbol(toCurrency) }}
+      <!-- 고시환율 정보 -->
+      <div class="exchange-rate-info">
+        <h3>은행 고시환율 ({{ getCurrentDate() }})</h3>
+        <div class="rate-table">
+          <div v-for="rate in mainExchangeRates" :key="rate.currency_code" class="rate-item">
+            <div class="currency-name">{{ getCurrencyName(rate.currency_code) }}</div>
+            <div class="rate-value">{{ formatExchangeRate(rate.rate) }}</div>
           </div>
-        </div>
-        <div class="result-amount placeholder" v-else>
-          변환된 금액이 표시됩니다
-        </div>
-      </div>
-    </div>
-
-    <!-- 고시환율 정보 -->
-    <div class="exchange-rate-info">
-      <h3>은행 고시환율 ({{ getCurrentDate() }})</h3>
-      <div class="rate-table">
-        <div v-for="rate in mainExchangeRates" :key="rate.currency_code" class="rate-item">
-          <div class="currency-name">{{ getCurrencyName(rate.currency_code) }}</div>
-          <div class="rate-value">{{ formatExchangeRate(rate.rate) }}</div>
         </div>
       </div>
     </div>
@@ -329,11 +331,29 @@ export default {
 </script>
 
 <style scoped>
+.whole {
+  background-color: #ffffff7a;
+  border-radius: 20px;
+  margin-left: 100px;
+  margin-right: 100px;
+}
+
 .exchange-container {
   max-width: 800px;
   margin: 40px auto;
   padding: 20px;
-  margin-top: 120px;
+}
+
+.exchange-container h2 {
+  margin-top: 20px;
+}
+
+h2 {
+  text-align: center;
+  color: #056800;
+  margin-bottom: 30px;
+  font-size: 30px;
+  font-weight: bold;
 }
 
 .notice {
@@ -354,6 +374,7 @@ export default {
   background: #f8f9fa;
   padding: 20px;
   border-radius: 8px;
+  margin-top: 10px;
   margin-bottom: 20px;
 }
 
@@ -382,7 +403,7 @@ export default {
 .conversion-symbol {
   text-align: center;
   margin: 10px aut;
-  font-size: 2rem;
+  font-size: 40px;
   color: #056800;
   font-weight: bold;
 }
@@ -424,13 +445,6 @@ export default {
   background-color: #045500;
 }
 
-h2 {
-  text-align: center;
-  color: #056800;
-  margin-bottom: 30px;
-  font-size: 30px;
-  font-weight: bold;
-}
 
 /* 반응형 디자인 */
 @media (max-width: 576px) {
@@ -514,9 +528,9 @@ h2 {
 }
 
 .currency-display {
-  font-size: 0.9em;
+  font-size: 20px;
   color: #056800;
-  margin-top: 4px;
+  margin-top: 10px;
   text-align: right;
 }
 
@@ -531,6 +545,7 @@ h2 {
 
 .exchange-rate-info {
   margin-top: 40px;
+  margin-bottom: 30px;
   padding: 20px;
   background-color: #f8f9fa;
   border-radius: 12px;
@@ -538,10 +553,12 @@ h2 {
 }
 
 .exchange-rate-info h3 {
-  color: #056800;
+  color: #000000;
   text-align: center;
-  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   font-size: 1.2em;
+  font-weight: bold;
 }
 
 .rate-table {

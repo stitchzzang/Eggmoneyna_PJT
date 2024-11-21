@@ -273,6 +273,7 @@ const passwordMatch = computed(() => {
   border: 1px solid #ddd;
   background: none;
   cursor: pointer;
+  border-radius: 10px;
 }
 
 .type-btn.active {
@@ -308,7 +309,7 @@ const passwordMatch = computed(() => {
 }
 
 .agreement-section {
-  margin-top: 20px;
+  margin-top: 5px;
   font-size: 12px;
   background-color: #f8f9fa;
   padding: 15px;
@@ -347,17 +348,37 @@ const passwordMatch = computed(() => {
 
 .submit-btn {
   margin-top: 20px;
-  padding: 12px;
-  background-color: #4CAF50;
+  margin-bottom: 10px;
+  text-decoration: none;
+  padding: 10px 20px;
+  background: linear-gradient(45deg, #98d49a, #338133) !important;
   color: white;
-  border: none;
-  border-radius: 4px;
+  border: 2px solid #4b9e40;
+  border-radius: 25px;
   cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .submit-btn:hover {
-  background-color: #45a049;
-}
+  margin-top: 20px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  padding: 10px 20px;
+  background: linear-gradient(45deg, #e9eea7, #d6e227) !important;
+  color: rgb(0, 0, 0);
+  border: 2px solid #b8bb15;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+} 
 
 .logo-container {
   display: flex;  /* Flexbox 사용 */
@@ -372,5 +393,9 @@ const passwordMatch = computed(() => {
   height: 70px;
   width: auto;
   object-fit: contain;  /* 이미지 비율 유지 */
+}
+
+h1 {
+  font-weight: 600;
 }
 </style>
