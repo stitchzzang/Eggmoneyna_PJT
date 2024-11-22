@@ -12,7 +12,7 @@
 
         </div>
         <div class="carousel-item">
-          <img src="@/assets/carousel2.png" class="d-block w-100" alt="Slide 2">
+          <img src="@/assets/testimg.png" class="d-block w-100" alt="Slide 2">
 
         </div>
         <div class="carousel-item">

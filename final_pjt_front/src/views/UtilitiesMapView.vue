@@ -1,7 +1,7 @@
 <template>
 <div class="whole">
   <div class="map-container">
-    <h2>🏡 주변 은행 찾기</h2>
+    <h1>🏡 주변 은행 찾기</h1>
     <br>
     <div class="option">
       <div class="search-container">
@@ -292,7 +292,7 @@ onUnmounted(() => {
   width: 1200px;     /* 최대 너비 설정 */
 }
 
-h2 {
+h1 {
   color: #056800;
   margin-bottom: 10px;
   font-size: 30px;

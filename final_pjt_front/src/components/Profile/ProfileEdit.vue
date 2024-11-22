@@ -1,6 +1,7 @@
 <template>
   <div class="profile-edit">
     <h2>회원정보 조회/수정</h2>
+    <hr>
     
     <form @submit.prevent="handleSubmit" class="edit-form">
       <!-- 이름 텍스트 -->
@@ -43,6 +44,10 @@
               :disabled="!isEditing"
             >
           </div>
+          <!-- 비밀번호 불일치 메시지 -->
+          <span v-if="isEditing && formData.password && formData.passwordConfirm && !passwordsMatch" class="password-mismatch">
+            비밀번호가 일치하지 않습니다.
+          </span>
         </div>
       </div>
 
@@ -81,7 +86,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { useProfileStore } from '@/stores/profile'
 
 const store = useProfileStore()
@@ -89,12 +94,26 @@ const isEditing = ref(false)
 const showPassword = ref(false)
 
 const formData = reactive({
-  name: '김싸피',  // 실제 사용자 이름으로 대체
-  username: 'hellohi1234',  // 실제 사용자 ID로 대체
+  name: '',
+  username: '',
   password: '',
   passwordConfirm: '',
   email: '',
-  birthdate: ''
+  birth_date: ''
+})
+
+// 사용자 정보 로딩
+onMounted(async () => {
+  try {
+    const userData = await store.fetchUserInfo()
+    // 받아온 데이터로 formData 업데이트
+    formData.name = userData.name || ''
+    formData.username = userData.username || ''
+    formData.email = userData.email || ''
+    formData.birth_date = userData.birth_date || ''
+  } catch (error) {
+    console.error('사용자 정보 로딩 실패:', error)
+  }
 })
 
 const togglePassword = () => {
@@ -107,11 +126,10 @@ const startEditing = () => {
 
 const cancelEditing = () => {
   isEditing.value = false
-  // 원래 데이터로 복구
   formData.password = ''
   formData.passwordConfirm = ''
   formData.email = store.userInfo.email
-  formData.birthdate = store.userInfo.birthdate
+  formData.birth_date = store.userInfo.birth_date
 }
 
 const handleSubmit = async () => {
@@ -128,12 +146,23 @@ const handleSubmit = async () => {
     alert('회원정보 수정에 실패했습니다.')
   }
 }
+
+// 비밀번호 일치 여부 확인
+const passwordsMatch = computed(() => {
+  if (!formData.password || !formData.passwordConfirm) return true
+  return formData.password === formData.passwordConfirm
+})
 </script>
 
 <style scoped>
 .profile-edit {
   max-width: 600px;
   margin: 0;
+}
+
+.profile-edit h2{
+  color: #056800;
+  font-weight: bold;
 }
 
 .edit-form {
@@ -207,8 +236,8 @@ button {
 
 .edit-btn, .save-btn {
   padding: 10px 20px;
-  background: linear-gradient(45deg, #00bf0a, #007500) !important;
-  color: white;
+  background: linear-gradient(45deg, #86da8a, #047404) !important;
+  color: rgb(255, 255, 255);
   border: 2px solid #128004;
   border-radius: 25px;
   cursor: pointer;
@@ -216,6 +245,7 @@ button {
   font-weight: bold;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+  letter-spacing: 1.3px;
 }
 
 .edit-btn:hover, .save-btn:hover {
@@ -289,5 +319,11 @@ input:disabled {
   color: #000;
   font-size: 1rem;
   font-weight: extrabold;
+}
+
+.password-mismatch {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 4px;
 }
 </style>

@@ -3,6 +3,9 @@ import MainPageView from '@/views/MainPageView.vue'  // 메인 컴포넌트 impo
 import LoginView from '@/views/LoginView.vue'
 import SignupView from '@/views/SignupView.vue'
 import ProfilePageView from '@/views/ProfilePageView.vue'
+import ProfileTest from '@/components/Profile/ProfileTest.vue'
+import ProfileRecommend from '@/components/Profile/ProfileRecommend.vue'
+import ProfileEdit from '@/components/Profile/ProfileEdit.vue'
 
 const routes = [
   {
@@ -11,29 +14,24 @@ const routes = [
     component: MainPageView
   },
   {
-    path: '/profilepage',
-    name: 'profilepage',
-    component: ProfilePageView
-  },
-  {
     path: '/financial-products',
     name: 'financial-products',
     component: () => import('@/views/FinancialProductsView.vue')
   },
   {
-    path: '/news/tips',
-    name: 'news-tips',
-    component: () => import('@/views/NewsTipsPageView.vue')
+    path: '/library/tips',
+    name: 'library-tips',
+    component: () => import('@/views/LibraryTipsPageView.vue')
   },
   {
-    path: '/news/books',
-    name: 'news-books',
-    component: () => import('@/views/NewsBooksPageView.vue')
+    path: '/library/contents',
+    name: 'library-contents',
+    component: () => import('@/views/LibraryContentsPageView.vue')
   },
   {
-    path: '/education/contents',
-    name: 'educationcontents',
-    component: () => import('@/views/EducationContentsPageView.vue')
+    path: '/library/books',
+    name: 'library-books',
+    component: () => import('@/views/LibraryBooksPageView.vue')
   },
   {
     path: '/community',
@@ -59,6 +57,12 @@ const routes = [
     path: '/signup',
     name: 'SignupView',
     component: SignupView
+  },
+  {
+    path: '/profilepage',
+    name: 'ProfilePageView',
+    component: ProfilePageView,
+    meta: { requiresAuth: true }
   },
 ]
 
