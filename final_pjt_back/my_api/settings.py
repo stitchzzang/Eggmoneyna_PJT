@@ -102,6 +102,7 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
 ]
 
+# 허용할 상대방 주소 등록 
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8000',
     'http://localhost:5173',

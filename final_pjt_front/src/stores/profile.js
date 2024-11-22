@@ -11,7 +11,7 @@ export const useProfileStore = defineStore('profile', () => {
     name: '',
     username: '',
     email: '',
-    birthdate: '',
+    birth_date: '',
   })
   const products = ref([])
   const financialType = ref(null)

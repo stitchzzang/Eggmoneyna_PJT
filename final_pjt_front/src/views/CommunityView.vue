@@ -1,18 +1,21 @@
 <template>
   <div class="community-container">
-    <!-- 게시글 목록 표시 (기본 화면) -->
-    <CommunityList 
-      v-if="!isWriting && !selectedPost"
-      :posts="posts"
-      @select-post="showPostDetail"
-    />
-
     <!-- 글쓰기 버튼 (목록 화면에서만 표시) -->
     <div v-if="!isWriting && !selectedPost" class="write-button-container">
+      <RouterLink :to="{ name: 'community-write' }" class="write-button">
+        글쓰기
+      </RouterLink>
+    </div>
+    <!-- <div v-if="!isWriting && !selectedPost" class="write-button-container">
       <button v-if="authStore.isAuthenticated" @click="showWriteForm" class="write-button">
         글쓰기
       </button>
-    </div>
+    </div> -->
+
+    <CommunityList 
+      :threads="store.threads"
+    />
+
 
     <!-- 글쓰기 폼 -->
     <CommunityWriteForm 
@@ -41,7 +44,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import { useCounterStore } from '@/stores/counter'
 import { useRouter } from 'vue-router'
+import { RouterLink } from 'vue-router' 
 import CommunityList from '@/components/Community/CommunityList.vue'
 import CommunityWriteForm from '@/components/Community/CommunityWriteForm.vue'
 import CommunityDetail from '@/components/Community/CommunityDetail.vue'
@@ -55,24 +60,12 @@ const isWriting = ref(false)
 const selectedPost = ref(null)
 const showDeleteModal = ref(false)
 const postToDelete = ref(null)
+const store = useCounterStore()
 
 // 게시글 목록 조회
-const fetchPosts = async () => {
-  try {
-    const response = await axios.get('http://127.0.0.1:8000/api/v1/posts/', {
-      headers: {
-        'Authorization': `Token ${authStore.token}`
-      }
-    })
-    console.log('게시글 목록:', response.data)  // 디버깅용
-    posts.value = response.data
-  } catch (error) {
-    console.error('게시글 조회 실패:', error)
-    if (error.response) {
-      console.error('서버 응답:', error.response.data)
-    }
-  }
-}
+onMounted(() => {
+  store.getThreads() 
+})
 
 // 글쓰기 폼 표시
 const showWriteForm = () => {
@@ -160,9 +153,6 @@ const cancelDelete = () => {
   postToDelete.value = null
 }
 
-onMounted(() => {
-  fetchPosts()
-})
 </script>
 
 <style scoped>
@@ -185,6 +175,8 @@ onMounted(() => {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
+  text-decoration: none;  /* 링크 밑줄 제거 */
+  display: inline-block;  /* 버튼처럼 보이게 만들기 */
 }
 
 .write-button:hover {

@@ -23,5 +23,5 @@ urlpatterns = [
     path('accounts/signup/', include('dj_rest_auth.registration.urls')),
     path('accounts/delete/', include('accounts.urls')),
     path('community/', include('threads.urls')),
-    path('finlife/', include('finlife.urls')),
+    path('', include('finlife.urls')),
 ]

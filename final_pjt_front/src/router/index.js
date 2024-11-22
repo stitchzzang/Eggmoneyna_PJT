@@ -3,6 +3,9 @@ import MainPageView from '@/views/MainPageView.vue'  // 메인 컴포넌트 impo
 import LoginView from '@/views/LoginView.vue'
 import SignupView from '@/views/SignupView.vue'
 import ProfilePageView from '@/views/ProfilePageView.vue'
+import CommunityView from '@/views/CommunityView.vue'
+import CommunityDetail from '@/components/Community/CommunityDetail.vue'
+import CommunityWriteForm from '@/components/Community/CommunityWriteForm.vue'
 
 const routes = [
   {
@@ -31,14 +34,24 @@ const routes = [
     component: () => import('@/views/NewsBooksPageView.vue')
   },
   {
-    path: '/education',
-    name: 'education',
+    path: '/education/contents',
+    name: 'educationcontents',
     component: () => import('@/views/EducationPageView.vue')
   },
   {
     path: '/community',
     name: 'community',
-    component: () => import('@/views/CommunityView.vue')
+    component: CommunityView
+  },
+  {
+    path: '/community/:id',
+    name: 'community-detail',
+    component: CommunityDetail
+  },
+  {
+    path: '/community/create',
+    name: 'community-write',
+    component: CommunityWriteForm
   },
   {
     path: '/utilities/exchange',

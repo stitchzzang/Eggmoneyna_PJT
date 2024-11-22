@@ -8,18 +8,26 @@ export const useCounterStore = defineStore('counter', () => {
   const threads = ref([])
   const API_URL = 'http://127.0.0.1:8000'
 
-  // DRF로 전체 게시글 요청을 보내고 응답을 받아 articles에 저장하는 함수
+  // DRF로 전체 게시글 요청을 보내고 응답을 받아 
+  // threads에 저장하는 함수
   const getThreads = function () {
+    // localStorage에서 토큰 가져오기
+    const token = localStorage.getItem('token')
+    
     axios({
       method: 'get',
-      url: `${API_URL}/community/threads/`
+      url: `${API_URL}/community/`,
+      headers: {
+        Authorization: `Token ${token}`  // 인증 토큰 추가
+      }
     })
-    .then((res) => {
-      threads.value = res.data
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+      .then((res) => {
+        // console.log(res.data)
+        threads.value = res.data  // 장고가 준 데이터(res.data)를 threads에 저장
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   // 회원가입 요청을 보내는 함수
@@ -77,7 +85,6 @@ export const useCounterStore = defineStore('counter', () => {
       throw error
     }
   }
-
 
 
   return { threads, API_URL, getThreads, signUp, logIn }

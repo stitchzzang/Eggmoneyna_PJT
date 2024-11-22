@@ -4,12 +4,11 @@ from rest_framework import status
 
 # permission Decorators
 from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated
-
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from django.shortcuts import get_object_or_404, get_list_or_404
 
-from .serializers import ThreadListSerializer, ThreadSerializer
-from .models import Thread
+from .serializers import ThreadListSerializer, ThreadSerializer, CommentSerializer
+from .models import Thread, Comment
 
 
 # 인증된 사용자만 사용 가능 : IsAuthenticated (요청에 반드시 토큰이 있어야 함)
@@ -21,7 +20,7 @@ def thread_list(request):
         serializer = ThreadListSerializer(threads, many=True)
         return Response(serializer.data)
     
-    elif request.method == 'POST':  # 게시글 생성 
+    elif request.method == 'POST':  # 게시글 생성  
         serializer = ThreadSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             # serializer.save()
@@ -29,13 +28,36 @@ def thread_list(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-# 모두 허용
-@api_view(['GET'])
+# 단일 게시글 조회 (모두 허용)
+@api_view(['GET', 'DELETE', 'PUT', 'PATCH'])
+@permission_classes([IsAuthenticated])
 def thread_detail(request, thread_pk):
-    thread = get_object_or_404(Thread, pk=thread_pk)    
-
+    thread = get_object_or_404(Thread, pk=thread_pk)
+    
     if request.method == 'GET':
         serializer = ThreadSerializer(thread)
-        print(serializer.data)
         return Response(serializer.data)
+    
+    # 작성자 확인
+    if request.user != thread.user:
+        return Response({'detail': '권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+    
+    if request.method == 'DELETE':
+        thread.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        
+    elif request.method in ['PUT', 'PATCH']:  # PUT과 PATCH 모두 처리
+        serializer = ThreadSerializer(thread, data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
+
+
+@api_view(['POST'])
+def comment_create(request, thread_pk):
+    thread = get_object_or_404(Thread, pk=thread_pk)
+    serializer = CommentSerializer(data=request.data)
+    if serializer.is_valid(raise_status=True):
+        serializer.save(thread=thread, user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
