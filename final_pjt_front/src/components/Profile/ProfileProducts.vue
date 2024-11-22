@@ -1,6 +1,7 @@
 <template>
   <div>
     <h2>가입한 상품 보기</h2>
+    <hr>
   </div>
 </template>
 
@@ -8,6 +9,9 @@
 
 </script>
 
-<style lang="scss" scoped>
-
+<style scoped>
+h2 {
+  color: #056800;
+  font-weight: bold;
+}
 </style>

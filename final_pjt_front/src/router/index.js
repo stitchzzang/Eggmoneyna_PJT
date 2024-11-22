@@ -7,6 +7,7 @@ import CommunityView from '@/views/CommunityView.vue'
 import CommunityDetail from '@/components/Community/CommunityDetail.vue'
 import CommunityWriteForm from '@/components/Community/CommunityWriteForm.vue'
 
+
 const routes = [
   {
     path: '/',
@@ -14,29 +15,24 @@ const routes = [
     component: MainPageView
   },
   {
-    path: '/profilepage',
-    name: 'profilepage',
-    component: ProfilePageView
-  },
-  {
     path: '/financial-products',
     name: 'financial-products',
     component: () => import('@/views/FinancialProductsView.vue')
   },
   {
-    path: '/news/tips',
-    name: 'news-tips',
-    component: () => import('@/views/NewsTipsPageView.vue')
+    path: '/library/tips',
+    name: 'library-tips',
+    component: () => import('@/views/LibraryTipsPageView.vue')
   },
   {
-    path: '/news/books',
-    name: 'news-books',
-    component: () => import('@/views/NewsBooksPageView.vue')
+    path: '/library/contents',
+    name: 'library-contents',
+    component: () => import('@/views/LibraryContentsPageView.vue')
   },
   {
-    path: '/education/contents',
-    name: 'educationcontents',
-    component: () => import('@/views/EducationPageView.vue')
+    path: '/library/books',
+    name: 'library-books',
+    component: () => import('@/views/LibraryBooksPageView.vue')
   },
   {
     path: '/community',
@@ -72,6 +68,12 @@ const routes = [
     path: '/signup',
     name: 'SignupView',
     component: SignupView
+  },
+  {
+    path: '/profilepage',
+    name: 'ProfilePageView',
+    component: ProfilePageView,
+    meta: { requiresAuth: true }
   },
 ]
 

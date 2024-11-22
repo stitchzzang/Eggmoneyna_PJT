@@ -1,7 +1,7 @@
 <template>
   <div class="whole">
     <div class="exchange-container">
-      <h2>💸 환율 계산기</h2>
+      <h1>💸 환율 계산기</h1>
       <p class="notice">* 엔화 / 인도네시아 루피아는 100단위, 나머지는 모두 1단위 입니다.</p>
       <div class="exchange-form">
         <!-- 입력 금액 및 통화 선택 -->
@@ -349,7 +349,8 @@ export default {
   margin-top: 20px;
 }
 
-h2 {
+
+h1 {
   text-align: center;
   color: #056800;
   margin-bottom: 30px;

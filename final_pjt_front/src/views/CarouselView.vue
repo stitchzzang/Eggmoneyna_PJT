@@ -12,7 +12,7 @@
 
         </div>
         <div class="carousel-item">
-          <img src="@/assets/carousel2.png" class="d-block w-100" alt="Slide 2">
+          <img src="@/assets/testimg.png" class="d-block w-100" alt="Slide 2">
 
         </div>
         <div class="carousel-item">
@@ -163,6 +163,7 @@
   background-color: rgba(0, 114, 0, 0.493);
   padding: 25px;
   border-radius: 10px;
+  border: 1px solid #198322;
 }
 
 /* 호버 효과 추가 */

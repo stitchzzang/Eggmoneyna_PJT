@@ -8,7 +8,7 @@
         </div>
         <div class="right-column">
           <h1>금융 성향 테스트</h1>
-          <p>나의 금융 성향을 알아보고 맞춤형 금융 상품을 추천 받아보세요!</p>
+          <p>나의 금융 성향을 알아보고<br>맞춤형 금융 상품을 추천 받아보세요!</p>
           <button @click="startTest" class="start-btn">테스트 시작하기</button>
         </div>
       </div>
@@ -66,12 +66,18 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useProfileStore } from '@/stores/profile'
+import { useRouter } from 'vue-router'
+
+const store = useProfileStore()
+const router = useRouter()
 
 const started = ref(false)
 const currentQuestion = ref(0)
 const totalScore = ref(0)
 const testCompleted = ref(false)
+const result = ref(null)
 
 const questions = [
   {
@@ -86,10 +92,10 @@ const questions = [
   {
     question: "월별 소득에서 얼마를 저축하고 투자하시나요?",
     options: [
-      { text: "소득의 대부분을 저축하고 투자한다", score: 4 },
-      { text: "저축은 하지만, 대부분은 소비한다", score: 3 },
-      { text: "소비가 많고 저축은 거의 하지 않는다", score: 2 },
-      { text: "저축이나 투자보다는 비상 지출에 대비한다", score: 1 }
+      { text: "소득의 대부분을 저축하고 투자", score: 4 },
+      { text: "저축은 하지만, 대부분은 소비", score: 3 },
+      { text: "소비가 많고 저축은 거의 하지 않음", score: 2 },
+      { text: "저축이나 투자보다는 비상 지출에 대비", score: 1 }
     ]
   },
   {
@@ -104,28 +110,28 @@ const questions = [
   {
     question: "금융 계획을 세울 때 주로 어떤 방식으로 접근하시나요?",
     options: [
-      { text: "고정적인 예산을 세워 생활비를 철저히 관리한다", score: 4 },
-      { text: "일정 부분을 유동성 있게 소비하고 나머지는 저축한다", score: 3 },
-      { text: "생활비와 소비를 유동적으로 조절한다", score: 2 },
-      { text: "계획 없이 지출하고 나서야 예산을 조정한다", score: 1 }
+      { text: "고정적인 예산을 세워 생활비를 철저히 관리", score: 4 },
+      { text: "일정 부분을 유동성 있게 소비하고 나머지는 저축", score: 3 },
+      { text: "생활비와 소비를 유동적으로 조절", score: 2 },
+      { text: "계획 없이 지출하고 나서야 예산을 조정", score: 1 }
     ]
   },
   {
     question: "위급 상황에서의 대처 방식은 무엇인가요?",
     options: [
-      { text: "대출이나 신용카드를 사용하지 않고, 예비 자금을 사용한다", score: 4 },
-      { text: "여유 자금이 없다면 신용카드나 대출을 고려한다", score: 3 },
-      { text: "신용카드나 대출을 자주 이용한다", score: 2 },
-      { text: "비상 자금이 없어 바로 대출을 받아야 한다", score: 1 }
+      { text: "대출이나 신용카드를 사용하지 않고, 예비 자금을 사용", score: 4 },
+      { text: "여유 자금이 없다면 신용카드나 대출을 고려", score: 3 },
+      { text: "신용카드나 대출을 자주 이용", score: 2 },
+      { text: "비상 자금이 없어 바로 대출을 받아야 함", score: 1 }
     ]
   },
   {
-    question: "금융 투자에서 선호하는 위험 수준은?",
+    question: "금융 투자에서 고려하는 위험 수준은?",
     options: [
-      { text: "위험을 최소화하고 안정적인 수익을 추구한다", score: 4 },
-      { text: "중간 정도의 위험을 감수하고 안정적인 수익을 원한다", score: 3 },
-      { text: "고위험 고수익을 추구한다", score: 2 },
-      { text: "가능한 한 위험을 회피하고 유동성을 중시한다", score: 1 }
+      { text: "위험을 최소화하고 안정적인 수익을 추구", score: 4 },
+      { text: "중간 정도의 위험을 감수하고 안정적인 수익을 원함", score: 3 },
+      { text: "고위험 고수익을 추구", score: 2 },
+      { text: "가능한 한 위험을 회피하고 유동성을 중시", score: 1 }
     ]
   }
 ]
@@ -225,7 +231,21 @@ const selectAnswer = (score) => {
 
 const calculateResult = () => {
   testCompleted.value = true
-  result.value = getResultType(totalScore.value)
+  const resultData = getResultType(totalScore.value)
+  result.value = resultData
+
+  // store에 테스트 결과 저장
+  store.setTestResult({
+    type: resultData.type,
+    image: resultData.image,
+    description: resultData.description,
+    recommendations: resultData.recommendations
+  })
+
+  // 3초 후 추천 페이지로 이동
+  setTimeout(() => {
+    store.currentView = 'recommend'
+  }, 3000)
 }
 
 const getResultType = (score) => {
@@ -241,8 +261,6 @@ const restartTest = () => {
   totalScore.value = 0
   testCompleted.value = false
 }
-
-const result = ref(null)
 </script>
 
 <style scoped>
@@ -314,6 +332,16 @@ const result = ref(null)
   text-align: center;
 }
 
+.right-column h1 {
+  font-size: 2.5rem;
+  font-weight: semibold;
+}
+
+.right-column p {
+  white-space: pre-line;
+  font-size: 1.2rem;
+}
+
 .start-section img {
   max-width: 100%;
   height: auto;
@@ -324,15 +352,17 @@ const result = ref(null)
 .start-btn,
 .restart-btn {
   padding: 10px 20px;
-  background: linear-gradient(45deg, #00bf0a, #007500) !important;
+  margin-top: 15px;
+  background: linear-gradient(45deg, #86da8a, #047404) !important;
   color: white;
   border: 2px solid #128004;
   border-radius: 25px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 19px;
   font-weight: bold;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+  letter-spacing: 1.3px;
 }
 
 .start-btn:hover,
@@ -346,7 +376,9 @@ const result = ref(null)
   font-size: 18px;
   font-weight: bold;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
+  transform: translateY(-2px);
 }
 
 .restart-btn {
@@ -394,7 +426,6 @@ const result = ref(null)
 .option-btn {
   padding: 15px;
   border: 2px solid #b3b3b38f;
-  border-width: 3px;
   border-radius: 8px;
   background: white;
   cursor: pointer;
