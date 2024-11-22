@@ -1,7 +1,7 @@
 <template>
   <div class="community-container">
     <!-- 글쓰기 버튼 (목록 화면에서만 표시) -->
-    <div v-if="!isWriting && !selectedPost" class="write-button-container">
+    <div v-if="!isWriting && !selectedPost && authStore.isAuthenticated" class="write-button-container">
       <RouterLink :to="{ name: 'community-write' }" class="write-button">
         글쓰기
       </RouterLink>
