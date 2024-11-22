@@ -2,19 +2,22 @@
   <div class="profile-container">
     <!-- 좌측 메뉴 -->
     <div class="sidebar">
-      <div class="menu-item" :class="{ active: currentView === 'edit' }" @click="currentView = 'edit'">
+      <div class="menu-item" :class="{ active: store.currentView === 'edit' }" @click="store.currentView = 'edit'">
         회원정보 조회/수정
       </div>
       <div class="financial-category">
         <div class="category-title">금융 서비스</div>
-        <div class="menu-item" :class="{ active: currentView === 'products' }" @click="currentView = 'products'">
+        <div class="menu-item" :class="{ active: store.currentView === 'products' }" @click="store.currentView = 'products'">
           가입한 상품 보기
         </div>
-        <div class="menu-item" :class="{ active: currentView === 'test' }" @click="currentView = 'test'">
+        <div class="menu-item" :class="{ active: store.currentView === 'test' }" @click="store.currentView = 'test'">
           금융 성향 테스트
         </div>
+        <div class="menu-item" :class="{ active: store.currentView === 'recommend' }" @click="store.currentView = 'recommend'">
+          추천 상품 보기
+        </div>
       </div>
-      <div class="menu-item quit" :class="{ active: currentView === 'quit' }" @click="currentView = 'quit'">
+      <div class="menu-item quit" :class="{ active: store.currentView === 'quit' }" @click="store.currentView = 'quit'">
         회원 탈퇴
       </div>
     </div>
@@ -27,18 +30,27 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { computed, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { useProfileStore } from '@/stores/profile'
 import ProfileEdit from '@/components/Profile/ProfileEdit.vue'
 import ProfileProducts from '@/components/Profile/ProfileProducts.vue'
 import ProfileTest from '@/components/Profile/ProfileTest.vue'
 import ProfileQuit from '@/components/Profile/ProfileQuit.vue'
+import ProfileRecommend from '@/components/Profile/ProfileRecommend.vue'
 
+const route = useRoute()
 const store = useProfileStore()
-const currentView = ref('edit')
+
+// URL query parameter 감지하여 view 변경
+watch(() => route.query.view, (newView) => {
+  if (newView) {
+    store.currentView = newView
+  }
+}, { immediate: true })
 
 const currentComponent = computed(() => {
-  switch (currentView.value) {
+  switch (store.currentView) {
     case 'edit':
       return ProfileEdit
     case 'products':
@@ -47,6 +59,8 @@ const currentComponent = computed(() => {
       return ProfileTest
     case 'quit':
       return ProfileQuit
+    case 'recommend':
+      return ProfileRecommend
     default:
       return ProfileEdit
   }

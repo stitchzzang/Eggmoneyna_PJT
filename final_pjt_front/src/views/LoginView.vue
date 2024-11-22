@@ -32,11 +32,11 @@
           </div>
         </div>
 
-        <button type="submit" class="login-btn">Log in</button>
+        <button type="submit" class="login-btn">Log In</button>
       </form>
       <div class="signup-section">
         <p>아직 회원이 아니신가요?</p>
-        <router-link to="/signup" class="signup-btn">Sign up !</router-link>
+        <router-link to="/signup" class="signup-btn">Sign Up !</router-link>
       </div>
     </div>
   </div>

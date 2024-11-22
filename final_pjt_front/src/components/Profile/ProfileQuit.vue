@@ -1,6 +1,7 @@
 <template>
   <div class="profile-quit">
     <h2>회원 탈퇴</h2>
+    <hr>
     
     <div class="warning-box">
       <h3>회원탈퇴 전 안내 사항을 확인해 주세요.</h3>
@@ -73,7 +74,10 @@ const handleQuit = async () => {
 
 h2 {
   color: #343a40;
-  margin-bottom: 2rem;
+}
+
+hr {
+  margin-bottom: 30px;
 }
 
 .warning-box {

@@ -42,8 +42,9 @@ export default {
 .weekly-products {
   width: 80%;
   max-width: 1200px;
-  margin: 50px auto;
+  margin: 25px auto;
   padding-top: 10px;
+  padding-bottom: 30px;
 }
 
 .section-title {

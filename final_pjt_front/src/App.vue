@@ -16,25 +16,14 @@
           <div class="nav-links" v-show="!isMobile">
             <div class="nav-item">
               <router-link to="/financial-products/recommend">금융상품</router-link>
-              <div class="submenu">
-                <router-link to="/financial-products/recommend">상품 추천</router-link>
-                <router-link to="/financial-products/all">전체 상품 조회</router-link>
-              </div>
             </div>
 
             <div class="nav-item">
-              <router-link to="/news/tips">뉴스 & 트렌드</router-link>
+              <router-link to="/library/tips">라이브러리</router-link>
               <div class="submenu">
-                <router-link to="/news/tips">알쓸금잡</router-link>
-                <router-link to="/news/books">도서 추천</router-link>
-              </div>
-            </div>
-
-            <div class="nav-item">
-              <router-link to="/education/contents">교육</router-link>
-              <div class="submenu">
-                <router-link to="/education/contents">콘텐츠 수강</router-link>
-                <router-link to="/education/terms">금융 용어</router-link>
+                <router-link to="/library/tips">알쓸금잡</router-link>
+                <router-link to="/library/contents">교육 콘텐츠</router-link>
+                <router-link to="/library/books">도서 추천</router-link>
               </div>
             </div>
 
@@ -59,31 +48,18 @@
                   <router-link to="/financial-products/recommend" @click="closeMenu">금융상품</router-link>
                   <span class="arrow">▼</span>
                 </div>
-                <div class="submenu" v-show="activeSubmenu === 'financial'">
-                  <router-link to="/financial-products/recommend" @click="closeMenu">상품 추천</router-link>
-                  <router-link to="/financial-products/all" @click="closeMenu">전체 상품 조회</router-link>
-                </div>
               </div>
 
               <div class="mobile-menu-item">
                 <div class="menu-title" @click="toggleSubmenu('news')">
-                  <router-link to="/news/tips" @click="closeMenu">뉴스 & 트렌드</router-link>
+                  <router-link to="/news/tips" @click="closeMenu">라이브러리</router-link>
                   <span class="arrow">▼</span>
                 </div>
                 <div class="submenu" v-show="activeSubmenu === 'news'">
                   <router-link to="/news/tips" @click="closeMenu">알쓸금잡</router-link>
+                  <router-link to="/education/contents" @click="closeMenu">교육 콘텐츠</router-link>
                   <router-link to="/news/books" @click="closeMenu">도서 추천</router-link>
-                </div>
-              </div>
 
-              <div class="mobile-menu-item">
-                <div class="menu-title" @click="toggleSubmenu('education')">
-                  <router-link to="/education/contents" @click="closeMenu">교육</router-link>
-                  <span class="arrow">▼</span>
-                </div>
-                <div class="submenu" v-show="activeSubmenu === 'education'">
-                  <router-link to="/education/contents" @click="closeMenu">콘텐츠 수강</router-link>
-                  <router-link to="/education/terms" @click="closeMenu">금융 용어</router-link>
                 </div>
               </div>
 
@@ -118,10 +94,9 @@
           
           <div v-if="auth.isAuthenticated" class="user-menu">
             <div class="user-info">
-              <router-link to="/profilepage" class="username">
+              <router-link :to="{ path: '/profilepage' }" class="username">
                 <strong>🐣 {{ auth.user }}</strong> 님 안녕하세요!
               </router-link>
-              <!-- <div class="greeting">안녕하세요!</div> -->
             </div>
             <button @click="logout" class="logout-button">로그아웃</button>
           </div>
@@ -141,33 +116,19 @@
         <div class="sitemap">
           <div class="sitemap-section">
             <h3>금융상품</h3>
-            <ul>
-              <li><router-link to="/financial-products/recommend">상품 추천</router-link></li>
-              <li><router-link to="/financial-products/all">전체 상품 조회</router-link></li>
-            </ul>
           </div>
 
           <div class="sitemap-section">
-            <h3>뉴스 & 트렌드</h3>
+            <h3>라이브러리</h3>
             <ul>
-              <li><router-link to="/news/tips">알쓸금잡</router-link></li>
-              <li><router-link to="/news/books">도서 추천</router-link></li>
-            </ul>
-          </div>
-
-          <div class="sitemap-section">
-            <h3>교육</h3>
-            <ul>
-              <li><router-link to="/education/contents">콘텐츠 수강</router-link></li>
-              <li><router-link to="/education/terms">금융 용어</router-link></li>
+              <li><router-link to="/library/tips">알쓸금잡</router-link></li>
+              <li><router-link to="/library/contents">교육 콘텐츠</router-link></li>
+              <li><router-link to="/library/books">도서 추천</router-link></li>
             </ul>
           </div>
 
           <div class="sitemap-section">
             <h3>커뮤니티</h3>
-            <ul>
-              <li><router-link to="/community">커뮤니티 홈</router-link></li>
-            </ul>
           </div>
 
           <div class="sitemap-section">
@@ -180,7 +141,7 @@
         </div>
         
         <div class="footer-bottom">
-          <p>&copy; 2024 에그머니나. All rights reserved.</p>
+          <p>&copy; 2024 Eggmoneyna. All rights reserved.</p>
         </div>
       </div>
     </footer>
@@ -250,8 +211,8 @@ const logout = async () => {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Nanum Gothic", sans-serif;
-  font-weight: 400;
+  font-family: 'EnvironmentR';
+  font-weight: normal;
   font-style: normal;
 }
 
@@ -270,7 +231,7 @@ body {
   min-height: 100vh;
   background : linear-gradient(
     rgba(255, 255, 255, 0.5),
-    rgb(238, 238, 157, 0.81) 40%,
+    rgb(238, 238, 157, 0.81) 35%,
     rgb(61, 171, 61, 0.63) 100%
   );
 }
@@ -284,7 +245,7 @@ body {
   width: 100%;
   top: 10px;
   z-index: 1000;
-  padding: 5px 0;
+  padding: 0.5rem 1rem;
 }
 
 .nav-container {
@@ -300,19 +261,25 @@ body {
   display: flex;
   align-items: center;
   gap: 2rem;
+  margin-top: 10px;
+  margin-left: 20px;
 }
 
 /* 에그머니나 로고 이미지 */
 .logo-image {
-  height: 70px;
+  height: 80px;
   width: auto;
   vertical-align: middle;
   margin-left: 10px;
 }
 
 .nav-links {
+  margin-left: 15px;
+  margin-right: 10px;
   display: flex;
-  gap: 2rem;
+  font-weight: normal;
+  font-size: 1.3rem;
+  gap: 0.8rem;
   position: relative;
   white-space: nowrap;
 }
@@ -320,13 +287,15 @@ body {
 .nav-item {
   position: relative;
   padding: 10px 0;
+  white-space: nowrap;
+  margin: 0 2px;
 }
 
 .nav-item > a {
   text-decoration: none;
-  color: #000;
+  color: #222222;
   font-weight: 600;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.7rem;
   border-radius: 4px;
   transition: background-color 0.3s;
 }
@@ -335,7 +304,7 @@ body {
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: rgba(255, 255, 255, 0.534);
+  background-color: rgba(255, 255, 255, 0.938);
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   padding: 10px 0;
@@ -356,9 +325,10 @@ body {
 .submenu a {
   display: block;
   padding: 8px 20px;
-  color: #333;
+  color: #000000;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 1rem;
+  font-weight: bold;
   transition: background-color 0.2s;
   white-space: nowrap;
 }
@@ -377,14 +347,14 @@ body {
 .user-menu {
   display: flex;
   align-items: center;
+  gap: 1rem;
+  flex-wrap: nowrap;
 }
 
 .user-info {
   text-align: left;
-  margin-right: 20px;
-  background-color: #e7e7e773;
-  border-radius: 20px;
-  padding: 5px 10px;
+  margin-right: 10px;
+  white-space: nowrap;
 }
 
 .username {
@@ -397,11 +367,6 @@ body {
   color: #056800;
 }
 
-.greeting {
-  font-size: 0.85rem;
-  color: #666;
-  margin-top: 2px;
-}
 
 .logout-button {
   padding: 0.5rem 1rem;
@@ -409,6 +374,8 @@ body {
   border: none;
   cursor: pointer;
   font-weight: 500;
+  white-space: nowrap;
+  min-width: fit-content;
 }
 
 .auth-buttons {
@@ -423,7 +390,7 @@ body {
 .logout-button {
   text-decoration: none;
   padding: 8px 18px;
-  background: linear-gradient(45deg, #39ca40, #007500) !important;
+  background: linear-gradient(45deg, #86da8a, #047404) !important;
   color: white;
   border: 2px solid #1d8a0e;
   border-radius: 25px;
@@ -431,6 +398,7 @@ body {
   font-size: 18px;
   font-weight: bold;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
 }
 
@@ -439,7 +407,7 @@ body {
   text-decoration: none;
   padding: 10px 20px;
   background: linear-gradient(45deg, #e9eea7, #d6e227) !important;
-  color: rgb(0, 0, 0);
+  color: rgba(24, 24, 24, 0.918);
   border: 2px solid #989b0d;
   border-radius: 25px;
   cursor: pointer;
@@ -583,6 +551,30 @@ body {
   }
   
   .login-button, .signup-button {
+    padding: 0.4rem 1rem;
+  }
+
+  .nav-right {
+    display: flex;
+    flex-direction: column !important;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+
+  .user-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+
+  .user-info {
+    margin-right: 0;
+    text-align: right;
+  }
+
+  .logout-button {
+    width: auto;
     padding: 0.4rem 1rem;
   }
 }
@@ -875,16 +867,21 @@ body {
 
 .sitemap {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 30px;
-  margin-bottom: 30px;
+  grid-template-columns: repeat(4, minmax(150px, 200px));
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.sitemap-section {
+  text-align: center;
 }
 
 .sitemap-section h3 {
   color: #056800;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   margin-bottom: 15px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .sitemap-section ul {
@@ -897,10 +894,11 @@ body {
 }
 
 .sitemap-section ul li a {
-  color: #666;
+  color: #333;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   transition: color 0.2s;
+  font-weight: 500;
 }
 
 .sitemap-section ul li a:hover {
@@ -917,13 +915,32 @@ body {
 
 @media (max-width: 768px) {
   .sitemap {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(120px, 180px));
+    gap: 10px;
+  }
+
+  .sitemap-section h3 {
+    font-size: 1.2rem;
+  }
+
+  .sitemap-section ul li a {
+    font-size: 1rem;
   }
 }
 
 @media (max-width: 480px) {
   .sitemap {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(1, minmax(150px, 200px));
   }
+}
+
+.navbar-nav {
+  flex-direction: row !important;
+  align-items: center !important;
+}
+
+.nav-link {
+  display: inline-block !important;
+  padding: 0.5rem 1rem !important;
 }
 </style>
