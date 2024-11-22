@@ -103,7 +103,7 @@ export default {
   methods: {
     async getExchangeRates() {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_APP_API_URL}/utilities/exchange/`)
+        const response = await axios.get('/finlife/utilities/exchange/')
         this.exchangeRates = response.data.sort((a, b) => {
           const nameA = this.getCurrencyName(a.currency_code)
           const nameB = this.getCurrencyName(b.currency_code)
@@ -112,7 +112,6 @@ export default {
         this.filterMainExchangeRates()
       } catch (error) {
         console.error('환율 정보 로드 오류:', error)
-        alert('환율 정보를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.')
       }
     },
 
@@ -348,7 +347,6 @@ export default {
 .exchange-container h2 {
   margin-top: 20px;
 }
-
 
 h1 {
   text-align: center;
