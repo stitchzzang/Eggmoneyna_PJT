@@ -1,16 +1,27 @@
 <template>
-  <div class="post-item" @click="$emit('select')">
+  <!-- <div class="post-item" @click="$emit('select')">
     <h3 class="post-title">{{ post.title }}</h3>
     <div class="post-info">
       <span class="author">{{ post.author }}</span>
       <span class="date">{{ formatDate(post.created_at) }}</span>
     </div>
+  </div> -->
+  <div>
+    <h5>{{ thread.id }}</h5>
+    <h3>{{ thread.title }}</h3>
+    <p>{{ thread.content }}</p>
+    <RouterLink 
+      :to="{ name: 'community-detail', 
+      params: { id: thread.id } }">Detail</RouterLink>
+    <hr>
   </div>
 </template>
 
 <script setup>
+import { RouterLink } from 'vue-router'
+
 defineProps({
-  post: {
+  thread: {  
     type: Object,
     required: true
   }

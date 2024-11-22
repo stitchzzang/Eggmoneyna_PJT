@@ -3,11 +3,24 @@ import { ref } from 'vue'
 import axios from 'axios'
 
 export const useProfileStore = defineStore('profile', () => {
+  const router = useRouter()
+  
+  // state를 ref로 정의
+  const userInfo = ref({
+    name: '',
+    username: '',
+    email: '',
+    birth_date: '',
+  })
+  const products = ref([])
+  const financialType = ref(null)
+  const loading = ref(false)
+  const error = ref(null)
+
   // localStorage에서 저장된 테스트 결과 불러오기
   const savedResult = localStorage.getItem('testResult')
   const testResult = ref(savedResult ? JSON.parse(savedResult) : null)
   const currentView = ref('edit')
-  const userInfo = ref(null)  // 사용자 정보 저장용
 
   const setTestResult = (result) => {
     testResult.value = result

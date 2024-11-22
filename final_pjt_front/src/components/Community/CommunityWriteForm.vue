@@ -1,13 +1,13 @@
 <template>
   <div class="write-form">
     <h2>게시글 작성</h2>
-    <form @submit.prevent="submitForm">
+    <form @submit.prevent="createThread">
       <div class="form-group">
         <label for="title">제목</label>
         <input 
           type="text" 
           id="title"
-          v-model="title"
+          v-model.trim="title"
           required
           placeholder="제목을 입력하세요"
         >
@@ -17,7 +17,7 @@
         <label for="content">내용</label>
         <textarea 
           id="content"
-          v-model="content"
+          v-model.trim="content"
           required
           placeholder="내용을 입력하세요"
           rows="10"
@@ -35,22 +35,56 @@
 <script setup>
 import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import { useCounterStore } from '@/stores/counter'
+import axios from 'axios'
+import { useRouter } from 'vue-router'
 
 const auth = useAuthStore()
 const emit = defineEmits(['submit', 'cancel'])
 
-const title = ref('')
-const content = ref('')
+const title = ref(null)
+const content = ref(null)
+const store = useCounterStore()
+const router = useRouter()
 
-const submitForm = () => {
-  emit('submit', {
-    title: title.value,
-    content: content.value,
-    author: auth.user
+const createThread = function() {
+  console.log('현재 토큰:', auth.token)
+
+  if (!auth.token) {
+    alert('로그인이 필요합니다.')
+    router.push('/login')
+    return
+  }
+
+  axios({
+    method: 'post',
+    url: `${store.API_URL}/community/`,
+    headers: {
+      Authorization: `Token ${auth.token}`,
+      'Content-Type': 'application/json',
+    },
+    data: {
+      title: title.value,
+      content: content.value
+    }
   })
-  title.value = ''
-  content.value = ''
+  .then((res) => {
+    // console.log('게시글 작성 성공!')
+    alert('게시글이 성공적으로 등록되었습니다!');
+    router.push('/community')
+  })
+  .catch((err) => {
+    console.log('에러 응답:', err.response?.data)
+    if (err.response?.status === 401) {
+      alert('로그인이 필요하거나 세션이 만료되었습니다. 다시 로그인해주세요.')
+      auth.logout()
+      router.push('/login')
+    } else {
+      alert('게시글 등록에 실패했습니다. 다시 시도해주세요.')
+    }
+  })
 }
+
 </script>
 
 <style scoped>

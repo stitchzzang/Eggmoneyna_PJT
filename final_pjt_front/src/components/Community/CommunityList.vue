@@ -1,6 +1,6 @@
 <template>
   <div class="community-list">
-    <div v-for="post in posts" 
+    <!-- <div v-for="post in posts" 
          :key="post.id" 
          class="post-item"
          @click="$emit('select-post', post)">
@@ -9,14 +9,24 @@
         <span>작성자: {{ post.author }}</span>
         <span>작성일: {{ formatDate(post.created_at) }}</span>
       </div>
-    </div>
-  </div>
+    </div> -->
+    <CommunityItem 
+      v-for="thread in store.threads" 
+      :key="thread.id" 
+      :thread="thread"
+    />
+</div>
 </template>
 
 <script setup>
+import CommunityItem from '@/components/Community/CommunityItem.vue'
+import { useCounterStore } from '@/stores/counter'
+
+const store = useCounterStore()
+
 defineProps({
-  posts: {
-    type: Array,
+  thread: {
+    type: Object,
     required: true
   }
 })

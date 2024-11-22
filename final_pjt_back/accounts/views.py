@@ -11,7 +11,6 @@ from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
 
 @api_view(['POST'])
-# @permission_classes([AllowAny])
 def signup(request):
     try:
         # 패스워드 일치 여부 확인
@@ -21,11 +20,17 @@ def signup(request):
         if password != password_confirmation:
             return Response({'error': '비밀번호가 일치하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
         
-        # 시리얼라이저로 유저 생성
-        serializer = UserSerializer(data=request.data)
+        # 시리얼라이저에 전달할 데이터 정리
+        serializer_data = {
+            'username': request.data.get('username'),
+            'password': password,
+            'email': request.data.get('email'),
+            # 필요한 다른 필드들도 여기에 추가
+        }
+        
+        serializer = UserSerializer(data=serializer_data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
-            # 비밀번호 해싱
             user.set_password(password)
             user.save()
             

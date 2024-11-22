@@ -15,8 +15,6 @@ class User(AbstractUser):
     # email과 first_name도 AbstractUser에 있지만, 필수 필드로 변경
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=30)
-    
-    # 새로 추가할 필드
     birth_date = models.DateField(
         default=datetime.date(1900, 1, 1)  # 1990년 1월 1일을 기본값으로 설정
     )
