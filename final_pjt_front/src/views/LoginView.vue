@@ -105,7 +105,7 @@ const submitForm = async () => {
 }
 
 .login-modal {
-  background-color: rgba(143, 188, 143, 0.7);
+  background-color: rgba(154, 214, 186, 0.7);
   padding: 30px;
   border-radius: 40px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
