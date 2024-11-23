@@ -1,9 +1,16 @@
 <template>
   <div class="community-view">
     <h1 class="page-title">📝 커뮤니티</h1>
-    <div class="community-container">
-      <!-- 글쓰기 버튼 -->
-      <div v-if="!isWriting && !selectedPost && authStore.isAuthenticated" class="write-button-container">
+    
+    <!-- 로그인하지 않은 사용자를 위한 메시지 추가 -->
+    <div v-if="!authStore.isAuthenticated" class="login-message">
+      로그인 후 사용 가능합니다.
+    </div>
+
+    <!-- 로그인한 사용자에게만 커뮤니티 컨테이너 표시 -->
+    <div v-else class="community-container">
+      <!-- 글쓰기 버튼 (인증된 사용자만 표시) -->
+      <div v-if="!isWriting && !selectedPost" class="write-button-container">
         <RouterLink :to="{ name: 'community-write' }" class="write-button">
           글쓰기
         </RouterLink>
@@ -291,6 +298,18 @@ const displayedPages = computed(() => {
 .page-btn:not(:disabled):hover,
 .page-number:not(.active):hover {
   background-color: #f0f0f0;
+}
+
+/* 로그인 메시지 스타일 추가 */
+.login-message {
+  text-align: center;
+  padding: 20px;
+  /* background-color: #f8f9fa; */
+  /* border: 1px solid #ddd; */
+  /* border-radius: 8px; */
+  margin: 250px auto;
+  color: #666;
+  font-size: 1.2em;
 }
 
 </style>

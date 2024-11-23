@@ -85,7 +85,7 @@ const submitForm = async () => {
   } catch (error) {
     if (error.response) {
       console.error('서버 응답:', error.response.data)
-      alert(error.response.data.detail || '로그인에 실패했습니다.')
+      alert(error.response.data.detail || "아이디 또는 비밀번호가 일치하지 않습니다. 다시 확인해 주세요.")
     } else {
       console.error('서버 연결 실패:', error)
       alert('서버에 연결할 수 없습니다. 서버가 실행중인지 확인해주세요.')
