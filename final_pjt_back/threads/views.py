@@ -53,11 +53,42 @@ def thread_detail(request, thread_pk):
             return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def comment_list(request, thread_pk):
+    thread = get_object_or_404(Thread, pk=thread_pk)
+    comments = Comment.objects.filter(thread=thread)
+    serializer = CommentSerializer(comments, many=True)
+    return Response(serializer.data)
+
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def comment_create(request, thread_pk):
     thread = get_object_or_404(Thread, pk=thread_pk)
     serializer = CommentSerializer(data=request.data)
-    if serializer.is_valid(raise_status=True):
-        serializer.save(thread=thread, user=request.user)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save(
+            thread=thread,
+            user=request.user
+        )
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+@api_view(['PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def comment_detail(request, thread_pk, comment_pk):
+    comment = get_object_or_404(Comment, pk=comment_pk)
+    
+    # 작성자 확인
+    if request.user != comment.user:
+        return Response({'detail': '권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+    
+    if request.method == 'DELETE':
+        comment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    elif request.method == 'PUT':
+        serializer = CommentSerializer(comment, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
 

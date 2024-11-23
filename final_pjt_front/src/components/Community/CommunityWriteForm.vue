@@ -1,34 +1,36 @@
 <template>
-  <div class="write-form">
+  <div>
     <h2>게시글 작성</h2>
-    <form @submit.prevent="createThread">
-      <div class="form-group">
-        <label for="title">제목</label>
-        <input 
-          type="text" 
-          id="title"
-          v-model.trim="title"
-          required
-          placeholder="제목을 입력하세요"
-        >
-      </div>
+    <div class="community-container">
+      <form @submit.prevent="createThread">
+        <div class="form-group">
+          <label for="title">제목</label>
+          <input 
+            type="text" 
+            id="title"
+            v-model.trim="title"
+            required
+            placeholder="제목을 입력하세요"
+          >
+        </div>
 
-      <div class="form-group">
-        <label for="content">내용</label>
-        <textarea 
-          id="content"
-          v-model.trim="content"
-          required
-          placeholder="내용을 입력하세요"
-          rows="10"
-        ></textarea>
-      </div>
+        <div class="form-group">
+          <label for="content">내용</label>
+          <textarea 
+            id="content"
+            v-model.trim="content"
+            required
+            placeholder="내용을 입력하세요"
+            rows="10"
+          ></textarea>
+        </div>
 
-      <div class="button-group">
-        <button type="submit" class="btn-submit">등록</button>
-        <button type="button" @click="$emit('cancel')" class="btn-cancel">취소</button>
-      </div>
-    </form>
+        <div class="button-group">
+          <button type="submit" class="primary-btn">등록</button>
+          <button type="button" @click="cancelWrite" class="secondary-btn">취소</button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -85,14 +87,34 @@ const createThread = function() {
   })
 }
 
+const cancelWrite = () => {
+  router.push('/community')
+}
+
 </script>
 
 <style scoped>
-.write-form {
-  background-color: white;
+h2 {
+  color: #056800;
+  margin: 40px 0 20px;
+  margin-bottom: 40px;
+  font-size: 1.8rem;
+  text-align: center;
+  font-weight: 600;
+
+}
+
+.page-title {
+  margin-bottom: 20px;
+}
+
+.community-container {
+  max-width: 800px;
+  margin: 20px auto 60px;
   padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .form-group {
@@ -102,47 +124,70 @@ const createThread = function() {
 label {
   display: block;
   margin-bottom: 8px;
-  font-weight: bold;
+  color: #555;
+  font-weight: 600;
 }
 
 input, textarea {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
   font-size: 1rem;
+  background-color: #f8f9fa;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  background-color: #fff;
 }
 
 textarea {
   resize: vertical;
+  min-height: 200px;
 }
 
 .button-group {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   justify-content: flex-end;
-  margin-top: 20px;
+  margin-top: 24px;
 }
 
-button {
-  padding: 10px 20px;
-  border-radius: 4px;
-  border: none;
+.primary-btn, .secondary-btn {
+  padding: 8px 18px;
+  border-radius: 25px;
+  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
+  border: 2px solid;
+  white-space: nowrap;
+  min-width: fit-content;
+  font-size: 18px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.btn-submit {
-  background-color: #4CAF50;
+.primary-btn {
+  background: linear-gradient(45deg, #86da8a, #047404);
   color: white;
+  border-color: #1d8a0e;
 }
 
-.btn-cancel {
-  background-color: #6c757d;
+.secondary-btn {
+  background: linear-gradient(45deg, #8a8a8a, #4a4a4a);
   color: white;
+  border-color: #5a5a5a;
 }
 
-button:hover {
-  opacity: 0.9;
+.primary-btn:hover {
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+.secondary-btn:hover {
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
 }
 </style>

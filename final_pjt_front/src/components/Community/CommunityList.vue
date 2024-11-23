@@ -1,15 +1,5 @@
 <template>
   <div class="community-list">
-    <!-- <div v-for="post in posts" 
-         :key="post.id" 
-         class="post-item"
-         @click="$emit('select-post', post)">
-      <h3>{{ post.title }}</h3>
-      <div class="post-info">
-        <span>작성자: {{ post.author }}</span>
-        <span>작성일: {{ formatDate(post.created_at) }}</span>
-      </div>
-    </div> -->
     <CommunityItem 
       v-for="thread in store.threads" 
       :key="thread.id" 

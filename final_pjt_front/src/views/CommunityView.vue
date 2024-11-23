@@ -1,48 +1,74 @@
 <template>
-  <div class="community-container">
-    <!-- 글쓰기 버튼 (목록 화면에서만 표시) -->
-    <div v-if="!isWriting && !selectedPost && authStore.isAuthenticated" class="write-button-container">
-      <RouterLink :to="{ name: 'community-write' }" class="write-button">
-        글쓰기
-      </RouterLink>
+  <div class="community-view">
+    <h1 class="page-title">📝 커뮤니티</h1>
+    <div class="community-container">
+      <!-- 글쓰기 버튼 -->
+      <div v-if="!isWriting && !selectedPost && authStore.isAuthenticated" class="write-button-container">
+        <RouterLink :to="{ name: 'community-write' }" class="write-button">
+          글쓰기
+        </RouterLink>
+      </div>
+
+      <!-- 게시글 목록 -->
+      <CommunityList 
+        :threads="paginatedThreads"
+      />
+
+      <!-- 페이지네이션 -->
+      <div class="pagination">
+        <button 
+          :disabled="currentPage === 1"
+          @click="currentPage--"
+          class="page-btn"
+        >
+          이전
+        </button>
+        
+        <div class="page-numbers">
+          <button 
+            v-for="page in displayedPages" 
+            :key="page"
+            @click="currentPage = page"
+            :class="['page-number', { active: currentPage === page }]"
+          >
+            {{ page }}
+          </button>
+        </div>
+        
+        <button 
+          :disabled="currentPage === totalPages"
+          @click="currentPage++"
+          class="page-btn"
+        >
+          다음
+        </button>
+      </div>
+
+      <!-- 나머지 컴포넌트들 -->
+      <CommunityWriteForm 
+        v-if="isWriting"
+        @submit="createPost"
+        @cancel="cancelWriting"
+      />
+
+      <CommunityDetail
+        v-if="selectedPost"
+        :post="selectedPost"
+        @close="closePostDetail"
+        @delete="showDeleteConfirm"
+      />
+
+      <CommunityDeleteModal
+        v-if="showDeleteModal"
+        @confirm="confirmDelete"
+        @cancel="cancelDelete"
+      />
     </div>
-    <!-- <div v-if="!isWriting && !selectedPost" class="write-button-container">
-      <button v-if="authStore.isAuthenticated" @click="showWriteForm" class="write-button">
-        글쓰기
-      </button>
-    </div> -->
-
-    <CommunityList 
-      :threads="store.threads"
-    />
-
-
-    <!-- 글쓰기 폼 -->
-    <CommunityWriteForm 
-      v-if="isWriting"
-      @submit="createPost"
-      @cancel="cancelWriting"
-    />
-
-    <!-- 게시글 상세 보기 -->
-    <CommunityDetail
-      v-if="selectedPost"
-      :post="selectedPost"
-      @close="closePostDetail"
-      @delete="showDeleteConfirm"
-    />
-
-    <!-- 삭제 확인 모달 -->
-    <CommunityDeleteModal
-      v-if="showDeleteModal"
-      @confirm="confirmDelete"
-      @cancel="cancelDelete"
-    />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useCounterStore } from '@/stores/counter'
 import { useRouter } from 'vue-router'
@@ -61,6 +87,8 @@ const selectedPost = ref(null)
 const showDeleteModal = ref(false)
 const postToDelete = ref(null)
 const store = useCounterStore()
+const currentPage = ref(1)
+const itemsPerPage = 10
 
 // 게시글 목록 조회
 onMounted(() => {
@@ -153,6 +181,31 @@ const cancelDelete = () => {
   postToDelete.value = null
 }
 
+// 페이지네이션된 게시글 목록
+const paginatedThreads = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return store.threads.slice(start, end)
+})
+
+// 전체 페이지 수 계산
+const totalPages = computed(() => {
+  return Math.ceil(store.threads.length / itemsPerPage)
+})
+
+// 표시할 페이지 번호 계산
+const displayedPages = computed(() => {
+  const range = 2
+  let start = Math.max(currentPage.value - range, 1)
+  let end = Math.min(currentPage.value + range, totalPages.value)
+
+  const pages = []
+  for (let i = start; i <= end; i++) {
+    pages.push(i)
+  }
+  return pages
+})
+
 </script>
 
 <style scoped>
@@ -168,18 +221,76 @@ const cancelDelete = () => {
 }
 
 .write-button {
-  background-color: #4CAF50;
+  text-decoration: none;
+  padding: 8px 18px;
+  background: linear-gradient(45deg, #86da8a, #047404) !important;
   color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
+  border: 2px solid #1d8a0e;
+  border-radius: 25px;
   cursor: pointer;
-  transition: background-color 0.3s;
-  text-decoration: none;  /* 링크 밑줄 제거 */
-  display: inline-block;  /* 버튼처럼 보이게 만들기 */
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 }
 
 .write-button:hover {
-  background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
 }
+
+.community-view {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  margin: 20px auto;
+}
+
+.page-title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #056800;
+  font-weight: 600;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 30px 0;
+  gap: 10px;
+}
+
+.page-numbers {
+  display: flex;
+  gap: 5px;
+}
+
+.page-btn, .page-number {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  min-width: 40px;
+}
+
+.page-btn:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  color: #999;
+}
+
+.page-number.active {
+  background-color: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
+}
+
+.page-btn:not(:disabled):hover,
+.page-number:not(.active):hover {
+  background-color: #f0f0f0;
+}
+
 </style>
