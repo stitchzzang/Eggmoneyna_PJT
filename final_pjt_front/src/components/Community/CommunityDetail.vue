@@ -339,11 +339,16 @@ const deleteComment = (commentId) => {
 }
 
 .btn-edit {
-  background: linear-gradient(45deg, #40c057, #2b8a3e);
+  background: linear-gradient(45deg, #86da8a, #047404) !important;
+  border: 2px solid #128004;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  letter-spacing: 1.3px;
   color: white;
   opacity: 0.8;
-  transition: all 0.3s ease;
-  border: none;
   padding: 8px 20px;
   border-radius: 5px;
 }
@@ -355,11 +360,16 @@ const deleteComment = (commentId) => {
 }
 
 .btn-delete {
-  background: linear-gradient(45deg, #fa5252, #e03131);
+  background: linear-gradient(45deg, #fa8b8b, #eb1c1c);
+  border: 2px solid #b5221a;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  letter-spacing: 1.3px;
   color: white;
   opacity: 0.8;
-  transition: all 0.3s ease;
-  border: none;
   padding: 8px 20px;
   border-radius: 5px;
 }
@@ -376,8 +386,15 @@ const deleteComment = (commentId) => {
 }
 
 .btn-submit {
-  background: linear-gradient(45deg, #86da8a, #047404);
+  padding: 10px 20px;
+  background: linear-gradient(45deg, #47e0cc, #049b8c) !important;
   color: white;
+  border: 2px solid #00897B;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 18px;
   width: 100%;
   margin-top: 10px;
   opacity: 0.8;
