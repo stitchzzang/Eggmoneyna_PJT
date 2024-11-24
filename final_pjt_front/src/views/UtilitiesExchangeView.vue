@@ -9,11 +9,11 @@
           <div class="currency-select">
             <select v-model="fromCurrency">
               <option 
-                v-for="rate in exchangeRates" 
+                v-for="rate in sortedExchangeRates" 
                 :key="rate.currency_code"
                 :value="rate.currency_code"
               >
-                {{ getCurrencyName(rate.currency_code) }}
+                {{ getFormattedCurrencyName(rate.currency_name) }}({{ rate.currency_code }})
               </option>
             </select>
           </div>
@@ -45,7 +45,7 @@
                 :key="rate.currency_code"
                 :value="rate.currency_code"
               >
-                {{ getCurrencyName(rate.currency_code) }}
+                {{ getCurrencyName(rate.currency_name).split(' (')[0] }}({{ rate.currency_code }})
               </option>
             </select>
           </div>
@@ -100,18 +100,26 @@ export default {
     fromCurrency: 'convertCurrency',
     toCurrency: 'convertCurrency'
   },
+  computed: {
+    sortedExchangeRates() {
+      return [...this.exchangeRates].sort((a, b) => {
+        const nameA = this.getFormattedCurrencyName(a.currency_name);
+        const nameB = this.getFormattedCurrencyName(b.currency_name);
+        return nameA.localeCompare(nameB, 'ko');
+      });
+    }
+  },
   methods: {
     async getExchangeRates() {
       try {
-        const response = await axios.get('/finlife/utilities/exchange/')
-        this.exchangeRates = response.data.sort((a, b) => {
-          const nameA = this.getCurrencyName(a.currency_code)
-          const nameB = this.getCurrencyName(b.currency_code)
-          return nameA.localeCompare(nameB, 'ko')
-        })
-        this.filterMainExchangeRates()
+        const response = await axios.get('http://127.0.0.1:8000/utilities/exchange/')
+        if (response.data.status === 'success') {
+          this.exchangeRates = response.data.data
+          this.filterMainExchangeRates()
+        }
       } catch (error) {
         console.error('환율 정보 로드 오류:', error)
+        this.exchangeRates = []
       }
     },
 
@@ -237,30 +245,32 @@ export default {
     },
 
     getCurrencyName(code) {
+      if (!code) return '알 수 없음' // 코드가 없는 경우 기본값 반환
+      
       const currencyMap = {
-        'KRW': '대한민국',
-        'USD': '미국',
-        'EUR': '유럽연합',
-        'JPY(100)': '일본',
-        'CNH': '중국',
-        'HKD': '홍콩',
-        'THB': '태국',
-        'IDR(100)': '인도네시아',
-        'AUD': '호주',
-        'CAD': '캐나다',
-        'CHF': '스위스',
-        'GBP': '영국',
-        'SGD': '싱가포르',
         'AED': '아랍에미리트',
+        'AUD': '호주',
         'BHD': '바레인',
         'BND': '브루나이',
+        'CAD': '캐나다',
+        'CHF': '스위스',
+        'CNH': '중국',
         'DKK': '덴마크',
+        'EUR': '유럽연합',
+        'GBP': '영국',
+        'HKD': '홍콩',
+        'IDR(100)': '인도네시아',
+        'JPY(100)': '일본',
+        'KRW': '대한민국',
         'KWD': '쿠웨이트',
         'MYR': '말레이시아',
         'NOK': '노르웨이',
         'NZD': '뉴질랜드',
         'SAR': '사우디아라비아',
-        'SEK': '스웨덴'
+        'SEK': '스웨덴',
+        'SGD': '싱가포르',
+        'THB': '태국',
+        'USD': '미국'
       }
       return currencyMap[code] ? `${currencyMap[code]} (${code})` : code
     },
@@ -322,6 +332,35 @@ export default {
       this.mainExchangeRates = this.exchangeRates.filter(rate => 
         mainCurrencies.includes(rate.currency_code)
       )
+    },
+
+    getFormattedCurrencyName(currencyName) {
+      const nameMap = {
+        '아랍에미리트 디르함': '아랍에미리트',
+        '호주 달러': '호주',
+        '바레인 디나르': '바레인',
+        '브루나이 달러': '브루나이',
+        '캐나다 달러': '캐나다',
+        '스위스 프랑': '스위스',
+        '위안화': '중국',
+        '덴마아크 크로네': '덴마크',
+        '유로': '유럽연합',
+        '영국 파운드': '영국',
+        '홍콩 달러': '홍콩',
+        '인도네시아 루피아': '인도네시아',
+        '일본 옌': '일본',
+        '한국 원': '대한민국',
+        '쿠웨이트 디나르': '쿠웨이트',
+        '말레이지아 링기트': '말레이시아',
+        '노르웨이 크로네': '노르웨이',
+        '뉴질랜드 달러': '뉴질랜드',
+        '사우디 리얄': '사우디아라비아',
+        '스웨덴 크로나': '스웨덴',
+        '싱가포르 달러': '싱가포르',
+        '태국 바트': '태국',
+        '미국 달러': '미국'
+      }
+      return nameMap[currencyName] || currencyName.split(' ')[0]
     }
   },
   mounted() {

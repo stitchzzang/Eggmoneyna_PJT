@@ -4,36 +4,70 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 from .models import DepositProduct, DepositOption, SavingProduct, SavingOption
 from .serializers import DepositProductSerializer, SavingProductSerializer
 
 
 @api_view(['GET'])
 def exchange(request):
-    today = datetime.now().strftime('%Y%m%d')
-    
-    response = requests.get(
-        'https://www.koreaexim.go.kr/site/program/financial/exchangeJSON',
-        params={
-            'authkey': settings.KOREAEXIM_API_KEY,
-            'searchdate': today,
-            'data': 'AP01'
-        },
-        verify=False
-    )
-    
-    if response.status_code != 200:
-        return Response({'error': '환율 정보를 가져오는데 실패했습니다.'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    data = response.json()
-    processed_data = [{
-        'currency_code': item['cur_unit'],
-        'rate': item['deal_bas_r'],
-        'updated_at': today
-    } for item in data]
-    
-    return Response(processed_data)
+    def get_last_friday():
+        today = datetime.now()
+        # 오늘이 월요일(0)부터 일요일(6)까지일 때, 지난 금요일까지의 차이를 계산
+        days_to_subtract = (today.weekday() - 4) % 7
+        if days_to_subtract == 0 and today.hour < 11:  # 금요일이지만 11시 이전이면
+            days_to_subtract = 7  # 지난주 금요일 데이터 사용
+        last_friday = today - timedelta(days=days_to_subtract)
+        return last_friday.strftime('%Y%m%d')
+
+    def get_exchange_rate(date):
+        response = requests.get(
+            'https://www.koreaexim.go.kr/site/program/financial/exchangeJSON',
+            params={
+                'authkey': settings.KOREAEXIM_API_KEY,
+                'searchdate': date,
+                'data': 'AP01'
+            },
+            verify=False,
+            timeout=10
+        )
+        return response
+
+    try:
+        # 가장 최근 금요일 날짜로 시도
+        friday_date = get_last_friday()
+        response = get_exchange_rate(friday_date)
+        
+        if response.status_code == 200:
+            data = response.json()
+            if data:  # 데이터가 있는 경우
+                processed_data = [{
+                    'currency_code': item['cur_unit'],
+                    'rate': item['deal_bas_r'],
+                    'currency_name': item.get('cur_nm', ''),
+                    'updated_at': friday_date
+                } for item in data]
+                return Response({
+                    'status': 'success',
+                    'message': '환율 정보를 성공적으로 가져왔습니다.',
+                    'data': processed_data
+                })
+            else:  # 데이터가 비어있는 경우
+                return Response({
+                    'status': 'error',
+                    'message': '환율 정보가 없습니다. 다음 영업일을 기다려주세요.'
+                }, status=status.HTTP_404_NOT_FOUND)
+        
+        return Response({
+            'status': 'error',
+            'message': '환율 정보를 가져오는데 실패했습니다.'
+        }, status=status.HTTP_400_BAD_REQUEST)
+        
+    except requests.exceptions.RequestException as e:
+        return Response({
+            'status': 'error',
+            'message': f'API 연결 중 오류가 발생했습니다: {str(e)}'
+        }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
 
 # 정기예금 상품 정보 (저장/갱신)
