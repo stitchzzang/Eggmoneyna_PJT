@@ -2,7 +2,7 @@
   <div>
     <!-- 게시글 내용 -->
     <div class="post-item">
-      <div class="post-id">{{ thread.id }}</div>
+      <div class="post-id">{{ index }}</div>
       <div class="post-title">
         <RouterLink 
           :to="{ name: 'community-detail', params: { id: thread.id } }"
@@ -29,6 +29,10 @@ import { RouterLink } from 'vue-router'
 defineProps({
   thread: {  
     type: Object,
+    required: true
+  },
+  index: {    // 새로운 prop 추가
+    type: Number,
     required: true
   }
 })

@@ -14,4 +14,4 @@ app.use(createPinia())
 app.use(router)
 
 app.mount('#app')
-console.log('KAKAO API KEY:', import.meta.env.VITE_KAKAO_MAP_API_KEY)
+// console.log('KAKAO API KEY:', import.meta.env.VITE_KAKAO_MAP_API_KEY)

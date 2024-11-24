@@ -51,14 +51,14 @@
               </div>
 
               <div class="mobile-menu-item">
-                <div class="menu-title" @click="toggleSubmenu('news')">
-                  <router-link to="/news/tips" @click="closeMenu">라이브러리</router-link>
+                <div class="menu-title" @click="toggleSubmenu('library')">
+                  <router-link to="/library/tips" @click="closeMenu">라이브러리</router-link>
                   <span class="arrow">▼</span>
                 </div>
-                <div class="submenu" v-show="activeSubmenu === 'news'">
-                  <router-link to="/news/tips" @click="closeMenu">알쓸금잡</router-link>
-                  <router-link to="/education/contents" @click="closeMenu">교육 콘텐츠</router-link>
-                  <router-link to="/news/books" @click="closeMenu">도서 추천</router-link>
+                <div class="submenu" v-show="activeSubmenu === 'library'">
+                  <router-link to="/library/tips" @click="closeMenu">알쓸금잡</router-link>
+                  <router-link to="/library/contents" @click="closeMenu">교육 콘텐츠</router-link>
+                  <router-link to="/library/books" @click="closeMenu">도서 추천</router-link>
 
                 </div>
               </div>

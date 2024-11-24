@@ -14,9 +14,10 @@
 
       <!-- 게시글 목록 -->
       <CommunityItem
-        v-for="thread in sortedThreads"
+        v-for="(thread, index) in sortedThreads"
         :key="thread.id"
         :thread="thread"
+        :index="index + 1"
       />
     </div>
   </div>
@@ -36,6 +37,8 @@ const props = defineProps({
 
 // 정렬된 threads computed 속성 추가
 const sortedThreads = computed(() => {
+  if (!props.threads) return []
+  
   return [...props.threads].sort((a, b) => {
     return new Date(b.created_at) - new Date(a.created_at)
   })

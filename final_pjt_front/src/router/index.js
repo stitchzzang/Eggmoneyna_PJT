@@ -6,7 +6,9 @@ import ProfilePageView from '@/views/ProfilePageView.vue'
 import CommunityView from '@/views/CommunityView.vue'
 import CommunityDetail from '@/components/Community/CommunityDetail.vue'
 import CommunityWriteForm from '@/components/Community/CommunityWriteForm.vue'
-
+import FinancialProductsView from '@/views/FinancialProductsView.vue'
+import FinancialItemDeposit from '@/components/Financial/FinancialItemDeposit.vue'
+import FinancialItemSaving from '@/components/Financial/FinancialItemSaving.vue'
 
 const routes = [
   {
@@ -17,7 +19,19 @@ const routes = [
   {
     path: '/financial-products',
     name: 'financial-products',
-    component: () => import('@/views/FinancialProductsView.vue')
+    component: FinancialProductsView,
+    children: [
+      {
+        path: 'deposit',
+        name: 'deposit',
+        component: FinancialItemDeposit
+      },
+      {
+        path: 'saving',
+        name: 'saving',
+        component: FinancialItemSaving
+      }
+    ] 
   },
   {
     path: '/library/tips',
@@ -75,6 +89,7 @@ const routes = [
     component: ProfilePageView,
     meta: { requiresAuth: true }
   },
+  
 ]
 
 const router = createRouter({
