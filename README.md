@@ -49,7 +49,25 @@ $ source venv/Scripts/activate
 $ pip install -r requirements.txt
 ```
 
-3. Django 서버 실행
+3. DB 생성 : migrate 실행
+```bash
+$ python manage.py migrate
+```
+
+4. 관리자 계정 생성 : createsuperuser 실행
+```bash
+$ python manage.py createsuperuser
+```
+- admin 계정 생성 후, 관리자 페이지 접속 가능
+- 관리자 페이지 접속 주소 : http://127.0.0.1:8000/admin/
+- `threads.json` 파일 `"user_id": 1`이므로 임시 계정 생성 필요
+
+5. `threads.json` 파일 내용 DB에 저장
+```bash
+$ python manage.py loaddata threads.json
+```
+
+6. Django 서버 실행
 ```bash
 $ python manage.py runserver
 ```
