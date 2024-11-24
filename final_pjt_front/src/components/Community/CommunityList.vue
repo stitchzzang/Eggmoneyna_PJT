@@ -58,7 +58,7 @@ const formatDate = (date) => {
   max-width: 900px;
   margin: 0 auto;
   padding: 10px 20px;
-  background-color: rgba(247, 249, 250, 0.506);
+  background-color: rgba(247, 249, 250, 0.675);
   border-radius: 25px;
 }
 

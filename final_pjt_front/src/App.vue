@@ -1,5 +1,13 @@
 <template>
   <div id="app">
+    <div class="floating-container">
+      <div class="chatbot-wrapper" v-if="showChatBot">
+        <ChatBot />
+      </div>
+      <button @click="toggleChatBot" class="chatbot-toggle">
+        <img src="@/assets/chatbot.png" alt="ChatBot" class="chatbot-icon">
+      </button>
+    </div>
     <nav class="navbar">
       <div class="nav-container">
         <div class="nav-left">
@@ -76,7 +84,7 @@
                   <span class="arrow">▼</span>
                 </div>
                 <div class="submenu" v-show="activeSubmenu === 'utilities'">
-                  <router-link to="/utilities/exchange" @click="closeMenu">환율 조회</router-link>
+                  <router-link to="/utilities/exchange" @click="closeMenu">환율 조</router-link>
                   <router-link to="/utilities/findbanks" @click="closeMenu">주변 은행 찾기</router-link>
                 </div>
               </div>
@@ -149,6 +157,7 @@
 </template>
 
 <script setup>
+import ChatBot from '@/components/ChatBot.vue';
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
 import { ref, onMounted, onUnmounted } from 'vue'
@@ -160,6 +169,9 @@ const router = useRouter()
 const isMobile = ref(false)
 const isMenuOpen = ref(false)
 const activeSubmenu = ref(null)
+
+// ChatBot 관련 상태 추가
+const showChatBot = ref(false)
 
 // 화면 크기에 따른 모바일 상태 업데이트
 const checkMobile = () => {
@@ -204,6 +216,11 @@ const logout = async () => {
     alert('로그아웃 중 오류가 발생했습니다.')
   }
 }
+
+// ChatBot 토글 함수 추가
+const toggleChatBot = () => {
+  showChatBot.value = !showChatBot.value
+}
 </script>
 
 <style>
@@ -219,6 +236,32 @@ const logout = async () => {
 /* router-view를 위한 스타일 추가 */
 #app {
   min-height: 100vh;
+}
+
+.chatbot-toggle {
+  position: relative;
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.719) !important;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.chatbot-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 챗봇 아이콘 이미지 크기 감소 */
+.chatbot-icon {
+  width: 50ㅋpx;  
+  height: 45px; 
 }
 
 /* router-view 컨테이너에 패딩 추가 */
@@ -962,5 +1005,43 @@ body {
 
 .sitemap-section a {
   text-decoration: none !important;
+}
+
+/* 플로팅 컨테이너 스타일 수정 */
+.floating-container {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.chatbot-toggle {
+  display: flex;
+  padding: 14px 19px;
+  align-items: center;
+  background-color: white;
+  border-radius: 24px;
+  color: black;
+  font-size: 14px;
+  font-weight: 600;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* ChatBot 컴포넌트가 버튼 위에 나타나도록 위치 조정 */
+.floating-container > :first-child {
+  margin-bottom: 10px;
+}
+
+.chatbot-wrapper {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  margin-bottom: 20px;
 }
 </style>

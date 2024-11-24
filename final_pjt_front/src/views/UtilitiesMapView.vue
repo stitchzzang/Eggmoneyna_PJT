@@ -389,10 +389,12 @@ onUnmounted(() => {
 .whole {
   background-color: #ffffff7a;
   border-radius: 20px;
-  margin: 20px auto;  /* 상하 여백 20px, 좌우 자동 중앙 정렬 */
+  margin: 20px auto;
   padding: 20px;
-  max-width: 90%;    /* 전체 너비를 90%로 제한 */
-  width: 1200px;     /* 최대 너비 설정 */
+  max-width: 90%;
+  width: 1200px;
+  position: relative;
+  overflow: hidden;
 }
 
 h1 {
@@ -575,13 +577,15 @@ input[type="text"] {
   justify-content: center;
   gap: 15px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+  padding: 0 10px;
 }
 
 .filter-select {
   padding: 12px;
   border: 2px solid #ddd;
   border-radius: 8px;
-  min-width: 220px;
+  width: 100%;
   background-color: white;
   position: relative;
   color: black;
@@ -602,21 +606,20 @@ input[type="text"] {
 .current-location-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
   padding: 10px 20px;
   background: rgba(255, 255, 255, 0.9);
-  border: 2px solid #056800;
+  border: none;
   border-radius: 20px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: bold;
-  color: #056800;
+  color: #005c43;
 }
 
 .current-location-btn:hover {
-  background: #056800;
+  background:linear-gradient(45deg, #7de1c4, #01966c);
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -645,10 +648,13 @@ input[type="text"] {
   flex-direction: column;
   gap: 5px;
   position: relative;
+  min-width: 200px;
+  flex: 1;
+  max-width: 300px;
 }
 
 .filter-group label {
-  font-size: 12px;
+  font-size: 14px;
   color: #056800;
   font-weight: bold;
   position: absolute;
@@ -657,6 +663,51 @@ input[type="text"] {
   background-color: white;
   padding: 0 5px;
   z-index: 1;
+}
+
+/* 반응형 스타일 추가 */
+@media screen and (max-width: 768px) {
+  .whole {
+    padding: 10px;
+    margin: 10px auto;
+  }
+
+  .filter-group {
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .map_wrap {
+    height: 500px;
+  }
+
+  #menu_wrap {
+    width: 200px;
+  }
+
+  .current-location-btn {
+    padding: 8px 15px;
+    font-size: 12px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .filter-container {
+    gap: 10px;
+  }
+
+  #menu_wrap {
+    width: 150px;
+  }
+
+  .current-location-btn {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
 }
 
 </style>
