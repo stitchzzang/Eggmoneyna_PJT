@@ -7,6 +7,8 @@ import requests
 from datetime import datetime, timedelta
 from .models import DepositProduct, DepositOption, SavingProduct, SavingOption
 from .serializers import DepositProductSerializer, SavingProductSerializer
+import json
+import os
 
 
 @api_view(['GET'])
@@ -101,18 +103,22 @@ def save_deposit_products(request):
                 'join_way': item.get('join_way', ''),
                 'join_deny': item.get('join_deny', ''),
                 'join_member': item.get('join_member', ''),
+                'max_limit': item.get('max_limit', None),
+                'dcls_strt_day': item.get('dcls_strt_day', ''),
+                'dcls_end_day': item.get('dcls_end_day', ''),
+                'fin_co_subm_day': item.get('fin_co_subm_day', '')
             }
         )
         
         if not created:
-            product.kor_co_nm = item['kor_co_nm']
-            product.fin_prdt_nm = item['fin_prdt_nm']
-            product.etc_note = item.get('etc_note', '')
-            product.join_way = item.get('join_way', '')
-            product.join_deny = item.get('join_deny', '')
-            product.join_member = item.get('join_member', '')
+            # 기존 상품 정보 업데이트
+            for field in ['kor_co_nm', 'fin_prdt_nm', 'etc_note', 'join_way', 
+                         'join_deny', 'join_member', 'max_limit', 'dcls_strt_day',
+                         'dcls_end_day', 'fin_co_subm_day']:
+                setattr(product, field, item.get(field, ''))
             product.save()
             
+            # 기존 옵션 삭제
             product.options.all().delete()
         
         options = [opt for opt in optionList if opt['fin_prdt_cd'] == product.fin_prdt_cd]
@@ -128,11 +134,23 @@ def save_deposit_products(request):
             except (TypeError, ValueError):
                 save_trm = 0
                 
+            saved_option = DepositOption.objects.create(
+                product=product,
+                fin_prdt_cd=option['fin_prdt_cd'],
+                intr_rate_type=option.get('intr_rate_type', ''),
+                intr_rate=intr_rate,
+                save_trm=save_trm,
+                intr_rate2=float(option.get('intr_rate2', 0)),
+                rsrv_type=option.get('rsrv_type', '')
+            )
+            
             saved_options.append({
-                'fin_prdt_cd': option['fin_prdt_cd'],
-                'intr_rate_type': option.get('intr_rate_type', ''),
-                'intr_rate': intr_rate,
-                'save_trm': save_trm
+                'fin_prdt_cd': saved_option.fin_prdt_cd,
+                'intr_rate_type': saved_option.intr_rate_type,
+                'intr_rate': saved_option.intr_rate,
+                'save_trm': saved_option.save_trm,
+                'intr_rate2': saved_option.intr_rate2,
+                'rsrv_type': saved_option.rsrv_type
             })
         
         saved_products.append({
@@ -182,18 +200,22 @@ def save_saving_products(request):
                 'join_way': item.get('join_way', ''),
                 'join_deny': item.get('join_deny', ''),
                 'join_member': item.get('join_member', ''),
+                'max_limit': item.get('max_limit', None),
+                'dcls_strt_day': item.get('dcls_strt_day', ''),
+                'dcls_end_day': item.get('dcls_end_day', ''),
+                'fin_co_subm_day': item.get('fin_co_subm_day', '')
             }
         )
         
         if not created:
-            product.kor_co_nm = item['kor_co_nm']
-            product.fin_prdt_nm = item['fin_prdt_nm']
-            product.etc_note = item.get('etc_note', '')
-            product.join_way = item.get('join_way', '')
-            product.join_deny = item.get('join_deny', '')
-            product.join_member = item.get('join_member', '')
+            # 기존 상품 정보 업데이트
+            for field in ['kor_co_nm', 'fin_prdt_nm', 'etc_note', 'join_way', 
+                         'join_deny', 'join_member', 'max_limit', 'dcls_strt_day',
+                         'dcls_end_day', 'fin_co_subm_day']:
+                setattr(product, field, item.get(field, ''))
             product.save()
             
+            # 기존 옵션 삭제
             product.options.all().delete()
         
         options = [opt for opt in optionList if opt['fin_prdt_cd'] == product.fin_prdt_cd]
@@ -243,14 +265,126 @@ def save_saving_products(request):
 # DB에 저장된 모든 정기예금 상품 정보 조회 (단순 조회)
 @api_view(['GET'])
 def get_deposit_products(request):
-    products = DepositProduct.objects.all()
-    serializer = DepositProductSerializer(products, many=True)
-    return Response(serializer.data)
+    try:
+        products = DepositProduct.objects.all()
+        
+        # 각 상품의 상세 정보를 포함한 데이터 구성
+        detailed_data = []
+        for product in products:
+            product_data = {
+                'product_code': product.fin_prdt_cd,
+                'bank_name': product.kor_co_nm,
+                'product_name': product.fin_prdt_nm,
+                'product_description': product.etc_note,
+                'join_way': product.join_way,
+                'join_deny': product.join_deny,
+                'join_member': product.join_member,
+                'max_limit': product.max_limit,
+                'dcls_start_day': product.dcls_strt_day,
+                'dcls_end_day': product.dcls_end_day,
+                'options': [{
+                    'save_term': option.save_trm,
+                    'interest_rate_type': option.intr_rate_type,
+                    'basic_rate': option.intr_rate,
+                    'prime_rate': option.intr_rate2,
+                    'reserve_type': option.rsrv_type
+                } for option in product.options.all()]
+            }
+            detailed_data.append(product_data)
+        
+        return Response({
+            'status': 'success',
+            'message': '정기예금 상품 목록을 성공적으로 조회했습니다.',
+            'total_count': len(detailed_data),
+            'data': detailed_data
+        })
+    except Exception as e:
+        return Response({
+            'status': 'error',
+            'message': f'정기예금 상품 조회 중 오류가 발생했습니다: {str(e)}'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 # DB에 저장된 모든 정기적금 상품 정보 조회 (단순 조회)
 @api_view(['GET'])
 def get_saving_products(request):
-    products = SavingProduct.objects.all()
-    serializer = SavingProductSerializer(products, many=True)
-    return Response(serializer.data)
+    try:
+        products = SavingProduct.objects.all()
+        
+        # 각 상품의 상세 정보를 포함한 데이터 구성
+        detailed_data = []
+        for product in products:
+            product_data = {
+                'product_code': product.fin_prdt_cd,
+                'bank_name': product.kor_co_nm,
+                'product_name': product.fin_prdt_nm,
+                'product_description': product.etc_note,
+                'join_way': product.join_way,
+                'join_deny': product.join_deny,
+                'join_member': product.join_member,
+                'max_limit': product.max_limit,
+                'dcls_start_day': product.dcls_strt_day,
+                'dcls_end_day': product.dcls_end_day,
+                'fin_co_subm_day': product.fin_co_subm_day,
+                'options': [{
+                    'save_term': option.save_trm,
+                    'interest_rate_type': option.intr_rate_type,
+                    'basic_rate': option.intr_rate,
+                } for option in product.options.all()]
+            }
+            detailed_data.append(product_data)
+        
+        return Response({
+            'status': 'success',
+            'message': '정기적금 상품 목록을 성공적으로 조회했습니다.',
+            'total_count': len(detailed_data),
+            'data': detailed_data
+        })
+    except Exception as e:
+        return Response({
+            'status': 'error',
+            'message': f'정기적금 상품 조회 중 오류가 발생했습니다: {str(e)}'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# import json
+# import os
+
+# url = "http://finlife.fss.or.kr/finlifeapi/depositProductsSearch.json"
+# params = {
+#     "auth": settings.PROD_API_KEY,
+#     "topFinGrpNo": "020000",  # 은행권 코드
+#     "pageNo": "1"
+# }
+
+# response = requests.get(url, params=params)
+
+# # JSON 데이터를 예쁘게 출력
+# print(json.dumps(response.json(), indent=4, ensure_ascii=False))
+
+# # JSON 파일로 저장
+# with open('deposit_products.json', 'w', encoding='utf-8') as f:
+#     json.dump(response.json(), f, indent=4, ensure_ascii=False)
+
+# # 저장된 경로 출력
+# print(f"파일이 저장된 경로: {os.path.abspath('deposit_products.json')}")
+
+
+# url = 'http://finlife.fss.or.kr/finlifeapi/savingProductsSearch.json'
+# params = {
+#     "auth": settings.PROD_API_KEY,
+#     "topFinGrpNo": "020000",  # 은행권 코드
+#     "pageNo": "1"
+# }
+
+# response = requests.get(url, params=params)
+
+# # JSON 데이터를 예쁘게 출력
+# print(json.dumps(response.json(), indent=4, ensure_ascii=False))
+
+# # JSON 파일로 저장
+# with open('saving_products.json', 'w', encoding='utf-8') as f:
+#     json.dump(response.json(), f, indent=4, ensure_ascii=False)
+
+# # 저장된 경로 출력
+# print(f"파일이 저장된 경로: {os.path.abspath('saving_products.json')}")

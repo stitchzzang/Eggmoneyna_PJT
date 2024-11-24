@@ -36,7 +36,6 @@
 
 <script setup>
 import { ref } from 'vue'
-import FinancialDetail from '@/components/Financial/FinancialDetail.vue'
 
 const selectedProduct = ref(null)
 const recommendedProducts = ref([
