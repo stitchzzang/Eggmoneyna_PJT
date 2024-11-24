@@ -1,17 +1,5 @@
 <template>
   <div>
-    <!-- 컬럼 헤더 -->
-    <div class="column-headers" v-if="thread.id === 1">
-      <div class="header-row">
-        <div class="header-id">말머리</div>
-        <div class="header-title">제목</div>
-        <div class="header-author">작성자</div>
-        <div class="header-date">작성일</div>
-        <div class="header-likes">좋아요</div>
-      </div>
-      <hr class="header-divider">
-    </div>
-
     <!-- 게시글 내용 -->
     <div class="post-item">
       <div class="post-id">{{ thread.id }}</div>
@@ -54,7 +42,7 @@ const formatDate = (date) => {
 
 <style scoped>
 /* 공통 레이아웃 */
-.header-row, .post-item {
+.post-item {
   display: flex;
   align-items: center;
   padding: 10px 0;
@@ -65,49 +53,29 @@ const formatDate = (date) => {
 }
 
 /* 컬럼 너비 설정 */
-.header-id, .post-id {
+.post-id {
   flex: 0 0 100px;  /* 고정 너비 */
   text-align: center;
 }
 
-.header-title, .post-title {
+.post-title {
   flex: 0 0 400px;  /* 고정 너비 */
   padding: 0 20px;
 }
 
-.header-author, .post-author {
+.post-author {
   flex: 0 0 120px;  /* 고정 너비 */
   text-align: center;
 }
 
-.header-date, .post-date {
+.post-date {
   flex: 0 0 120px;  /* 고정 너비 */
   text-align: center;
 }
 
-.header-likes, .post-likes {
+.post-likes {
   flex: 0 0 100px;  /* 고정 너비 */
   text-align: center;
-}
-
-/* 헤더 스타일 */
-.column-headers {
-  margin-bottom: 10px;
-  max-width: 900px;  /* 컬럼 헤더와 동일한 너비 */
-  margin: 0 auto;    /* 중앙 정렬 */
-}
-
-.header-row {
-  font-weight: bold;
-  color: #333;
-}
-
-.header-divider {
-  border: none;
-  height: 2px;
-  background-color: #333;
-  margin: 0 auto;    /* 중앙 정렬 */
-  max-width: 900px;  /* 컬럼 헤더와 동일한 너비 */
 }
 
 /* 게시글 스타일 */

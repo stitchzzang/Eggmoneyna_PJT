@@ -3,4 +3,8 @@ from . import views
 
 urlpatterns = [
     path('utilities/exchange/', views.exchange),
+    path('save-deposit-products/', views.save_deposit_products),
+    path('save-saving-products/', views.save_saving_products),
+    path('deposit-products/', views.get_deposit_products),
+    path('saving-products/', views.get_saving_products),
 ]
