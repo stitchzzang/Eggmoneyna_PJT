@@ -334,7 +334,7 @@ const restartTest = () => {
 
 .right-column h1 {
   font-size: 2.5rem;
-  font-weight: semibold;
+  font-weight: bold;
 }
 
 .right-column p {

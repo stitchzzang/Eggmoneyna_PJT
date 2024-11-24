@@ -15,7 +15,7 @@
           <!-- PC 메뉴 -->
           <div class="nav-links" v-show="!isMobile">
             <div class="nav-item">
-              <router-link to="/financial-products/recommend">금융상품</router-link>
+              <router-link to="/financial-products">금융상품</router-link>
             </div>
 
             <div class="nav-item">
@@ -45,7 +45,7 @@
             <div class="mobile-menu-content">
               <div class="mobile-menu-item">
                 <div class="menu-title" @click="toggleSubmenu('financial')">
-                  <router-link to="/financial-products/recommend" @click="closeMenu">금융상품</router-link>
+                  <router-link to="/financial-products" @click="closeMenu">금융상품</router-link>
                   <span class="arrow">▼</span>
                 </div>
               </div>
@@ -115,7 +115,7 @@
       <div class="footer-container">
         <div class="sitemap">
           <div class="sitemap-section">
-            <h3>금융상품</h3>
+            <router-link to="/financial-products"><h3>금융상품</h3></router-link>
           </div>
 
           <div class="sitemap-section">
@@ -128,7 +128,7 @@
           </div>
 
           <div class="sitemap-section">
-            <h3>커뮤니티</h3>
+            <router-link to="/community"><h3>커뮤니티</h3></router-link>
           </div>
 
           <div class="sitemap-section">
@@ -942,5 +942,25 @@ body {
 .nav-link {
   display: inline-block !important;
   padding: 0.5rem 1rem !important;
+}
+
+/* 사이트맵 링크 스타일 수정 */
+.sitemap-section h3 a {
+  text-decoration: none;
+  color: #056800;
+}
+
+.sitemap-section h3 router-link {
+  text-decoration: none;
+  color: #056800;
+}
+
+.sitemap-section router-link {
+  text-decoration: none;
+  color: #333;
+}
+
+.sitemap-section a {
+  text-decoration: none !important;
 }
 </style>

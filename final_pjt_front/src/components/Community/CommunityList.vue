@@ -14,7 +14,7 @@
 
       <!-- 게시글 목록 -->
       <CommunityItem
-        v-for="thread in threads"
+        v-for="thread in sortedThreads"
         :key="thread.id"
         :thread="thread"
       />
@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import CommunityItem from './CommunityItem.vue'
 
 // props만 정의
@@ -32,6 +32,13 @@ const props = defineProps({
     type: Array,
     required: true
   }
+})
+
+// 정렬된 threads computed 속성 추가
+const sortedThreads = computed(() => {
+  return [...props.threads].sort((a, b) => {
+    return new Date(b.created_at) - new Date(a.created_at)
+  })
 })
 
 defineEmits(['select-post'])
@@ -50,46 +57,53 @@ const formatDate = (date) => {
 .list-wrapper {
   max-width: 900px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 10px 20px;
+  background-color: rgba(247, 249, 250, 0.506);
+  border-radius: 25px;
 }
 
-.list-row {
+.list-row, :deep(.post-item) {
   display: flex;
   align-items: center;
   padding: 10px 0;
+  width: 100%;
+}
+
+.list-row {
   font-weight: bold;
 }
 
-.column {
+.column, :deep(.post-column) {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  min-width: 0;
 }
 
-.id {
-  flex: 0 0 100px;
+.id, :deep(.post-id) {
+  flex: 0 0 15%;
   text-align: center;
   margin-left: 8px;
 }
 
-.title {
-  flex: 0 0 400px;
+.title, :deep(.post-title) {
+  flex: 1 1 40%;
   text-align: center;
   padding: 0 20px;
 }
 
-.author {
-  flex: 0 0 120px;
+.author, :deep(.post-author) {
+  flex: 0 0 15%;
   text-align: center;
 }
 
-.date {
-  flex: 0 0 120px;
+.date, :deep(.post-date) {
+  flex: 0 0 15%;
   text-align: center;
 }
 
-.likes {
-  flex: 0 0 100px;
+.likes, :deep(.post-likes) {
+  flex: 0 0 15%;
   text-align: center;
 }
 
@@ -98,5 +112,37 @@ const formatDate = (date) => {
   height: 1px;
   background-color: #ddd;
   margin: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .date, :deep(.post-date) {
+    display: none;
+  }
+  
+  .author, :deep(.post-author) {
+    flex: 0 0 20%;
+  }
+  
+  .title, :deep(.post-title) {
+    flex: 1 1 45%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .author, :deep(.post-author) {
+    display: none;
+  }
+  
+  .id, :deep(.post-id) {
+    flex: 0 0 20%;
+  }
+  
+  .title, :deep(.post-title) {
+    flex: 1 1 60%;
+  }
+  
+  .likes, :deep(.post-likes) {
+    flex: 0 0 20%;
+  }
 }
 </style>

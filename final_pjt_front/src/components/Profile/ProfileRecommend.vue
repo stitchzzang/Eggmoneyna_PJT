@@ -147,20 +147,18 @@ const moveToTest = () => {
 }
 
 .test-link.retake {
-  margin-top: 20px;
-  background-color: #6c757d;
-  transition: all 0.3s ease;
-  text-decoration: none;
   padding: 10px 20px;
-  background: linear-gradient(45deg, #98d49a, #338133) !important;
+  margin-top: 10px;
+  background: linear-gradient(45deg, #86da8a, #047404) !important;
   color: white;
-  border: 2px solid #4b9e40;
+  border: 2px solid #128004;
   border-radius: 25px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 19px;
   font-weight: bold;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+  letter-spacing: 1.3px;
 }
 
 .test-link.retake:hover {

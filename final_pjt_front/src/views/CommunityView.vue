@@ -224,7 +224,7 @@ const displayedPages = computed(() => {
 
 .write-button-container {
   text-align: right;
-  margin: 20px 0;
+  margin-bottom: 40px;
 }
 
 .write-button {
@@ -238,7 +238,6 @@ const displayedPages = computed(() => {
   font-size: 18px;
   font-weight: bold;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
 }
 
@@ -256,7 +255,7 @@ const displayedPages = computed(() => {
 
 .page-title {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   color: #056800;
   font-weight: 600;
 }
