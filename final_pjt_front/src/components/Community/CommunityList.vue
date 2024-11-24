@@ -1,22 +1,22 @@
 <template>
-  <div class="community-list">
+  <div>
+    <!-- 게시물 목록 -->
     <CommunityItem 
-      v-for="thread in store.threads" 
+      v-for="thread in threads" 
       :key="thread.id" 
       :thread="thread"
     />
-</div>
+  </div>
 </template>
 
 <script setup>
-import CommunityItem from '@/components/Community/CommunityItem.vue'
-import { useCounterStore } from '@/stores/counter'
+import { ref } from 'vue'
+import CommunityItem from './CommunityItem.vue'
 
-const store = useCounterStore()
-
-defineProps({
-  thread: {
-    type: Object,
+// props만 정의
+const props = defineProps({
+  threads: {
+    type: Array,
     required: true
   }
 })
