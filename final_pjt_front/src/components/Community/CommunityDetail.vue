@@ -431,7 +431,10 @@ const deleteComment = (commentId) => {
 }
 
 .comment-item {
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 15px;
   padding: 20px;
+  margin: 20px;
   border-bottom: 1px solid #eee;
 }
 
