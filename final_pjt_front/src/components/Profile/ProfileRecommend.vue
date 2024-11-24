@@ -118,16 +118,26 @@ const moveToTest = () => {
   padding: 40px;
 }
 
+.no-result p{
+  font-size: 18px;
+}
+
 .test-link {
-  display: inline-block;
-  margin-top: 20px;
   padding: 10px 20px;
-  background-color: #4CAF50;
+  margin-top: 15px;
+  background: linear-gradient(45deg, #86da8a, #047404) !important;
   color: white;
-  text-decoration: none;
-  border-radius: 5px;
+  border: 2px solid #128004;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-  border: none;
+  letter-spacing: 1.3px;
+  display: inline-block;
+  text-decoration: none;
+  transition: all 0.3s ease;
   cursor: pointer;
 }
 
