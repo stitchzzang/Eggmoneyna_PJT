@@ -13,7 +13,10 @@
           </span>
         </RouterLink>
       </div>
-      <div class="post-author">{{ thread.username }}</div>
+      <div class="post-author">
+        {{ thread.member_type === 'regular' ? '🐣 ' : '☑️ ' }}
+        {{ thread.name }}
+      </div>
       <div class="post-date">{{ formatDate(thread.created_at) }}</div>
       <div class="post-likes">
         <i class="fas fa-heart"></i> {{ thread.likes_count }}

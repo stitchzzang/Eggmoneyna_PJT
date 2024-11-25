@@ -98,8 +98,10 @@ const currentPage = ref(1)
 const itemsPerPage = 10
 
 // 게시글 목록 조회
-onMounted(() => {
-  store.getThreads() 
+onMounted(async () => {
+  if (authStore.isAuthenticated) {
+    await store.getThreads()
+  }
 })
 
 // 글쓰기 폼 표시
@@ -201,17 +203,31 @@ const totalPages = computed(() => {
 })
 
 // 표시할 페이지 번호 계산
+// 표시할 페이지 번호 계산
 const displayedPages = computed(() => {
-  const range = 2
-  let start = Math.max(currentPage.value - range, 1)
-  let end = Math.min(currentPage.value + range, totalPages.value)
+  const totalPagesCount = totalPages.value;
+  const range = 5;  // 최대 5페이지 범위
+  let start = Math.max(currentPage.value - range, 1);
+  let end = Math.min(currentPage.value + range, totalPagesCount);
 
-  const pages = []
-  for (let i = start; i <= end; i++) {
-    pages.push(i)
+  // 마지막 페이지가 10보다 크면 10개 페이지까지만 보여주기
+  if (totalPagesCount > 10) {
+    if (currentPage.value <= 6) {
+      end = 10;
+    } else if (currentPage.value + range >= totalPagesCount) {
+      start = totalPagesCount - 9;
+      end = totalPagesCount;
+    }
   }
-  return pages
-})
+
+  const pages = [];
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  return pages;
+});
+
 
 </script>
 

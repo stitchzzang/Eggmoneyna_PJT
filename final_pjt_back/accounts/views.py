@@ -3,12 +3,14 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from django.contrib.auth import get_user_model
-from .serializers import CustomRegisterSerializer
+from .serializers import CustomRegisterSerializer, CustomUserDetailsSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.hashers import make_password
+
 
 @api_view(['GET', 'POST'])
 @permission_classes([AllowAny])
@@ -79,6 +81,16 @@ def signup(request):
 @api_view(['GET', 'POST'])
 @permission_classes([AllowAny])
 def login(request):
+    if request.method == 'GET':
+        return Response({
+            'message': '로그인 페이지입니다.',
+            'required_fields': {
+                'username': '사용자 이름',
+                'password': '비밀번호'
+            }
+        })
+    
+    # POST 요청 처리
     username = request.data.get('username')
     password = request.data.get('password')
 
@@ -92,7 +104,10 @@ def login(request):
         token, created = Token.objects.get_or_create(user=user)
         return Response({
             'token': token.key,
-            'username': user.username
+            'username': user.username,
+            'name': user.name,
+            'email': user.email,
+            'member_type': user.member_type
         })
     else:
         return Response({'error': '아이디 또는 비밀번호가 잘못되었습니다.'}, 
@@ -129,4 +144,55 @@ def delete(request):
     return Response({'message': '계정이 성공적으로 삭제되었습니다.'}, 
                   status=status.HTTP_204_NO_CONTENT)
 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_info(request):
+    serializer = CustomUserDetailsSerializer(request.user)
+    return Response(serializer.data)
+
+
+@api_view(['GET', 'PUT'])
+@permission_classes([IsAuthenticated])
+def update_user_info(request):
+    user = request.user
+    
+    # GET 요청 처리 추가
+    if request.method == 'GET':
+        return Response({
+            'message': '회원정보 수정 페이지입니다.',
+            'user_info': {
+                'email': user.email,
+                'birth_date': user.birth_date,
+                'gender': user.gender,
+                'income_level': user.income_level,
+            }
+        })
+    
+    # PUT 요청 처리
+    password = request.data.get('password')
+    email = request.data.get('email')
+    birth_date = request.data.get('birth_date')
+    gender = request.data.get('gender')
+    income_level = request.data.get('income_level')
+    
+    # 비밀번호 변경
+    if password:
+        user.password = make_password(password)
+    
+    # 나머지 필드 업데이트
+    if email:
+        user.email = email
+    if birth_date:
+        user.birth_date = birth_date
+    if gender:
+        user.gender = gender
+    if income_level:
+        user.income_level = income_level
+    
+    try:
+        user.save()
+        return Response({'message': '회원정보가 성공적으로 업데이트되었습니다.'}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 

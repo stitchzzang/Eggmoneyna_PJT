@@ -98,10 +98,10 @@
             </button>
           </div> -->
           
-          <div v-if="auth.isAuthenticated" class="user-menu">
+          <div v-if="isAuthenticated" class="user-menu">
             <div class="user-info">
               <router-link :to="{ path: '/profilepage' }" class="username">
-                <strong>🐣 {{ auth.name }}</strong> 님 안녕하세요!
+                <strong>🐣 {{ authStore.name }}</strong> 님 안녕하세요!
               </router-link>
             </div>
             <button @click="logout" class="logout-button">로그아웃</button>
@@ -157,10 +157,15 @@
 import ChatBot from '@/components/ChatBot.vue';
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { storeToRefs } from 'pinia'
 
-const auth = useAuthStore()
 const router = useRouter()
+const authStore = useAuthStore()
+
+// storeToRefs 대신 computed 사용
+const isAuthenticated = computed(() => authStore.isAuthenticated)
+const name = computed(() => authStore.name || '사용자') // 기본값 설정
 
 // 모바일 메뉴 관련 상태 추가
 const isMobile = ref(false)
@@ -202,10 +207,21 @@ onUnmounted(() => {
   window.removeEventListener('resize', checkMobile)
 })
 
-// isLoggedIn 대신 auth.isAuthenticated 사용
+// 컴포넌트가 마운트될 때 사용자 정보 가져오기
+onMounted(async () => {
+  if (authStore.isAuthenticated) {
+    try {
+      await authStore.fetchUserInfo()
+    } catch (error) {
+      console.error('사용자 정보 로딩 실패:', error)
+    }
+  }
+})
+
+// auth 객체 대신 직접 store의 상태 사용
 const logout = async () => {
   try {
-    await auth.logout()
+    await authStore.logout()
     router.push('/login')
     alert('로그아웃되었습니다.')
   } catch (error) {

@@ -6,7 +6,10 @@
         <div class="detail-header">
           <h2>{{ thread.title }}</h2>
           <div class="post-info">
-            <span>작성자: {{ thread.username }}</span>
+            <span>
+              {{ thread.member_type === 'regular' ? '🐣 ' : '☑️ ' }}
+              {{ thread.name }}
+            </span>
             <span>작성일: {{ formatDate(thread.created_at) }}</span>
             <span>수정일: {{ formatDate(thread.updated_at) }}</span>
           </div>
@@ -55,7 +58,11 @@
         <div v-for="comment in comments" :key="comment.id" class="comment-item">
           <div v-if="editingCommentId !== comment.id">
             <div class="comment-info">
-              <span class="comment-author">{{ comment.username }}</span>
+              <span class="comment-author">
+                {{ comment.member_type === 'regular' ? '🐣 ' : '☑️ ' }}
+                {{ comment.name }}
+                <span v-if="comment.username === thread.username" class="author-tag">(작성자)</span>
+              </span>
               <div class="comment-content">{{ comment.content }}</div>
             </div>
             <div class="comment-date">{{ formatDate(comment.created_at) }}</div>
@@ -88,6 +95,12 @@ import axios from 'axios'
 import { onMounted, ref } from 'vue'
 import { useCounterStore } from '@/stores/counter' 
 import { useRoute, useRouter } from 'vue-router'
+import chickImage from '@/assets/chick.png'
+import masterImage from '@/assets/master_logo.png'
+
+const getMemberTypeImage = (memberType) => {
+  return memberType === 'regular' ? chickImage : masterImage
+}
 
 const store = useCounterStore()
 const route = useRoute()
@@ -476,5 +489,11 @@ const deleteComment = (commentId) => {
   gap: 10px;
   justify-content: flex-end;
   margin-top: 20px;
+}
+
+.author-tag {
+  color: #047404;
+  font-size: 0.9em;
+  margin-left: 5px;
 }
 </style>

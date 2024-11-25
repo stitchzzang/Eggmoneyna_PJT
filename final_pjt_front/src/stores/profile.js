@@ -32,11 +32,29 @@ export const useProfileStore = defineStore('profile', () => {
     }
   }
 
+  // 사용자 정보 업데이트
+  const updateUserInfo = async (updatedData) => {
+    try {
+      const token = localStorage.getItem('token')
+      const response = await axios.put('http://127.0.0.1:8000/accounts/user/update/', updatedData, {
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      })
+      userInfo.value = response.data
+      return response.data
+    } catch (error) {
+      console.error('사용자 정보 업데이트 실패:', error)
+      throw error
+    }
+  }
+
   return {
     testResult,
     currentView,
     userInfo,
     setTestResult,
-    fetchUserInfo
+    fetchUserInfo,
+    updateUserInfo
   }
 })
