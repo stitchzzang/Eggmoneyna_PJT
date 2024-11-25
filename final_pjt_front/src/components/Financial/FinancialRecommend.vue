@@ -37,7 +37,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import ProductDetail from '@/components/Financial/FinancialProductDetail.vue'
+import ProductDetail from '@/components/Financial/FinancialProductDetailModal.vue'
 
 const showModal = ref(false)
 const selectedProduct = ref(null)

@@ -9,6 +9,7 @@ import CommunityWriteForm from '@/components/Community/CommunityWriteForm.vue'
 import FinancialProductsView from '@/views/FinancialProductsView.vue'
 import FinancialItemDeposit from '@/components/Financial/FinancialItemDeposit.vue'
 import FinancialItemSaving from '@/components/Financial/FinancialItemSaving.vue'
+import FinancialFilter from '@/components/Financial/FinancialFilter.vue'
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
         path: 'saving',
         name: 'saving',
         component: FinancialItemSaving
+      },
+      {
+        path: 'filter',
+        name: 'financial-filter',
+        component: FinancialFilter
       }
     ] 
   },
