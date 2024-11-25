@@ -110,6 +110,16 @@ CORS_ALLOWED_ORIGINS = [
 
 ROOT_URLCONF = 'my_api.urls'
 
+ # REST-AUTH 회원가입 기본 Serailizer 재정의
+REST_AUTH = {
+    'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
+    'USER_DETAILS_SERIALIZER': 'dj_rest_auth.serializers.UserDetailsSerializer',
+ }
+
+
+ACCOUNT_ADAPTER  = 'accounts.models.CustomAccountAdapter'
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -181,6 +191,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# 사용자 모델 설정  
 AUTH_USER_MODEL = 'accounts.User'
 
 ACCOUNT_EMAIL_REQUIRED = False

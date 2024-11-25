@@ -3,53 +3,80 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from django.contrib.auth import get_user_model
-from .serializers import UserSerializer
+from .serializers import CustomRegisterSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
 
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
+@permission_classes([AllowAny])
 def signup(request):
+    if request.method == 'GET':
+        return Response({
+            'message': '회원가입 페이지입니다.',
+            'required_fields': {
+                'username': '사용자 이름',
+                'email': '이메일',
+                'password1': '비밀번호',
+                'password2': '비밀번호 확인',
+                'name': '이름',
+                'birth_date': '생년월일',
+                'gender': '성별',
+                'income_level': '소득 수준',
+                'terms_agreement': '이용약관 동의',
+                'privacy_agreement': '개인정보 처리방침 동의'
+            }
+        })
+    
+    # POST 요청 처리
     try:
-        # 패스워드 일치 여부 확인
-        password = request.data.get('password1')
-        password_confirmation = request.data.get('password2')
+         # username 중복 검사
+        username = request.data.get('username')
+        if get_user_model().objects.filter(username=username).exists():
+            return Response(
+                {'error': '이미 사용 중인 아이디입니다.'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
-        if password != password_confirmation:
-            return Response({'error': '비밀번호가 일치하지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        # 시리얼라이저에 전달할 데이터 정리
-        serializer_data = {
-            'username': request.data.get('username'),
-            'password': password,
-            'email': request.data.get('email'),
-            # 필요한 다른 필드들도 여기에 추가
-        }
-        
-        serializer = UserSerializer(data=serializer_data)
+        # 이메일 중복 검사
+        email = request.data.get('email')
+        if get_user_model().objects.filter(email=email).exists():
+            return Response(
+                {'error': '이미 등록된 이메일입니다.'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        serializer = CustomRegisterSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
-            user.set_password(password)
-            user.save()
             
-            # 토큰 생성
-            token = RefreshToken.for_user(user)
+            # JWT 토큰 생성
+            refresh = RefreshToken.for_user(user)
+            
             return Response({
-                'user': serializer.data,
+                'message': '회원가입이 완료되었습니다.',
+                'user': {
+                    'username': user.username,
+                    'email': user.email,
+                    'name': user.name,
+                    'member_type': user.member_type,
+                },
                 'token': {
-                    'refresh': str(token),
-                    'access': str(token.access_token),
+                    'refresh': str(refresh),
+                    'access': str(refresh.access_token),
                 }
             }, status=status.HTTP_201_CREATED)
             
     except Exception as e:
-        print(e)  # 디버깅용 로그
-        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {'error': str(e)}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
 @permission_classes([AllowAny])
 def login(request):
     username = request.data.get('username')

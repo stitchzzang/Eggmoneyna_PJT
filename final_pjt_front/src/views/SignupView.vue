@@ -94,6 +94,25 @@
         <input type="date" id="birthdate" v-model.trim="formData.birth_date" required>
       </div>
 
+      <div class="form-group">
+        <label for="gender">성별</label>
+        <select id="gender" v-model="formData.gender" required>
+          <option value="">선택하세요</option>
+          <option value="M">남성</option>
+          <option value="F">여성</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="income">소득수준</label>
+        <select id="income" v-model="formData.income_level" required>
+          <option value="">선택하세요</option>
+          <option value="low">저소득층 (월 소득 200만원 이하)</option>
+          <option value="middle">중소득층 (월 소득 200만원 ~ 700만원)</option>
+          <option value="high">고소득층 (월 소득 700만원 이상)</option>
+        </select>
+      </div>
+
       <!-- 전문가 회원 추가 정보 -->
       <div v-if="formData.memberType === 'expert'" class="expert-info">
         <h5>자격증 등록</h5>
@@ -142,6 +161,8 @@ const formData = reactive({
   email: '',
   name: '',
   birth_date: '',
+  gender: '',
+  income_level: '',
   termsAgreed: false,
   privacyAgreed: false,
 
@@ -180,7 +201,7 @@ const signUp = async function () {
   // 비밀번호 일치 여부 확인
   if (formData.password1 !== formData.password2) {
     alert('비밀번호가 일치하지 않습니다.')
-    return  // 함수 실행 중단
+    return
   }
 
   // 날짜 형식을 YYYY-MM-DD로 변환
@@ -193,6 +214,8 @@ const signUp = async function () {
     email: formData.email,
     name: formData.name,
     birth_date: formattedBirthDate,
+    gender: formData.gender,
+    income_level: formData.income_level,
     member_type: formData.memberType,
     terms_agreement: formData.termsAgreed,
     privacy_agreement: formData.privacyAgreed,
@@ -209,11 +232,35 @@ const signUp = async function () {
     const success = await store.signUp(payload)
     if (success) {
       alert('회원가입이 완료되었습니다.')
-      router.push({ name: 'LoginView' })  // 여기서 라우팅 처리
+      router.push({ name: 'LoginView' })
     }
   } catch (error) {
-    alert('회원가입 중 오류가 발생했습니다: ' + error.message)
-    console.error('회원가입 오류:', error)
+    // 서버에서 반환하는 에러 메시지 처리
+    if (error.response && error.response.data) {
+      const errorData = error.response.data;
+      
+      if (errorData.username) {
+        alert('이미 존재하는 아이디입니다.');
+        return;
+      }
+      
+      if (errorData.email) {
+        alert('이미 존재하는 이메일입니다.');
+        return;
+      }
+
+      // 그 외의 에러 메시지가 있다면
+      const errorMessages = [];
+      for (const field in errorData) {
+        errorMessages.push(`${field}: ${errorData[field].join(' ')}`);
+      }
+      if (errorMessages.length > 0) {
+        alert('회원가입 중 다음과 같은 오류가 발생했습니다:\n' + errorMessages.join('\n'));
+      }
+    } else {
+      alert('회원가입 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
+    console.error('회원가입 오류:', error);
   }
 }
 
