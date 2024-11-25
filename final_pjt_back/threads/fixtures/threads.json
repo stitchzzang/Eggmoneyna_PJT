@@ -4,6 +4,7 @@
     "pk": 1,
     "fields": {
       "user": 1,
+      "username": "user1",
       "name": "강철민",
       "member_type": "regular",
       "title": "하나은행 1년 정기예금 추천!",
@@ -19,6 +20,7 @@
     "pk": 2,
     "fields": {
       "user": 2,
+      "username": "user2",
       "name": "별이",
       "member_type": "expert",
       "title": "신한은행 적금 추천",
@@ -34,6 +36,7 @@
     "pk": 3,
     "fields": {
       "user": 3,
+      "username": "user3",
       "name": "어드벤처리",
       "member_type": "regular",
       "title": "KB국민은행 '희망드림 적금' 추천!",
@@ -49,6 +52,7 @@
     "pk": 4,
     "fields": {
       "user": 4,
+      "username": "user4",
       "name": "핑크토끼",
       "member_type": "regular",
       "title": "우리은행 정기예금 추천",
@@ -64,6 +68,7 @@
     "pk": 5,
     "fields": {
       "user": 5,
+      "username": "user5",
       "name": "피지컬강자",
       "member_type": "expert",
       "title": "농협은행 적금 상품 추천",
@@ -79,6 +84,7 @@
     "pk": 6,
     "fields": {
       "user": 6,
+      "username": "user6",
       "name": "햇살소녀",
       "member_type": "regular",
       "title": "국민은행 '마이홈 적금' 추천",
@@ -94,6 +100,7 @@
     "pk": 7,
     "fields": {
       "user": 7,
+      "username": "user7",
       "name": "초코송이",
       "member_type": "regular",
       "title": "하나은행 자유적금 추천",
@@ -109,6 +116,7 @@
     "pk": 8,
     "fields": {
       "user": 8,
+      "username": "user8",
       "name": "로즈퀸",
       "member_type": "expert",
       "title": "신한은행 정기예금 추천",
@@ -124,6 +132,7 @@
     "pk": 9,
     "fields": {
       "user": 1,
+      "username": "user1",
       "name": "강철민",
       "member_type": "regular",
       "title": "카카오뱅크 1년 정기예금 추천",
@@ -139,6 +148,7 @@
     "pk": 10,
     "fields": {
       "user": 2,
+      "username": "user2",
       "name": "별이",
       "member_type": "expert",
       "title": "하나은행 1년 적금 추천",
@@ -154,6 +164,7 @@
     "pk": 11,
     "fields": {
       "user": 3,
+      "username": "user3",
       "name": "어드벤처리",
       "member_type": "regular",
       "title": "우리은행 '정기예금' 추천",
@@ -169,6 +180,7 @@
     "pk": 12,
     "fields": {
       "user": 4,
+      "username": "user4",
       "name": "핑크토끼",
       "member_type": "regular",
       "title": "신한은행 적금 추천",
@@ -184,6 +196,7 @@
     "pk": 13,
     "fields": {
       "user": 5,
+      "username": "user5",
       "name": "피지컬강자",
       "member_type": "expert",
       "title": "농협은행 1년 정기예금 추천",
@@ -199,6 +212,7 @@
     "pk": 14,
     "fields": {
       "user": 6,
+      "username": "user6",
       "name": "햇살소녀",
       "member_type": "regular",
       "title": "우리은행 12개월 적금 추천",
@@ -214,6 +228,7 @@
     "pk": 15,
     "fields": {
       "user": 7,
+      "username": "user7",
       "name": "초코송이",
       "member_type": "regular",
       "title": "신한은행 정기예금 추천",
@@ -229,6 +244,7 @@
     "pk": 16,
     "fields": {
       "user": 8,
+      "username": "user8",
       "name": "로즈퀸",
       "member_type": "expert",
       "title": "KB국민은행 '희망드림 적금' 추천",
@@ -244,6 +260,7 @@
     "pk": 17,
     "fields": {
       "user": 1,
+      "username": "user1",
       "name": "강철민",
       "member_type": "regular",
       "title": "카카오뱅크 자유적금 추천",
@@ -258,7 +275,8 @@
     "model": "threads.thread",
     "pk": 18,
     "fields": {
-      "user": 2,
+      "user": 2,  
+      "username": "user2",
       "name": "별이",
       "member_type": "expert",
       "title": "하나은행 6개월 정기예금 추천",
@@ -274,6 +292,7 @@
     "pk": 19,
     "fields": {
       "user": 3,
+      "username": "user3",
       "name": "어드벤처리",
       "member_type": "regular",
       "title": "국민은행 정기예금 추천",
@@ -289,6 +308,7 @@
     "pk": 20,
     "fields": {
       "user": 4,
+      "username": "user4",
       "name": "핑크토끼",
       "member_type": "regular",
       "title": "농협은행 적금 추천",
@@ -304,6 +324,7 @@
     "pk": 21,
     "fields": {
       "user": 5,
+      "username": "user5",
       "name": "피지컬강자",
       "member_type": "expert",
       "title": "신한은행 1년 정기예금 추천",
@@ -319,6 +340,7 @@
     "pk": 22,
     "fields": {
       "user": 6,
+      "username": "user6",
       "name": "햇살소녀",
       "member_type": "regular",
       "title": "카카오뱅크 적금 추천",
@@ -334,6 +356,7 @@
     "pk": 23,
     "fields": {
       "user": 7,
+      "username": "user7",
       "name": "초코송이",
       "member_type": "regular",
       "title": "우리은행 자유적금 추천",
@@ -349,6 +372,7 @@
     "pk": 24,
     "fields": {
       "user": 8,
+      "username": "user8",
       "name": "로즈퀸",
       "member_type": "expert",
       "title": "하나은행 정기적금 추천",
@@ -364,6 +388,7 @@
     "pk": 25,
     "fields": {
       "user": 1,
+      "username": "user1",
       "name": "강철민",
       "member_type": "regular",
       "title": "신한은행 1년 정기예금 추천",
@@ -379,6 +404,7 @@
     "pk": 26,
     "fields": {
       "user": 2,
+      "username": "user2",
       "name": "별이",
       "member_type": "expert",
       "title": "농협은행 자유적금 추천",
@@ -394,6 +420,7 @@
     "pk": 27,
     "fields": {
       "user": 3,
+      "username": "user3",
       "name": "어드벤처리",
       "member_type": "regular",
       "title": "우리은행 6개월 정기예금 추천",
@@ -409,6 +436,7 @@
     "pk": 28,
     "fields": {
       "user": 4,
+      "username": "user4",
       "name": "핑크토끼",
       "member_type": "regular",
       "title": "하나은행 정기예금 추천",
@@ -424,6 +452,7 @@
     "pk": 29,
     "fields": {
       "user": 5,
+      "username": "user5",
       "name": "피지컬강자",
       "member_type": "expert",
       "title": "KB국민은행 적금 추천",
@@ -439,6 +468,7 @@
     "pk": 30,
     "fields": {
       "user": 6,
+      "username": "user6",
       "name": "햇살소녀",
       "member_type": "regular",
       "title": "신한은행 자유적금 추천",
@@ -454,6 +484,7 @@
     "pk": 31,
     "fields": {
       "user": 7,
+      "username": "user7",
       "name": "초코송이",
       "member_type": "regular",
       "title": "카카오뱅크 1년 적금 추천",
@@ -469,6 +500,7 @@
     "pk": 32,
     "fields": {
       "user": 8,
+      "username": "user8",
       "name": "로즈퀸",
       "member_type": "expert",
       "title": "농협은행 12개월 적금 추천",
@@ -484,6 +516,7 @@
     "pk": 33,
     "fields": {
       "user": 1,
+      "username": "user1",
       "name": "강철민",
       "member_type": "regular",
       "title": "하나은행 6개월 정기예금 추천",
@@ -499,6 +532,7 @@
     "pk": 34,
     "fields": {
       "user": 2,
+      "username": "user2",
       "name": "별이",
       "member_type": "expert",
       "title": "우리은행 자유적금 추천",
@@ -514,6 +548,7 @@
     "pk": 35,
     "fields": {
       "user": 3,
+      "username": "user3",
       "name": "어드벤처리",
       "member_type": "regular",
       "title": "KB국민은행 1년 정기예금 추천",
@@ -529,6 +564,7 @@
     "pk": 36,
     "fields": {
       "user": 4,
+      "username": "user4",
       "name": "핑크토끼",
       "member_type": "regular",
       "title": "카카오뱅크 자유적금 추천",
