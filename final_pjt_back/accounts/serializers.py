@@ -30,6 +30,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         data.update({
             'email': self.validated_data.get('email', ''),
             'name': self.validated_data.get('name', ''),
+            'username': self.validated_data.get('username', ''),
             'birth_date': self.validated_data.get('birth_date', ''),
             'gender': self.validated_data.get('gender', ''),
             'member_type': self.validated_data.get('member_type', 'regular'),
@@ -46,7 +47,7 @@ UserModel = get_user_model()
 
 class CustomUserDetailsSerializer(UserDetailsSerializer):
     # 필수 필드
-    email = serializers.EmailField(read_only=True)
+    email = serializers.EmailField()
     name = serializers.CharField()
     birth_date = serializers.DateField()
     gender = serializers.ChoiceField(choices=UserModel.GENDER_CHOICES)
@@ -61,17 +62,22 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
         default='middle'
     )
     
+    # 비밀번호 필드
+    password = serializers.CharField(write_only=True, required=False)
+    
     class Meta:
         model = UserModel
         fields = (
             'pk', 
             'email',
             'name',
+            'username',
             'birth_date',
             'gender',
             'member_type',
             'income_level',
             'terms_agreement',
-            'privacy_agreement'
+            'privacy_agreement',
+            'password'
         )
-        read_only_fields = ('email', 'terms_agreement', 'privacy_agreement')
+        read_only_fields = ('terms_agreement', 'privacy_agreement')

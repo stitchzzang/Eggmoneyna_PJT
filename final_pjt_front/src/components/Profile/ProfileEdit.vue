@@ -7,13 +7,13 @@
       <!-- 이름 텍스트 -->
       <div class="info-group">
         <label>이름</label>
-        <div class="info-text">{{ formData.name }}</div>
+        <div class="info-text">{{ authStore.name }}</div>
       </div>
 
       <!-- 아이디 텍스트 -->
       <div class="info-group">
         <label>아이디</label>
-        <div class="info-text">{{ formData.username }}</div>
+        <div class="info-text">{{ authStore.userInfo.username }}</div>
       </div>
 
       <!-- 비밀번호와 비밀번호 확인 필드 -->
@@ -24,7 +24,6 @@
             <input 
               :type="showPassword ? 'text' : 'password'"
               v-model="formData.password"
-              :disabled="!isEditing"
             >
             <span 
               class="password-toggle"
@@ -41,8 +40,13 @@
             <input 
               :type="showPassword ? 'text' : 'password'"
               v-model="formData.passwordConfirm"
-              :disabled="!isEditing"
             >
+            <span 
+              class="password-toggle"
+              @click="togglePassword"
+            >
+              {{ showPassword ? '🔒' : '👁️' }}
+            </span>
           </div>
           <!-- 비밀번호 불일치 메시지 -->
           <span v-if="isEditing && formData.password && formData.passwordConfirm && !passwordsMatch" class="password-mismatch">
@@ -57,7 +61,6 @@
         <input 
           type="email" 
           v-model="formData.email"
-          :disabled="!isEditing"
         >
       </div>
 
@@ -65,6 +68,25 @@
       <div class="form-group">
         <label for="birthdate">생년월일</label>
         <input type="date" id="birthdate" v-model.trim="formData.birth_date" required>
+      </div>
+
+      <!-- 성별 선택 필드 -->
+      <div class="form-group">
+        <label>성별</label>
+        <select v-model="formData.gender">
+          <option value="M">남성</option>
+          <option value="F">여성</option>
+        </select>
+      </div>
+
+      <!-- 소득수준 선택 필드 -->
+      <div class="form-group">
+        <label>소득수준</label>
+        <select v-model="formData.income_level">
+          <option value="low">저소득층 (월 소득 200만원 이하)</option>
+          <option value="middle">중소득층 (월 소득 200만원 ~ 700만원)</option>
+          <option value="high">고소득층 (월 소득 700만원 이상)</option>
+        </select>
       </div>
 
       <!-- 버튼 그룹 -->
@@ -88,10 +110,19 @@
 <script setup>
 import { ref, reactive, onMounted, computed } from 'vue'
 import { useProfileStore } from '@/stores/profile'
+import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
+import axios from 'axios'
 
 const store = useProfileStore()
+const authStore = useAuthStore()
+const router = useRouter()
 const isEditing = ref(false)
 const showPassword = ref(false)
+
+// 인증 관련 computed 속성들
+const isAuthenticated = computed(() => authStore.isAuthenticated)
+const name = computed(() => authStore.name || '사용자') // 기본값 설정
 
 const formData = reactive({
   name: '',
@@ -99,20 +130,50 @@ const formData = reactive({
   password: '',
   passwordConfirm: '',
   email: '',
-  birth_date: ''
+  birth_date: '',
+  gender: '',
+  income_level: '',
+  member_type: '',
 })
 
 // 사용자 정보 로딩
 onMounted(async () => {
   try {
+    // 토큰 확인 및 유효성 검사 강화
+    const token = localStorage.getItem('token')
+    if (!token) {
+      alert('로그인이 필요합니다')
+      router.push('/login')
+      return
+    }
+
+    // 순차적으로 사용자 정보 로딩
+    try {
+      await authStore.fetchUserInfo()
+    } catch (error) {
+      if (error.response?.status === 401) {
+        localStorage.removeItem('token') // 토큰 삭제
+        alert('인증이 만료되었습니다. 다시 로그인해주세요.')
+        router.push('/login')
+        return
+      }
+      throw error
+    }
+
     const userData = await store.fetchUserInfo()
-    // 받아온 데이터로 formData 업데이트
-    formData.name = userData.name || ''
-    formData.username = userData.username || ''
-    formData.email = userData.email || ''
-    formData.birth_date = userData.birth_date || ''
+    
+    // 사용자 정보 업데이트
+    Object.assign(formData, {
+      name: authStore.name || '',
+      username: userData.username || '',
+      email: userData.email || '',
+      birth_date: userData.birth_date || '',
+      gender: userData.gender || 'M',
+      income_level: userData.income_level || 'middle'
+    })
   } catch (error) {
     console.error('사용자 정보 로딩 실패:', error)
+    alert('사용자 정보를 불러오는데 실패했습니다.')
   }
 })
 
@@ -122,6 +183,10 @@ const togglePassword = () => {
 
 const startEditing = () => {
   isEditing.value = true
+  formData.email = store.userInfo.email
+  formData.birth_date = store.userInfo.birth_date
+  formData.gender = store.userInfo.gender
+  formData.income_level = store.userInfo.income_level
 }
 
 const cancelEditing = () => {
@@ -130,6 +195,8 @@ const cancelEditing = () => {
   formData.passwordConfirm = ''
   formData.email = store.userInfo.email
   formData.birth_date = store.userInfo.birth_date
+  formData.gender = store.userInfo.gender
+  formData.income_level = store.userInfo.income_level
 }
 
 const handleSubmit = async () => {
@@ -138,11 +205,36 @@ const handleSubmit = async () => {
     return
   }
 
+  // 수정된 데이터만 포함하는 객체 생성
+  const updatedData = {
+    email: formData.email,
+    birth_date: formData.birth_date,
+    gender: formData.gender,
+    income_level: formData.income_level,
+  }
+
+  // 비밀번호가 입력된 경우에만 포함
+  if (formData.password) {
+    updatedData.password = formData.password
+  }
+
   try {
-    await store.updateUserInfo(formData)
+    // store.updateUserInfo 대신 axios를 직접 사용
+    const token = localStorage.getItem('token')
+    await axios.put('http://127.0.0.1:8000/accounts/update/', updatedData, {
+      headers: {
+        Authorization: `Token ${token}`
+      }
+    })
+    
+    // 업데이트 성공 후 상태 갱신
+    await store.fetchUserInfo()  // 최신 정보로 다시 불러오기
     isEditing.value = false
+    formData.password = ''
+    formData.passwordConfirm = ''
     alert('회원정보가 수정되었습니다.')
   } catch (error) {
+    console.error('회원정보 수정 실패:', error)
     alert('회원정보 수정에 실패했습니다.')
   }
 }
@@ -152,6 +244,18 @@ const passwordsMatch = computed(() => {
   if (!formData.password || !formData.passwordConfirm) return true
   return formData.password === formData.passwordConfirm
 })
+
+// 컴포넌트 마운트 시 사용자 정보 가져오기
+onMounted(async () => {
+  if (authStore.isAuthenticated) {
+    try {
+      await authStore.fetchUserInfo()
+    } catch (error) {
+      console.error('사용자 정보 로딩 실패:', error)
+    }
+  }
+})
+
 </script>
 
 <style scoped>
@@ -282,7 +386,6 @@ input:focus {
 
 input:disabled {
   background-color: #f5f5f5;
-  cursor: not-allowed;
 }
 
 .form-row {
@@ -325,5 +428,17 @@ input:disabled {
   color: #dc3545;
   font-size: 0.875rem;
   margin-top: 4px;
+}
+
+select {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: white;
+}
+
+select:disabled {
+  background-color: #f5f5f5;
 }
 </style>

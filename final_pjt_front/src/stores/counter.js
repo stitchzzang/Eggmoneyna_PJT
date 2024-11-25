@@ -10,24 +10,35 @@ export const useCounterStore = defineStore('counter', () => {
 
   // DRF로 전체 게시글 요청을 보내고 응답을 받아 
   // threads에 저장하는 함수
-  const getThreads = function () {
-    // localStorage에서 토큰 가져오기
-    const token = localStorage.getItem('token')
-    
-    axios({
-      method: 'get',
-      url: `${API_URL}/community/`,
-      headers: {
-        Authorization: `Token ${token}`  // 인증 토큰 추가
+  const getThreads = async () => {
+    try {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        console.error('토큰이 없습니다.')
+        router.push('/login')  // 로그인 페이지로 리다이렉트
+        return
       }
-    })
-      .then((res) => {
-        // console.log(res.data)
-        threads.value = res.data  // 장고가 준 데이터(res.data)를 threads에 저장
+
+      const response = await axios({
+        method: 'get',
+        url: `${API_URL}/community/`,
+        headers: {
+          'Authorization': `Token ${token}`,
+          'Content-Type': 'application/json'
+        }
       })
-      .catch((err) => {
-        console.log(err)
-      })
+      threads.value = response.data
+    } catch (error) {
+      console.error('게시글 목록 조회 실패:', error)
+      if (error.response) {
+        if (error.response.status === 500) {
+          alert('서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
+        } else {
+          alert(error.response.data.message || '게시글 목록을 불러오는데 실패했습니다.')
+        }
+        console.error('에러 응답:', error.response.data)
+      }
+    }
   }
 
   // 회원가입 요청을 보내는 함수

@@ -3,36 +3,46 @@ import axios from 'axios'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    token: localStorage.getItem('token') || null,
-    user: localStorage.getItem('user') || null,
-    isAuthenticated: !!localStorage.getItem('token')
+    token: null,
+    userInfo: null,
   }),
 
   getters: {
-    isAuthenticated: (state) => !!state.token && !!state.user,
-    username: (state) => state.user,
+    isAuthenticated: (state) => !!state.token,
+    name: (state) => state.userInfo?.name || '',
   },
 
   actions: {
     async login({ username, password }) {
       try {
-        const response = await axios.post('http://127.0.0.1:8000/accounts/login/', {
+        // 로그인 요청
+        const loginResponse = await axios.post('http://127.0.0.1:8000/accounts/login/', {
           username,
           password
         })
         
-        if (response.data.key) {
-          this.token = response.data.key
-          this.user = username
-          localStorage.setItem('token', response.data.key)
-          localStorage.setItem('user', username)
+        if (loginResponse.data.key) {
+          // 토큰 저장
+          this.token = loginResponse.data.key
+          localStorage.setItem('token', loginResponse.data.key)
+          axios.defaults.headers.common['Authorization'] = `Token ${loginResponse.data.key}`
           
-          axios.defaults.headers.common['Authorization'] = `Token ${response.data.key}`
+          // 사용자 상세 정보 요청
+          const userResponse = await axios.get('http://127.0.0.1:8000/accounts/user/', {
+            headers: {
+              Authorization: `Token ${loginResponse.data.key}`
+            }
+          })
+          
+          // 사용자 정보 저장
+          this.userInfo = userResponse.data
+          localStorage.setItem('user', JSON.stringify(userResponse.data))
+          
           return true
         }
         return false
       } catch (error) {
-        console.error('Login error:', error)
+        console.error('로그인 에러:', error)
         throw error
       }
     },
@@ -62,8 +72,7 @@ export const useAuthStore = defineStore('auth', {
         // 로컬 상태 초기화 (항상 실행)
         this.$patch({
           token: null,
-          user: null,
-          isAuthenticated: false
+          userInfo: null,
         })
         
         // 로컬 스토리지 클리어
@@ -76,8 +85,7 @@ export const useAuthStore = defineStore('auth', {
         // 에러가 발생해도 로컬 상태는 초기화
         this.$patch({
           token: null,
-          user: null,
-          isAuthenticated: false
+          userInfo: null,
         })
         localStorage.removeItem('token')
         localStorage.removeItem('user')
@@ -95,13 +103,25 @@ export const useAuthStore = defineStore('auth', {
         })
         if (response.status === 204) {
           this.token = null
-          this.user = null
+          this.userInfo = null
           localStorage.removeItem('token')
           localStorage.removeItem('user')
           return true
         }
       } catch (error) {
         console.error('회원탈퇴 실패:', error)
+        throw error
+      }
+    },
+
+    async fetchUserInfo() {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/accounts/user/', {
+          headers: { Authorization: `Token ${this.token}` }
+        })
+        this.userInfo = response.data
+      } catch (error) {
+        console.error('사용자 정보 가져오기 실패:', error)
         throw error
       }
     }
