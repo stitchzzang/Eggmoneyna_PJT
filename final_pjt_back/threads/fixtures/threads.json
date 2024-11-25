@@ -4,15 +4,10 @@
     "pk": 1,
     "fields": {
       "user": 1,
-      "username": "user1",
-      "name": "강철민",
-      "member_type": "regular",
       "title": "하나은행 1년 정기예금 추천!",
       "content": "하나은행 1년 정기예금 상품 추천드립니다! 이자율도 높고, 이자 지급이 매월이라 관리하기 편해요.",
       "created_at": "2024-11-25T08:30:00Z",
-      "updated_at": "2024-11-25T08:45:00Z",
-      "likes_count": 5,
-      "comment_count": 2
+      "updated_at": "2024-11-25T08:45:00Z"
     }
   },
   {
@@ -20,15 +15,10 @@
     "pk": 2,
     "fields": {
       "user": 2,
-      "username": "user2",
-      "name": "별이",
-      "member_type": "expert",
       "title": "신한은행 적금 추천",
       "content": "신한은행의 12개월 적금 상품 추천합니다! 이자율도 안정적이고, 가입 후 6개월 뒤부터 이자가 쌓이기 시작합니다.",
       "created_at": "2024-11-25T09:00:00Z",
-      "updated_at": "2024-11-25T09:10:00Z",
-      "likes_count": 10,
-      "comment_count": 3
+      "updated_at": "2024-11-25T09:10:00Z"
     }
   },
   {
@@ -36,15 +26,10 @@
     "pk": 3,
     "fields": {
       "user": 3,
-      "username": "user3",
-      "name": "어드벤처리",
-      "member_type": "regular",
       "title": "KB국민은행 '희망드림 적금' 추천!",
       "content": "KB국민은행 '희망드림 적금' 상품 이자율이 높아서 추천합니다! 특히 저축한 금액에 따라 우대금리도 적용되니 매우 유리해요.",
       "created_at": "2024-11-25T10:00:00Z",
-      "updated_at": "2024-11-25T10:05:00Z",
-      "likes_count": 3,
-      "comment_count": 1
+      "updated_at": "2024-11-25T10:05:00Z"
     }
   },
   {
@@ -52,15 +37,10 @@
     "pk": 4,
     "fields": {
       "user": 4,
-      "username": "user4",
-      "name": "핑크토끼",
-      "member_type": "regular",
       "title": "우리은행 정기예금 추천",
       "content": "우리은행 1년 정기예금이 괜찮습니다. 이자율이 다른 은행보다 좀 더 높은 편이에요.",
       "created_at": "2024-11-25T11:20:00Z",
-      "updated_at": "2024-11-25T11:30:00Z",
-      "likes_count": 7,
-      "comment_count": 2
+      "updated_at": "2024-11-25T11:30:00Z"
     }
   },
   {
@@ -68,15 +48,10 @@
     "pk": 5,
     "fields": {
       "user": 5,
-      "username": "user5",
-      "name": "피지컬강자",
-      "member_type": "expert",
       "title": "농협은행 적금 상품 추천",
       "content": "농협은행의 24개월 적금 상품 추천합니다. 이자율도 좋고, 특별한 혜택도 많아서 장기 예치를 원하는 분들에게 추천해요.",
       "created_at": "2024-11-25T12:00:00Z",
-      "updated_at": "2024-11-25T12:10:00Z",
-      "likes_count": 15,
-      "comment_count": 0
+      "updated_at": "2024-11-25T12:10:00Z"
     }
   },
   {
@@ -84,15 +59,10 @@
     "pk": 6,
     "fields": {
       "user": 6,
-      "username": "user6",
-      "name": "햇살소녀",
-      "member_type": "regular",
       "title": "국민은행 '마이홈 적금' 추천",
       "content": "국민은행의 '마이홈 적금' 너무 좋아요! 6개월 기준으로 높은 이자율을 제공하고, 추가 예치도 유리하게 적용됩니다.",
       "created_at": "2024-11-25T13:00:00Z",
-      "updated_at": "2024-11-25T13:05:00Z",
-      "likes_count": 9,
-      "comment_count": 1
+      "updated_at": "2024-11-25T13:05:00Z"
     }
   },
   {
@@ -100,15 +70,10 @@
     "pk": 7,
     "fields": {
       "user": 7,
-      "username": "user7",
-      "name": "초코송이",
-      "member_type": "regular",
       "title": "하나은행 자유적금 추천",
       "content": "하나은행의 자유적금은 언제든지 중도해지해도 손해가 없어요. 이자율도 만족스럽고, 해지해도 이자를 받을 수 있다는 점이 좋습니다.",
       "created_at": "2024-11-25T14:00:00Z",
-      "updated_at": "2024-11-25T14:10:00Z",
-      "likes_count": 4,
-      "comment_count": 3
+      "updated_at": "2024-11-25T14:10:00Z"
     }
   },
   {
@@ -116,15 +81,10 @@
     "pk": 8,
     "fields": {
       "user": 8,
-      "username": "user8",
-      "name": "로즈퀸",
-      "member_type": "expert",
       "title": "신한은행 정기예금 추천",
       "content": "신한은행의 정기예금은 이자율이 꽤 높습니다. 또한, 자동이체나 급여이체 시 우대금리가 적용되니까 꼭 챙기세요.",
       "created_at": "2024-11-25T15:00:00Z",
-      "updated_at": "2024-11-25T15:10:00Z",
-      "likes_count": 6,
-      "comment_count": 2
+      "updated_at": "2024-11-25T15:10:00Z"
     }
   },
   {
@@ -132,15 +92,10 @@
     "pk": 9,
     "fields": {
       "user": 1,
-      "username": "user1",
-      "name": "강철민",
-      "member_type": "regular",
       "title": "카카오뱅크 1년 정기예금 추천",
       "content": "카카오뱅크의 1년 정기예금 상품 추천해요. 카카오뱅크는 모바일로 언제든지 관리할 수 있어서 편리합니다.",
       "created_at": "2024-11-25T16:00:00Z",
-      "updated_at": "2024-11-25T16:05:00Z",
-      "likes_count": 8,
-      "comment_count": 1
+      "updated_at": "2024-11-25T16:05:00Z"
     }
   },
   {
@@ -148,15 +103,10 @@
     "pk": 10,
     "fields": {
       "user": 2,
-      "username": "user2",
-      "name": "별이",
-      "member_type": "expert",
       "title": "하나은행 1년 적금 추천",
       "content": "하나은행의 1년 적금 상품 이자율이 높고, 급여이체 시 우대금리도 적용되어 좋습니다.",
       "created_at": "2024-11-25T17:00:00Z",
-      "updated_at": "2024-11-25T17:05:00Z",
-      "likes_count": 12,
-      "comment_count": 0
+      "updated_at": "2024-11-25T17:05:00Z"
     }
   },
   {
@@ -164,15 +114,10 @@
     "pk": 11,
     "fields": {
       "user": 3,
-      "username": "user3",
-      "name": "어드벤처리",
-      "member_type": "regular",
       "title": "우리은행 '정기예금' 추천",
       "content": "우리은행의 정기예금 상품 추천합니다. 이자율이 높고, 금융 상품을 관리하기 용이한 앱이 있어서 편리해요.",
       "created_at": "2024-11-25T18:00:00Z",
-      "updated_at": "2024-11-25T18:10:00Z",
-      "likes_count": 5,
-      "comment_count": 1
+      "updated_at": "2024-11-25T18:10:00Z"
     }
   },
   {
@@ -180,15 +125,10 @@
     "pk": 12,
     "fields": {
       "user": 4,
-      "username": "user4",
-      "name": "핑크토끼",
-      "member_type": "regular",
       "title": "신한은행 적금 추천",
       "content": "신한은행의 12개월 적금 상품 매우 좋습니다. 이자율이 높고, 추가 우대금리도 적용돼서 더욱 이득이에요.",
       "created_at": "2024-11-25T19:00:00Z",
-      "updated_at": "2024-11-25T19:05:00Z",
-      "likes_count": 7,
-      "comment_count": 2
+      "updated_at": "2024-11-25T19:05:00Z"
     }
   },
 {
@@ -196,15 +136,10 @@
     "pk": 13,
     "fields": {
       "user": 5,
-      "username": "user5",
-      "name": "피지컬강자",
-      "member_type": "expert",
       "title": "농협은행 1년 정기예금 추천",
       "content": "농협은행의 1년 정기예금은 안정적인 이자율을 제공하며, 급여이체 시 우대금리도 적용됩니다.",
       "created_at": "2024-11-25T20:00:00Z",
-      "updated_at": "2024-11-25T20:10:00Z",
-      "likes_count": 13,
-      "comment_count": 4
+      "updated_at": "2024-11-25T20:10:00Z"
     }
   },
   {
@@ -212,15 +147,10 @@
     "pk": 14,
     "fields": {
       "user": 6,
-      "username": "user6",
-      "name": "햇살소녀",
-      "member_type": "regular",
       "title": "우리은행 12개월 적금 추천",
       "content": "우리은행의 12개월 적금은 월복리 이자 계산이 가능한 상품입니다. 이자율이 높은 편이고, 우대금리도 적용돼요.",
       "created_at": "2024-11-25T21:00:00Z",
-      "updated_at": "2024-11-25T21:05:00Z",
-      "likes_count": 9,
-      "comment_count": 2
+      "updated_at": "2024-11-25T21:05:00Z"
     }
   },
   {
@@ -228,15 +158,10 @@
     "pk": 15,
     "fields": {
       "user": 7,
-      "username": "user7",
-      "name": "초코송이",
-      "member_type": "regular",
       "title": "신한은행 정기예금 추천",
       "content": "신한은행의 정기예금 상품 이자율이 좋아서 추천합니다. 급여이체나 특정 조건에서 우대금리가 제공돼요.",
       "created_at": "2024-11-25T22:00:00Z",
-      "updated_at": "2024-11-25T22:05:00Z",
-      "likes_count": 8,
-      "comment_count": 3
+      "updated_at": "2024-11-25T22:05:00Z"
     }
   },
   {
@@ -244,15 +169,10 @@
     "pk": 16,
     "fields": {
       "user": 8,
-      "username": "user8",
-      "name": "로즈퀸",
-      "member_type": "expert",
       "title": "KB국민은행 '희망드림 적금' 추천",
       "content": "KB국민은행의 '희망드림 적금'은 이자율이 매우 높고, 매월 이자지급 방식이라 편리한 상품입니다.",
       "created_at": "2024-11-25T23:00:00Z",
-      "updated_at": "2024-11-25T23:05:00Z",
-      "likes_count": 16,
-      "comment_count": 0
+      "updated_at": "2024-11-25T23:05:00Z"
     }
   },
   {
@@ -260,15 +180,10 @@
     "pk": 17,
     "fields": {
       "user": 1,
-      "username": "user1",
-      "name": "강철민",
-      "member_type": "regular",
       "title": "카카오뱅크 자유적금 추천",
       "content": "카카오뱅크 자유적금은 중도해지에도 불이익이 없어서 좋습니다. 이자율도 경쟁력 있고, 모바일로 쉽게 관리 가능합니다.",
       "created_at": "2024-11-26T00:00:00Z",
-      "updated_at": "2024-11-26T00:10:00Z",
-      "likes_count": 10,
-      "comment_count": 5
+      "updated_at": "2024-11-26T00:10:00Z"
     }
   },
   {
@@ -276,15 +191,10 @@
     "pk": 18,
     "fields": {
       "user": 2,  
-      "username": "user2",
-      "name": "별이",
-      "member_type": "expert",
       "title": "하나은행 6개월 정기예금 추천",
       "content": "하나은행의 6개월 정기예금은 이자율이 매력적이고, 중도해지 시에도 일정 비율의 이자가 지급됩니다.",
       "created_at": "2024-11-26T01:00:00Z",
-      "updated_at": "2024-11-26T01:05:00Z",
-      "likes_count": 18,
-      "comment_count": 1
+      "updated_at": "2024-11-26T01:05:00Z"
     }
   },
   {
@@ -292,15 +202,10 @@
     "pk": 19,
     "fields": {
       "user": 3,
-      "username": "user3",
-      "name": "어드벤처리",
-      "member_type": "regular",
       "title": "국민은행 정기예금 추천",
       "content": "국민은행의 정기예금은 다양한 이자 지급 방식이 있어서 선택의 폭이 넓어요. 이자율도 괜찮고, 안정적인 상품입니다.",
       "created_at": "2024-11-26T02:00:00Z",
-      "updated_at": "2024-11-26T02:10:00Z",
-      "likes_count": 6,
-      "comment_count": 2
+      "updated_at": "2024-11-26T02:10:00Z"
     }
   },
   {
@@ -308,1359 +213,10 @@
     "pk": 20,
     "fields": {
       "user": 4,
-      "username": "user4",
-      "name": "핑크토끼",
-      "member_type": "regular",
       "title": "농협은행 적금 추천",
       "content": "농협은행 적금 상품은 이자율도 좋고, 적금 기간도 유연하게 설정할 수 있어 추천드립니다.",
       "created_at": "2024-11-26T03:00:00Z",
-      "updated_at": "2024-11-26T03:05:00Z",
-      "likes_count": 5,
-      "comment_count": 0
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 21,
-    "fields": {
-      "user": 5,
-      "username": "user5",
-      "name": "피지컬강자",
-      "member_type": "expert",
-      "title": "신한은행 1년 정기예금 추천",
-      "content": "신한은행의 1년 정기예금은 안정적인 이자율을 제공하며, 월복리 방식으로 이자가 누적됩니다.",
-      "created_at": "2024-11-26T04:00:00Z",
-      "updated_at": "2024-11-26T04:10:00Z",
-      "likes_count": 7,
-      "comment_count": 2
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 22,
-    "fields": {
-      "user": 6,
-      "username": "user6",
-      "name": "햇살소녀",
-      "member_type": "regular",
-      "title": "카카오뱅크 적금 추천",
-      "content": "카카오뱅크 적금은 이자율이 높고, 급여이체 시 우대금리가 적용됩니다. 온라인으로 편리하게 가입 가능해요.",
-      "created_at": "2024-11-26T05:00:00Z",
-      "updated_at": "2024-11-26T05:05:00Z",
-      "likes_count": 11,
-      "comment_count": 3
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 23,
-    "fields": {
-      "user": 7,
-      "username": "user7",
-      "name": "초코송이",
-      "member_type": "regular",
-      "title": "우리은행 자유적금 추천",
-      "content": "우리은행의 자유적금은 언제든지 해지해도 손해가 없어요. 이자율도 꽤 높은 편이라 좋습니다.",
-      "created_at": "2024-11-26T06:00:00Z",
-      "updated_at": "2024-11-26T06:05:00Z",
-      "likes_count": 9,
-      "comment_count": 4
-    }
-  },
-{
-    "model": "threads.thread",
-    "pk": 24,
-    "fields": {
-      "user": 8,
-      "username": "user8",
-      "name": "로즈퀸",
-      "member_type": "expert",
-      "title": "하나은행 정기적금 추천",
-      "content": "하나은행의 정기적금은 중도해지 시에도 일부 이자 지급이 가능하고, 적금 기간 동안 안정적으로 이자를 제공합니다.",
-      "created_at": "2024-11-26T07:00:00Z",
-      "updated_at": "2024-11-26T07:10:00Z",
-      "likes_count": 15,
-      "comment_count": 6
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 25,
-    "fields": {
-      "user": 1,
-      "username": "user1",
-      "name": "강철민",
-      "member_type": "regular",
-      "title": "신한은행 1년 정기예금 추천",
-      "content": "신한은행의 1년 정기예금은 안정적이고 예측 가능한 이자 지급 방식으로 안정성을 중시하는 분들께 추천드립니다.",
-      "created_at": "2024-11-26T08:00:00Z",
-      "updated_at": "2024-11-26T08:10:00Z",
-      "likes_count": 12,
-      "comment_count": 3
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 26,
-    "fields": {
-      "user": 2,
-      "username": "user2",
-      "name": "별이",
-      "member_type": "expert",
-      "title": "농협은행 자유적금 추천",
-      "content": "농협은행의 자유적금은 이자율이 경쟁력이 있으며, 유연한 기간 설정으로 다양한 고객층을 타겟으로 한 상품입니다.",
-      "created_at": "2024-11-26T09:00:00Z",
-      "updated_at": "2024-11-26T09:05:00Z",
-      "likes_count": 14,
-      "comment_count": 5
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 27,
-    "fields": {
-      "user": 3,
-      "username": "user3",
-      "name": "어드벤처리",
-      "member_type": "regular",
-      "title": "우리은행 6개월 정기예금 추천",
-      "content": "우리은행의 6개월 정기예금은 이자율이 우수하고, 일정 기간 후 중도 해지가 가능해 유동성 있는 투자자에게 적합한 상품입니다.",
-      "created_at": "2024-11-26T10:00:00Z",
-      "updated_at": "2024-11-26T10:10:00Z",
-      "likes_count": 10,
-      "comment_count": 4
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 28,
-    "fields": {
-      "user": 4,
-      "username": "user4",
-      "name": "핑크토끼",
-      "member_type": "regular",
-      "title": "하나은행 정기예금 추천",
-      "content": "하나은행의 정기예금 상품은 기간에 따른 다양한 옵션을 제공하며, 이자율 또한 적당하여 안정적인 수익을 제공합니다.",
-      "created_at": "2024-11-26T11:00:00Z",
-      "updated_at": "2024-11-26T11:05:00Z",
-      "likes_count": 13,
-      "comment_count": 2
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 29,
-    "fields": {
-      "user": 5,
-      "username": "user5",
-      "name": "피지컬강자",
-      "member_type": "expert",
-      "title": "KB국민은행 적금 추천",
-      "content": "KB국민은행의 적금은 기본 이자율 외에도 추가적인 우대금리를 제공하며, 다양한 금리 옵션을 선택할 수 있습니다.",
-      "created_at": "2024-11-26T12:00:00Z",
-      "updated_at": "2024-11-26T12:10:00Z",
-      "likes_count": 19,
-      "comment_count": 0
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 30,
-    "fields": {
-      "user": 6,
-      "username": "user6",
-      "name": "햇살소녀",
-      "member_type": "regular",
-      "title": "신한은행 자유적금 추천",
-      "content": "신한은행의 자유적금은 자동이체와 급여이체 시 추가 우대금리가 적용돼 유리한 조건에서 적금을 들 수 있습니다.",
-      "created_at": "2024-11-26T13:00:00Z",
-      "updated_at": "2024-11-26T13:05:00Z",
-      "likes_count": 8,
-      "comment_count": 1
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 31,
-    "fields": {
-      "user": 7,
-      "username": "user7",
-      "name": "초코송이",
-      "member_type": "regular",
-      "title": "카카오뱅크 1년 적금 추천",
-      "content": "카카오뱅크의 1년 적금은 높은 이자율을 자랑하며, 모바일로 손쉽게 가입할 수 있어 편리합니다.",
-      "created_at": "2024-11-26T14:00:00Z",
-      "updated_at": "2024-11-26T14:05:00Z",
-      "likes_count": 6,
-      "comment_count": 3
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 32,
-    "fields": {
-      "user": 8,
-      "username": "user8",
-      "name": "로즈퀸",
-      "member_type": "expert",
-      "title": "농협은행 12개월 적금 추천",
-      "content": "농협은행의 12개월 적금은 월복리로 이자가 증가하며, 우대금리가 적용되어 수익률이 높습니다.",
-      "created_at": "2024-11-26T15:00:00Z",
-      "updated_at": "2024-11-26T15:10:00Z",
-      "likes_count": 20,
-      "comment_count": 0
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 33,
-    "fields": {
-      "user": 1,
-      "username": "user1",
-      "name": "강철민",
-      "member_type": "regular",
-      "title": "하나은행 6개월 정기예금 추천",
-      "content": "하나은행의 6개월 정기예금은 중도 해지가 가능하며, 안정적인 이자율을 제공합니다. 유연한 조건이 장점입니다.",
-      "created_at": "2024-11-26T16:00:00Z",
-      "updated_at": "2024-11-26T16:05:00Z",
-      "likes_count": 5,
-      "comment_count": 2
-    }
-  },
-{
-    "model": "threads.thread",
-    "pk": 34,
-    "fields": {
-      "user": 2,
-      "username": "user2",
-      "name": "별이",
-      "member_type": "expert",
-      "title": "우리은행 자유적금 추천",
-      "content": "우리은행의 자유적금은 고객 맞춤형 금리를 제공하며, 중도 해지 시에도 일부 이자를 받을 수 있는 옵션이 있습니다.",
-      "created_at": "2024-11-26T17:00:00Z",
-      "updated_at": "2024-11-26T17:10:00Z",
-      "likes_count": 17,
-      "comment_count": 8
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 35,
-    "fields": {
-      "user": 3,
-      "username": "user3",
-      "name": "어드벤처리",
-      "member_type": "regular",
-      "title": "KB국민은행 1년 정기예금 추천",
-      "content": "KB국민은행의 1년 정기예금은 고정 금리를 제공하며, 중간에 예금액을 일부 인출할 수 있는 유연성을 가지고 있습니다.",
-      "created_at": "2024-11-26T18:00:00Z",
-      "updated_at": "2024-11-26T18:05:00Z",
-      "likes_count": 21,
-      "comment_count": 4
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 36,
-    "fields": {
-      "user": 4,
-      "username": "user4",
-      "name": "핑크토끼",
-      "member_type": "regular",
-      "title": "카카오뱅크 자유적금 추천",
-      "content": "카카오뱅크의 자유적금은 모바일 뱅킹으로 쉽게 가입하고 관리할 수 있으며, 이자율이 매우 경쟁력 있는 상품입니다.",
-      "created_at": "2024-11-26T19:00:00Z",
-      "updated_at": "2024-11-26T19:05:00Z",
-      "likes_count": 12,
-      "comment_count": 9
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 37,
-    "fields": {
-      "user": 5,
-      "username": "user5",
-      "name": "피지컬강자",
-      "member_type": "expert",
-      "title": "신한은행 1년 적금 추천",
-      "content": "신한은행의 1년 적금은 예금액에 따른 높은 이자율을 제공하며, 은행 우대 조건을 만족시키면 추가 금리 혜택이 있습니다.",
-      "created_at": "2024-11-26T20:00:00Z",
-      "updated_at": "2024-11-26T20:10:00Z",
-      "likes_count": 25,
-      "comment_count": 3
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 38,
-    "fields": {
-      "user": 6,
-      "username": "user6",
-      "name": "햇살소녀",
-      "member_type": "regular",
-      "title": "하나은행 자유적금 추천",
-      "content": "하나은행의 자유적금은 이자율이 높고, 급여이체 조건을 충족하면 우대금리가 적용됩니다. 매우 유리한 조건입니다.",
-      "created_at": "2024-11-26T21:00:00Z",
-      "updated_at": "2024-11-26T21:05:00Z",
-      "likes_count": 13,
-      "comment_count": 7
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 39,
-    "fields": {
-      "user": 7,
-      "username": "user7",
-      "name": "초코송이",
-      "member_type": "regular",
-      "title": "농협은행 1년 정기예금 추천",
-      "content": "농협은행의 1년 정기예금은 이자율이 좋은 편이며, 기본적인 예금 조건을 충족시키면 이자율을 추가로 받을 수 있는 기회가 있습니다.",
-      "created_at": "2024-11-26T22:00:00Z",
-      "updated_at": "2024-11-26T22:05:00Z",
-      "likes_count": 9,
-      "comment_count": 5
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 40,
-    "fields": {
-      "user": 8,
-      "username": "user8",
-      "name": "로즈퀸",
-      "member_type": "expert",
-      "title": "KB국민은행 자유적금 추천",
-      "content": "KB국민은행의 자유적금은 고정 금리를 제공하며, 인터넷뱅킹을 통해 편리하게 가입하고 관리할 수 있는 장점이 있습니다.",
-      "created_at": "2024-11-26T23:00:00Z",
-      "updated_at": "2024-11-26T23:05:00Z",
-      "likes_count": 22,
-      "comment_count": 6
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 41,
-    "fields": {
-      "user": 1,
-      "username": "user1",
-      "name": "강철민",
-      "member_type": "regular",
-      "title": "우리은행 12개월 정기예금 추천",
-      "content": "우리은행의 12개월 정기예금은 이자율이 안정적이며, 예치금액에 따라 다양한 혜택을 제공하는 상품입니다.",
-      "created_at": "2024-11-27T00:00:00Z",
-      "updated_at": "2024-11-27T00:05:00Z",
-      "likes_count": 11,
-      "comment_count": 2
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 42,
-    "fields": {
-      "user": 2,
-      "username": "user2",
-      "name": "별이",
-      "member_type": "expert",
-      "title": "카카오뱅크 정기예금 추천",
-      "content": "카카오뱅크의 정기예금은 높은 이자율을 제공하며, 6개월 및 12개월 동안 안정적인 수익을 추구하는 분들께 적합한 상품입니다.",
-      "created_at": "2024-11-27T01:00:00Z",
-      "updated_at": "2024-11-27T01:05:00Z",
-      "likes_count": 30,
-      "comment_count": 0
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 43,
-    "fields": {
-      "user": 3,
-      "username": "user3",
-      "name": "어드벤처리",
-      "member_type": "regular",
-      "title": "신한은행 자유적금 추천",
-      "content": "신한은행의 자유적금은 유연한 조건과 함께 높은 이자율을 제공하며, 인터넷 뱅킹을 통해 손쉽게 가입할 수 있습니다.",
-      "created_at": "2024-11-27T02:00:00Z",
-      "updated_at": "2024-11-27T02:05:00Z",
-      "likes_count": 18,
-      "comment_count": 4
-    }
-  },
-{
-    "model": "threads.thread",
-    "pk": 44,
-    "fields": {
-      "user": 4,
-      "username": "user4",
-      "name": "핑크토끼",
-      "member_type": "regular",
-      "title": "하나은행 12개월 정기예금 추천",
-      "content": "하나은행의 12개월 정기예금은 고정금리를 제공하며, 예금액에 따른 우대금리를 적용받을 수 있어 안정적인 수익을 기대할 수 있습니다.",
-      "created_at": "2024-11-27T03:00:00Z",
-      "updated_at": "2024-11-27T03:05:00Z",
-      "likes_count": 20,
-      "comment_count": 3
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 45,
-    "fields": {
-      "user": 5,
-      "username": "user5",
-      "name": "피지컬강자",
-      "member_type": "expert",
-      "title": "농협은행 자유적금 추천",
-      "content": "농협은행의 자유적금은 자유롭게 예금액을 추가하거나 인출할 수 있어 매우 유연한 상품입니다. 추가 금리 혜택도 있습니다.",
-      "created_at": "2024-11-27T04:00:00Z",
-      "updated_at": "2024-11-27T04:10:00Z",
-      "likes_count": 35,
-      "comment_count": 6
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 46,
-    "fields": {
-      "user": 6,
-      "username": "user6",
-      "name": "햇살소녀",
-      "member_type": "regular",
-      "title": "우리은행 자유적금 추천",
-      "content": "우리은행의 자유적금은 이자율이 경쟁력 있으며, 고객 맞춤형 조건을 제공해 더욱 유리한 금융 혜택을 누릴 수 있습니다.",
-      "created_at": "2024-11-27T05:00:00Z",
-      "updated_at": "2024-11-27T05:05:00Z",
-      "likes_count": 28,
-      "comment_count": 7
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 47,
-    "fields": {
-      "user": 7,
-      "username": "user7",
-      "name": "초코송이",
-      "member_type": "regular",
-      "title": "카카오뱅크 정기예금 추천",
-      "content": "카카오뱅크의 정기예금은 모바일을 통해 손쉽게 가입할 수 있으며, 안정적인 이자율을 제공하여 많은 사람들이 이용하고 있습니다.",
-      "created_at": "2024-11-27T06:00:00Z",
-      "updated_at": "2024-11-27T06:05:00Z",
-      "likes_count": 16,
-      "comment_count": 5
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 48,
-    "fields": {
-      "user": 8,
-      "username": "user8",
-      "name": "로즈퀸",
-      "member_type": "expert",
-      "title": "KB국민은행 1년 정기예금 추천",
-      "content": "KB국민은행의 1년 정기예금은 예치 금액에 따라 우대금리를 적용받을 수 있어 매우 이점이 큽니다. 또한, 다양한 금융상품을 함께 고려할 수 있습니다.",
-      "created_at": "2024-11-27T07:00:00Z",
-      "updated_at": "2024-11-27T07:05:00Z",
-      "likes_count": 40,
-      "comment_count": 2
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 49,
-    "fields": {
-      "user": 1,
-      "username": "user1",
-      "name": "강철민",
-      "member_type": "regular",
-      "title": "신한은행 자유적금 추천",
-      "content": "신한은행의 자유적금은 이자율이 안정적이고, 가입 및 관리가 매우 간편한 특징이 있습니다. 또한 여러 가지 금융 상품을 함께 선택할 수 있는 장점이 있습니다.",
-      "created_at": "2024-11-27T08:00:00Z",
-      "updated_at": "2024-11-27T08:05:00Z",
-      "likes_count": 12,
-      "comment_count": 6
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 50,
-    "fields": {
-      "user": 2,
-      "username": "user2",
-      "name": "별이",
-      "member_type": "expert",
-      "title": "하나은행 자유적금 추천",
-      "content": "하나은행의 자유적금은 고금리를 제공하며, 인터넷 뱅킹을 통해 간편하게 관리할 수 있는 점이 큰 장점입니다.",
-      "created_at": "2024-11-27T09:00:00Z",
-      "updated_at": "2024-11-27T09:05:00Z",
-      "likes_count": 18,
-      "comment_count": 3
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 51,
-    "fields": {
-      "user": 3,
-      "username": "user3",
-      "name": "어드벤처리",
-      "member_type": "regular",
-      "title": "농협은행 1년 정기예금 추천",
-      "content": "농협은행의 1년 정기예금은 예치 기간 동안 고정 이자율을 제공하며, 추가적으로 우대금리를 적용받을 수 있는 기회가 많습니다.",
-      "created_at": "2024-11-27T10:00:00Z",
-      "updated_at": "2024-11-27T10:05:00Z",
-      "likes_count": 24,
-      "comment_count": 8
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 52,
-    "fields": {
-      "user": 4,
-      "username": "user4",
-      "name": "핑크토끼",
-      "member_type": "regular",
-      "title": "우리은행 정기예금 추천",
-      "content": "우리은행의 정기예금은 다양한 금리 상품을 제공하며, 우대금리를 적용받을 수 있는 조건이 있습니다. 이를 통해 수익을 극대화할 수 있습니다.",
-      "created_at": "2024-11-27T11:00:00Z",
-      "updated_at": "2024-11-27T11:05:00Z",
-      "likes_count": 15,
-      "comment_count": 9
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 53,
-    "fields": {
-      "user": 5,
-      "username": "user5",
-      "name": "피지컬강자",
-      "member_type": "expert",
-      "title": "KB국민은행 자유적금 추천",
-      "content": "KB국민은행의 자유적금은 다양한 금리 옵션을 제공하며, 이자율이 매우 경쟁력 있어 장기적으로 안정적인 이익을 얻을 수 있습니다.",
-      "created_at": "2024-11-27T12:00:00Z",
-      "updated_at": "2024-11-27T12:05:00Z",
-      "likes_count": 36,
-      "comment_count": 4
-    }
-  },
-{
-    "model": "threads.thread",
-    "pk": 54,
-    "fields": {
-      "user": 6,
-      "username": "user6",
-      "name": "햇살소녀",
-      "member_type": "regular",
-      "title": "카카오뱅크 정기예금 추천",
-      "content": "카카오뱅크의 정기예금은 온라인을 통해 간편하게 가입할 수 있으며, 고금리 혜택을 제공해 많은 사람들이 선호하는 상품입니다.",
-      "created_at": "2024-11-27T13:00:00Z",
-      "updated_at": "2024-11-27T13:05:00Z",
-      "likes_count": 22,
-      "comment_count": 2
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 55,
-    "fields": {
-      "user": 7,
-      "username": "user7",
-      "name": "초코송이",
-      "member_type": "regular",
-      "title": "신한은행 자유적금 추천",
-      "content": "신한은행의 자유적금은 다양한 우대 금리와 혜택을 제공하며, 가입 후 편리한 온라인 관리가 가능합니다.",
-      "created_at": "2024-11-27T14:00:00Z",
-      "updated_at": "2024-11-27T14:10:00Z",
-      "likes_count": 19,
-      "comment_count": 5
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 56,
-    "fields": {
-      "user": 8,
-      "username": "user8",
-      "name": "로즈퀸",
-      "member_type": "expert",
-      "title": "하나은행 12개월 정기예금 추천",
-      "content": "하나은행의 12개월 정기예금은 예금액에 따른 우대금리를 제공하며, 안정적인 수익을 기대할 수 있는 상품입니다.",
-      "created_at": "2024-11-27T15:00:00Z",
-      "updated_at": "2024-11-27T15:05:00Z",
-      "likes_count": 25,
-      "comment_count": 7
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 57,
-    "fields": {
-      "user": 1,
-      "username": "user1",
-      "name": "강철민",
-      "member_type": "regular",
-      "title": "농협은행 자유적금 추천",
-      "content": "농협은행의 자유적금은 고정금리가 적용되며, 인터넷 뱅킹을 통해 간편하게 관리할 수 있어 편리합니다.",
-      "created_at": "2024-11-27T16:00:00Z",
-      "updated_at": "2024-11-27T16:05:00Z",
-      "likes_count": 30,
-      "comment_count": 4
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 58,
-    "fields": {
-      "user": 2,
-      "username": "user2",
-      "name": "별이",
-      "member_type": "expert",
-      "title": "우리은행 자유적금 추천",
-      "content": "우리은행의 자유적금은 다양한 우대금리와 혜택을 제공하며, 추가적인 금리 혜택을 누릴 수 있는 상품입니다.",
-      "created_at": "2024-11-27T17:00:00Z",
-      "updated_at": "2024-11-27T17:05:00Z",
-      "likes_count": 28,
-      "comment_count": 6
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 59,
-    "fields": {
-      "user": 3,
-      "username": "user3",
-      "name": "어드벤처리",
-      "member_type": "regular",
-      "title": "KB국민은행 1년 정기예금 추천",
-      "content": "KB국민은행의 1년 정기예금은 고정금리를 제공하며, 우대금리 혜택을 제공하여 안정적인 이자 수익을 제공합니다.",
-      "created_at": "2024-11-27T18:00:00Z",
-      "updated_at": "2024-11-27T18:05:00Z",
-      "likes_count": 15,
-      "comment_count": 3
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 60,
-    "fields": {
-      "user": 4,
-      "username": "user4",
-      "name": "핑크토끼",
-      "member_type": "regular",
-      "title": "카카오뱅크 자유적금 추천",
-      "content": "카카오뱅크의 자유적금은 예금액에 따른 유연한 조건을 제공하며, 모바일 뱅킹을 통해 관리가 매우 간편합니다.",
-      "created_at": "2024-11-27T19:00:00Z",
-      "updated_at": "2024-11-27T19:05:00Z",
-      "likes_count": 18,
-      "comment_count": 4
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 61,
-    "fields": {
-      "user": 5,
-      "username": "user5",
-      "name": "피지컬강자",
-      "member_type": "expert",
-      "title": "신한은행 12개월 정기예금 추천",
-      "content": "신한은행의 12개월 정기예금은 경쟁력 있는 이자율을 제공하며, 가입 후 안정적인 수익을 기대할 수 있는 상품입니다.",
-      "created_at": "2024-11-27T20:00:00Z",
-      "updated_at": "2024-11-27T20:05:00Z",
-      "likes_count": 40,
-      "comment_count": 5
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 62,
-    "fields": {
-      "user": 6,
-      "username": "user6",
-      "name": "햇살소녀",
-      "member_type": "regular",
-      "title": "하나은행 자유적금 추천",
-      "content": "하나은행의 자유적금은 다양한 금리 상품을 제공하며, 금융 상품에 대한 깊은 이해가 필요 없을 만큼 간편한 가입 과정이 특징입니다.",
-      "created_at": "2024-11-27T21:00:00Z",
-      "updated_at": "2024-11-27T21:05:00Z",
-      "likes_count": 24,
-      "comment_count": 6
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 63,
-    "fields": {
-      "user": 7,
-      "username": "user7",
-      "name": "초코송이",
-      "member_type": "regular",
-      "title": "우리은행 1년 정기예금 추천",
-      "content": "우리은행의 1년 정기예금은 높은 안정성을 자랑하며, 금리가 매력적이어서 많은 사람들이 선택하는 상품입니다.",
-      "created_at": "2024-11-27T22:00:00Z",
-      "updated_at": "2024-11-27T22:05:00Z",
-      "likes_count": 33,
-      "comment_count": 8
-    }
-  },
-{
-    "model": "threads.thread",
-    "pk": 64,
-    "fields": {
-      "user": 8,
-      "username": "user8",
-      "name": "로즈퀸",
-      "member_type": "expert",
-      "title": "카카오뱅크 정기예금 6개월 상품 추천",
-      "content": "카카오뱅크의 6개월 정기예금은 상대적으로 짧은 기간에 적당한 이자율을 제공하여, 단기 투자자에게 적합한 상품입니다.",
-      "created_at": "2024-11-28T09:00:00Z",
-      "updated_at": "2024-11-28T09:05:00Z",
-      "likes_count": 19,
-      "comment_count": 4
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 65,
-    "fields": {
-      "user": 1,
-      "username": "user1",
-      "name": "강철민",
-      "member_type": "regular",
-      "title": "신한은행 24개월 정기예금 추천",
-      "content": "신한은행의 24개월 정기예금은 장기적인 안정성을 제공하며, 예상보다 높은 금리를 제공하는 우대 조건도 있습니다.",
-      "created_at": "2024-11-28T10:00:00Z",
-      "updated_at": "2024-11-28T10:05:00Z",
-      "likes_count": 23,
-      "comment_count": 3
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 66,
-    "fields": {
-      "user": 2,
-      "username": "user2",
-      "name": "별이",
-      "member_type": "expert",
-      "title": "하나은행 1년 자유적금 추천",
-      "content": "하나은행의 자유적금은 매월 입금액에 대한 유연성을 제공하며, 좋은 금리 조건을 자랑하는 상품입니다.",
-      "created_at": "2024-11-28T11:00:00Z",
-      "updated_at": "2024-11-28T11:05:00Z",
-      "likes_count": 17,
-      "comment_count": 5
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 67,
-    "fields": {
-      "user": 3,
-      "username": "user3",
-      "name": "어드벤처리",
-      "member_type": "regular",
-      "title": "우리은행 자유적금 추천",
-      "content": "우리은행의 자유적금은 다양한 예치 방법을 제공하며, 추가적인 우대 금리를 통해 더 나은 혜택을 받을 수 있습니다.",
-      "created_at": "2024-11-28T12:00:00Z",
-      "updated_at": "2024-11-28T12:05:00Z",
-      "likes_count": 29,
-      "comment_count": 8
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 68,
-    "fields": {
-      "user": 4,
-      "username": "user4",
-      "name": "핑크토끼",
-      "member_type": "regular",
-      "title": "KB국민은행 자유적금 추천",
-      "content": "KB국민은행의 자유적금은 소액부터 시작할 수 있으며, 주기적인 우대금리 혜택이 있는 상품입니다.",
-      "created_at": "2024-11-28T13:00:00Z",
-      "updated_at": "2024-11-28T13:05:00Z",
-      "likes_count": 21,
-      "comment_count": 6
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 69,
-    "fields": {
-      "user": 5,
-      "username": "user5",
-      "name": "피지컬강자",
-      "member_type": "expert",
-      "title": "카카오뱅크 3개월 정기예금 추천",
-      "content": "카카오뱅크의 3개월 정기예금은 짧은 기간 동안 안정적인 수익을 추구하는 분들에게 적합한 상품입니다.",
-      "created_at": "2024-11-28T14:00:00Z",
-      "updated_at": "2024-11-28T14:05:00Z",
-      "likes_count": 18,
-      "comment_count": 2
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 70,
-    "fields": {
-      "user": 6,
-      "username": "user6",
-      "name": "햇살소녀",
-      "member_type": "regular",
-      "title": "신한은행 36개월 정기예금 추천",
-      "content": "신한은행의 36개월 정기예금은 장기적인 이자 수익을 기대할 수 있으며, 높은 금리가 제공되는 상품입니다.",
-      "created_at": "2024-11-28T15:00:00Z",
-      "updated_at": "2024-11-28T15:05:00Z",
-      "likes_count": 26,
-      "comment_count": 5
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 71,
-    "fields": {
-      "user": 7,
-      "username": "user7",
-      "name": "초코송이",
-      "member_type": "regular",
-      "title": "하나은행 3개월 자유적금 추천",
-      "content": "하나은행의 3개월 자유적금은 유연한 가입 조건과 함께 매월 이자를 지급하여 안정적인 재정 관리를 도와주는 상품입니다.",
-      "created_at": "2024-11-28T16:00:00Z",
-      "updated_at": "2024-11-28T16:05:00Z",
-      "likes_count": 20,
-      "comment_count": 7
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 72,
-    "fields": {
-      "user": 8,
-      "username": "user8",
-      "name": "로즈퀸",
-      "member_type": "expert",
-      "title": "우리은행 24개월 자유적금 추천",
-      "content": "우리은행의 24개월 자유적금은 우대금리를 제공하여 장기적인 자금 관리가 필요한 사람들에게 적합한 상품입니다.",
-      "created_at": "2024-11-28T17:00:00Z",
-      "updated_at": "2024-11-28T17:05:00Z",
-      "likes_count": 32,
-      "comment_count": 4
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 73,
-    "fields": {
-      "user": 1,
-      "username": "user1",
-      "name": "강철민",
-      "member_type": "regular",
-      "title": "KB국민은행 6개월 정기예금 추천",
-      "content": "KB국민은행의 6개월 정기예금은 고정금리로 안정적인 수익을 제공하며, 짧은 기간 동안 자금을 예치하기에 적합한 상품입니다.",
-      "created_at": "2024-11-28T18:00:00Z",
-      "updated_at": "2024-11-28T18:05:00Z",
-      "likes_count": 27,
-      "comment_count": 3
-    }
-  },
-{
-    "model": "threads.thread",
-    "pk": 74,
-    "fields": {
-      "user": 2,
-      "username": "user2",
-      "name": "별이",
-      "member_type": "expert",
-      "title": "신한은행 12개월 자유적금 추천",
-      "content": "신한은행의 12개월 자유적금은 유연한 금리 조건과 함께 자유롭게 입출금할 수 있는 장점이 있습니다.",
-      "created_at": "2024-11-28T19:00:00Z",
-      "updated_at": "2024-11-28T19:05:00Z",
-      "likes_count": 28,
-      "comment_count": 5
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 75,
-    "fields": {
-      "user": 3,
-      "username": "user3",
-      "name": "어드벤처리",
-      "member_type": "regular",
-      "title": "하나은행 6개월 정기예금 추천",
-      "content": "하나은행의 6개월 정기예금은 금리가 우수하고, 짧은 기간 동안 안정적인 투자처를 원하는 분들에게 적합합니다.",
-      "created_at": "2024-11-28T20:00:00Z",
-      "updated_at": "2024-11-28T20:05:00Z",
-      "likes_count": 22,
-      "comment_count": 6
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 76,
-    "fields": {
-      "user": 4,
-      "username": "user4",
-      "name": "핑크토끼",
-      "member_type": "regular",
-      "title": "카카오뱅크 자유적금 추천",
-      "content": "카카오뱅크의 자유적금은 금리가 매력적이며, 소액으로도 참여할 수 있는 장점이 있습니다.",
-      "created_at": "2024-11-28T21:00:00Z",
-      "updated_at": "2024-11-28T21:05:00Z",
-      "likes_count": 31,
-      "comment_count": 4
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 77,
-    "fields": {
-      "user": 5,
-      "username": "user5",
-      "name": "피지컬강자",
-      "member_type": "expert",
-      "title": "KB국민은행 12개월 정기예금 추천",
-      "content": "KB국민은행의 12개월 정기예금은 고정 금리로 안정적인 수익을 제공합니다. 경제 상황에 관계없이 예치 기간 동안 확정된 수익을 기대할 수 있습니다.",
-      "created_at": "2024-11-28T22:00:00Z",
-      "updated_at": "2024-11-28T22:05:00Z",
-      "likes_count": 34,
-      "comment_count": 7
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 78,
-    "fields": {
-      "user": 6,
-      "username": "user6",
-      "name": "햇살소녀",
-      "member_type": "regular",
-      "title": "신한은행 36개월 자유적금 추천",
-      "content": "신한은행의 36개월 자유적금은 장기적인 재정 관리를 원하는 사람들에게 적합하며, 높은 금리를 제공하는 상품입니다.",
-      "created_at": "2024-11-28T23:00:00Z",
-      "updated_at": "2024-11-28T23:05:00Z",
-      "likes_count": 29,
-      "comment_count": 6
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 79,
-    "fields": {
-      "user": 7,
-      "username": "user7",
-      "name": "초코송이",
-      "member_type": "regular",
-      "title": "우리은행 12개월 정기예금 추천",
-      "content": "우리은행의 12개월 정기예금은 고객의 자산을 안전하게 보호하며, 높은 이자율을 제공하는 상품입니다.",
-      "created_at": "2024-11-29T00:00:00Z",
-      "updated_at": "2024-11-29T00:05:00Z",
-      "likes_count": 36,
-      "comment_count": 8
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 80,
-    "fields": {
-      "user": 8,
-      "username": "user8",
-      "name": "로즈퀸",
-      "member_type": "expert",
-      "title": "하나은행 1년 자유적금 추천",
-      "content": "하나은행의 1년 자유적금은 우대 금리 조건과 함께 자유롭게 입금할 수 있는 장점이 있으며, 입출금에 유연성을 제공합니다.",
-      "created_at": "2024-11-29T01:00:00Z",
-      "updated_at": "2024-11-29T01:05:00Z",
-      "likes_count": 25,
-      "comment_count": 5
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 81,
-    "fields": {
-      "user": 1,
-      "username": "user1",
-      "name": "강철민",
-      "member_type": "regular",
-      "title": "KB국민은행 24개월 자유적금 추천",
-      "content": "KB국민은행의 24개월 자유적금은 장기적인 저축을 원하는 분들에게 적합한 상품으로, 추가적인 금리 혜택도 제공됩니다.",
-      "created_at": "2024-11-29T02:00:00Z",
-      "updated_at": "2024-11-29T02:05:00Z",
-      "likes_count": 28,
-      "comment_count": 7
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 82,
-    "fields": {
-      "user": 2,
-      "username": "user2",
-      "name": "별이",
-      "member_type": "expert",
-      "title": "카카오뱅크 12개월 정기예금 추천",
-      "content": "카카오뱅크의 12개월 정기예금은 안정적인 수익을 제공하며, 경제 불확실성 속에서도 안정적인 투자처로 적합한 상품입니다.",
-      "created_at": "2024-11-29T03:00:00Z",
-      "updated_at": "2024-11-29T03:05:00Z",
-      "likes_count": 32,
-      "comment_count": 9
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 83,
-    "fields": {
-      "user": 3,
-      "username": "user3",
-      "name": "어드벤처리",
-      "member_type": "regular",
-      "title": "신한은행 6개월 정기예금 추천",
-      "content": "신한은행의 6개월 정기예금은 짧은 기간 동안 안정적인 수익을 제공하며, 특히 초기 금리가 유리한 상품입니다.",
-      "created_at": "2024-11-29T04:00:00Z",
-      "updated_at": "2024-11-29T04:05:00Z",
-      "likes_count": 20,
-      "comment_count": 6
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 84,
-    "fields": {
-      "user": 4,
-      "username": "user4",
-      "name": "핑크토끼",
-      "member_type": "regular",
-      "title": "하나은행 24개월 정기예금 추천",
-      "content": "하나은행의 24개월 정기예금은 고정 금리로 장기적으로 안정적인 수익을 기대할 수 있는 상품입니다.",
-      "created_at": "2024-11-29T05:00:00Z",
-      "updated_at": "2024-11-29T05:05:00Z",
-      "likes_count": 33,
-      "comment_count": 8
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 85,
-    "fields": {
-      "user": 5,
-      "username": "user5",
-      "name": "피지컬강자",
-      "member_type": "expert",
-      "title": "우리은행 6개월 자유적금 추천",
-      "content": "우리은행의 6개월 자유적금은 입출금이 자유로우며, 고객에게 우대 금리 혜택을 제공하는 상품입니다.",
-      "created_at": "2024-11-29T06:00:00Z",
-      "updated_at": "2024-11-29T06:05:00Z",
-      "likes_count": 29,
-      "comment_count": 5
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 86,
-    "fields": {
-      "user": 6,
-      "username": "user6",
-      "name": "햇살소녀",
-      "member_type": "regular",
-      "title": "카카오뱅크 24개월 정기예금 추천",
-      "content": "카카오뱅크의 24개월 정기예금은 높은 금리와 안정성을 제공하며, 긴 기간 동안 자금을 예치할 때 유리한 조건을 제시합니다.",
-      "created_at": "2024-11-29T07:00:00Z",
-      "updated_at": "2024-11-29T07:05:00Z",
-      "likes_count": 31,
-      "comment_count": 9
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 87,
-    "fields": {
-      "user": 7,
-      "username": "user7",
-      "name": "초코송이",
-      "member_type": "regular",
-      "title": "KB국민은행 36개월 정기예금 추천",
-      "content": "KB국민은행의 36개월 정기예금은 긴 기간 동안 고정 금리로 안정적인 수익을 제공합니다.",
-      "created_at": "2024-11-29T08:00:00Z",
-      "updated_at": "2024-11-29T08:05:00Z",
-      "likes_count": 35,
-      "comment_count": 10
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 88,
-    "fields": {
-      "user": 8,
-      "username": "user8",
-      "name": "로즈퀸",
-      "member_type": "expert",
-      "title": "하나은행 6개월 정기예금 추천",
-      "content": "하나은행의 6개월 정기예금은 금리가 높고, 단기적인 안정적인 수익을 원하는 분들에게 적합한 상품입니다.",
-      "created_at": "2024-11-29T09:00:00Z",
-      "updated_at": "2024-11-29T09:05:00Z",
-      "likes_count": 27,
-      "comment_count": 6
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 89,
-    "fields": {
-      "user": 1,
-      "username": "user1",
-      "name": "강철민",
-      "member_type": "regular",
-      "title": "우리은행 24개월 자유적금 추천",
-      "content": "우리은행의 24개월 자유적금은 고객에게 유리한 금리 조건을 제공하며, 장기적인 자금 운용에 유리한 상품입니다.",
-      "created_at": "2024-11-29T10:00:00Z",
-      "updated_at": "2024-11-29T10:05:00Z",
-      "likes_count": 30,
-      "comment_count": 8
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 90,
-    "fields": {
-      "user": 2,
-      "username": "user2",
-      "name": "별이",
-      "member_type": "expert",
-      "title": "신한은행 24개월 정기예금 추천",
-      "content": "신한은행의 24개월 정기예금은 고정 금리로 안정적인 수익을 보장하며, 경제 불안정에도 유리한 조건을 제공합니다.",
-      "created_at": "2024-11-29T11:00:00Z",
-      "updated_at": "2024-11-29T11:05:00Z",
-      "likes_count": 33,
-      "comment_count": 9
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 91,
-    "fields": {
-      "user": 3,
-      "username": "user3",
-      "name": "어드벤처리",
-      "member_type": "regular",
-      "title": "KB국민은행 자유적금 추천",
-      "content": "KB국민은행의 자유적금은 자유롭게 입출금하면서도 높은 금리 혜택을 제공하는 상품입니다.",
-      "created_at": "2024-11-29T12:00:00Z",
-      "updated_at": "2024-11-29T12:05:00Z",
-      "likes_count": 28,
-      "comment_count": 7
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 92,
-    "fields": {
-      "user": 4,
-      "username": "user4",
-      "name": "핑크토끼",
-      "member_type": "regular",
-      "title": "하나은행 12개월 정기예금 추천",
-      "content": "하나은행의 12개월 정기예금은 장기적인 안정성을 제공하며, 높은 금리로 유리한 조건을 자랑하는 상품입니다.",
-      "created_at": "2024-11-29T13:00:00Z",
-      "updated_at": "2024-11-29T13:05:00Z",
-      "likes_count": 31,
-      "comment_count": 10
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 93,
-    "fields": {
-      "user": 5,
-      "username": "user5",
-      "name": "피지컬강자",
-      "member_type": "expert",
-      "title": "우리은행 12개월 정기예금 추천",
-      "content": "우리은행의 12개월 정기예금은 높은 이자율을 제공하며, 짧은 기간 동안 안정적인 수익을 제공합니다.",
-      "created_at": "2024-11-29T14:00:00Z",
-      "updated_at": "2024-11-29T14:05:00Z",
-      "likes_count": 27,
-      "comment_count": 8
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 94,
-    "fields": {
-      "user": 6,
-      "username": "user6",
-      "name": "햇살소녀",
-      "member_type": "regular",
-      "title": "카카오뱅크 1년 정기예금 추천",
-      "content": "카카오뱅크의 1년 정기예금은 경제 상황에 관계없이 안정적인 이자율을 제공하며, 재정적인 안정성을 추구하는 분들에게 적합합니다.",
-      "created_at": "2024-11-29T15:00:00Z",
-      "updated_at": "2024-11-29T15:05:00Z",
-      "likes_count": 32,
-      "comment_count": 9
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 95,
-    "fields": {
-      "user": 7,
-      "username": "user7",
-      "name": "초코송이",
-      "member_type": "regular",
-      "title": "신한은행 6개월 자유적금 추천",
-      "content": "신한은행의 6개월 자유적금은 빠르게 입출금할 수 있는 상품으로, 유동성이 중요한 사람들에게 적합한 상품입니다.",
-      "created_at": "2024-11-29T16:00:00Z",
-      "updated_at": "2024-11-29T16:05:00Z",
-      "likes_count": 34,
-      "comment_count": 10
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 96,
-    "fields": {
-      "user": 8,
-      "username": "user8",
-      "name": "로즈퀸",
-      "member_type": "expert",
-      "title": "KB국민은행 자유적금 추천",
-      "content": "KB국민은행의 자유적금은 금리 우대 조건을 제공하며, 소액으로도 쉽게 가입할 수 있는 상품입니다.",
-      "created_at": "2024-11-29T17:00:00Z",
-      "updated_at": "2024-11-29T17:05:00Z",
-      "likes_count": 30,
-      "comment_count": 6
-    }
-  },
-{
-    "model": "threads.thread",
-    "pk": 97,
-    "fields": {
-      "user": 1,
-      "username": "user1",
-      "name": "강철민",
-      "member_type": "regular",
-      "title": "하나은행 24개월 정기예금 추천",
-      "content": "하나은행의 24개월 정기예금은 고객에게 장기적인 안정성을 제공하며, 우대 금리를 통한 혜택도 제공됩니다.",
-      "created_at": "2024-11-29T18:00:00Z",
-      "updated_at": "2024-11-29T18:05:00Z",
-      "likes_count": 38,
-      "comment_count": 8
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 98,
-    "fields": {
-      "user": 2,
-      "username": "user2",
-      "name": "별이",
-      "member_type": "expert",
-      "title": "우리은행 1년 정기예금 추천",
-      "content": "우리은행의 1년 정기예금은 금리가 높고, 장기적인 투자 수익을 목표로 하는 고객들에게 적합한 상품입니다.",
-      "created_at": "2024-11-29T19:00:00Z",
-      "updated_at": "2024-11-29T19:05:00Z",
-      "likes_count": 29,
-      "comment_count": 6
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 99,
-    "fields": {
-      "user": 3,
-      "username": "user3",
-      "name": "어드벤처리",
-      "member_type": "regular",
-      "title": "카카오뱅크 12개월 자유적금 추천",
-      "content": "카카오뱅크의 12개월 자유적금은 입출금이 자유로워 장기적으로 유리하며, 추가적인 금리 혜택을 제공합니다.",
-      "created_at": "2024-11-29T20:00:00Z",
-      "updated_at": "2024-11-29T20:05:00Z",
-      "likes_count": 33,
-      "comment_count": 7
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 100,
-    "fields": {
-      "user": 4,
-      "username": "user4",
-      "name": "핑크토끼",
-      "member_type": "regular",
-      "title": "KB국민은행 12개월 자유적금 추천",
-      "content": "KB국민은행의 12개월 자유적금은 유연한 조건을 제공하며, 고객의 자산을 안전하게 보호합니다.",
-      "created_at": "2024-11-29T21:00:00Z",
-      "updated_at": "2024-11-29T21:05:00Z",
-      "likes_count": 26,
-      "comment_count": 8
-    }
-  },
-{
-    "model": "threads.thread",
-    "pk": 101,
-    "fields": {
-      "user": 5,
-      "username": "user5",
-      "name": "피지컬강자",
-      "member_type": "expert",
-      "title": "카카오뱅크 18개월 정기예금 추천",
-      "content": "카카오뱅크의 18개월 정기예금은 적당한 기간과 높은 금리로 안정적인 수익을 제공합니다.",
-      "created_at": "2024-11-29T22:00:00Z",
-      "updated_at": "2024-11-29T22:05:00Z",
-      "likes_count": 32,
-      "comment_count": 9
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 102,
-    "fields": {
-      "user": 6,
-      "username": "user6",
-      "name": "햇살소녀",
-      "member_type": "regular",
-      "title": "우리은행 18개월 자유적금 추천",
-      "content": "우리은행의 18개월 자유적금은 중기적인 자금 운용을 고려하는 고객에게 적합한 상품입니다.",
-      "created_at": "2024-11-29T23:00:00Z",
-      "updated_at": "2024-11-29T23:05:00Z",
-      "likes_count": 28,
-      "comment_count": 7
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 103,
-    "fields": {
-      "user": 7,
-      "username": "user7",
-      "name": "초코송이",
-      "member_type": "regular",
-      "title": "신한은행 18개월 정기예금 추천",
-      "content": "신한은행의 18개월 정기예금은 금리가 안정적이며, 중기적 자금을 예치하기에 적합한 상품입니다.",
-      "created_at": "2024-11-30T00:00:00Z",
-      "updated_at": "2024-11-30T00:05:00Z",
-      "likes_count": 34,
-      "comment_count": 8
-    }
-  },
-  {
-    "model": "threads.thread",
-    "pk": 104,
-    "fields": {
-      "user": 8,
-      "username": "user8",
-      "name": "로즈퀸",
-      "member_type": "expert",
-      "title": "KB국민은행 18개월 정기예금 추천",
-      "content": "KB국민은행의 18개월 정기예금은 경쟁력 있는 금리와 안정적인 수익을 제공합니다.",
-      "created_at": "2024-11-30T01:00:00Z",
-      "updated_at": "2024-11-30T01:05:00Z",
-      "likes_count": 30,
-      "comment_count": 6
+      "updated_at": "2024-11-26T03:05:00Z"
     }
   }
 ]
