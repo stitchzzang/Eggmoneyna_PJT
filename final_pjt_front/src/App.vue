@@ -234,6 +234,11 @@ const logout = async () => {
 const toggleChatBot = () => {
   showChatBot.value = !showChatBot.value
 }
+
+// created 훅 대신 즉시 실행 함수 사용
+onMounted(async () => {
+  await authStore.initializeAuth()
+})
 </script>
 
 <style>
@@ -258,7 +263,7 @@ const toggleChatBot = () => {
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.719) !important;
-  border: none;
+  border: 2px solid #048602;
   border-radius: 50%;
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -698,7 +703,7 @@ body {
   }
 }
 
-/* 더 작은 화면을 위한 추가 미디어 쿼리 */
+/* 더 작은 ���면을 위한 추가 미디어 쿼리 */
 @media (max-width: 576px) {
   .logo-image {
     height: 60px;

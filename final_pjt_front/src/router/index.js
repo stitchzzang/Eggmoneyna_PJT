@@ -9,6 +9,7 @@ import CommunityWriteForm from '@/components/Community/CommunityWriteForm.vue'
 import FinancialProductsView from '@/views/FinancialProductsView.vue'
 import FinancialItemDeposit from '@/components/Financial/FinancialItemDeposit.vue'
 import FinancialItemSaving from '@/components/Financial/FinancialItemSaving.vue'
+import ProfileTest from '@/components/Profile/ProfileTest.vue'
 
 const routes = [
   {
@@ -82,7 +83,14 @@ const routes = [
     path: '/profilepage',
     name: 'ProfilePageView',
     component: ProfilePageView,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: 'profiletest',
+        name: 'profiletest',
+        component: ProfileTest
+      },
+    ] 
   },
   
 ]

@@ -1,10 +1,18 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
+axios.interceptors.request.use(config => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = `Token ${token}`
+  }
+  return config
+})
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    token: null,
-    userInfo: null,
+    token: localStorage.getItem('token') || null,
+    userInfo: JSON.parse(localStorage.getItem('user')) || null,
   }),
 
   getters: {
@@ -13,6 +21,15 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
+    async initializeAuth() {
+      const token = localStorage.getItem('token')
+      if (token) {
+        this.token = token
+        axios.defaults.headers.common['Authorization'] = `Token ${token}`
+        await this.fetchUserInfo()
+      }
+    },
+
     async login({ username, password }) {
       try {
         // 로그인 요청
