@@ -83,90 +83,109 @@ def save_deposit_products(request):
         'pageNo': 1
     }
     
-    response = requests.get(url, params=params)
-    
-    if response.status_code != 200:
-        return Response({'error': '데이터를 가져오는데 실패했습니다.'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    data = response.json()
-    baseList = data.get('result').get('baseList')
-    optionList = data.get('result').get('optionList')
-    
-    saved_products = []
-    for item in baseList:
-        product, created = DepositProduct.objects.get_or_create(
-            fin_prdt_cd=item['fin_prdt_cd'],
-            defaults={
-                'kor_co_nm': item['kor_co_nm'],
-                'fin_prdt_nm': item['fin_prdt_nm'],
-                'etc_note': item.get('etc_note', ''),
-                'join_way': item.get('join_way', ''),
-                'join_deny': item.get('join_deny', ''),
-                'join_member': item.get('join_member', ''),
-                'max_limit': item.get('max_limit', None),
-                'dcls_strt_day': item.get('dcls_strt_day', ''),
-                'dcls_end_day': item.get('dcls_end_day', ''),
-                'fin_co_subm_day': item.get('fin_co_subm_day', '')
-            }
-        )
+    try:
+        response = requests.get(url, params=params)
+        response.raise_for_status()  # HTTP 오류 발생시 예외 발생
         
-        if not created:
-            # 기존 상품 정보 업데이트
-            for field in ['kor_co_nm', 'fin_prdt_nm', 'etc_note', 'join_way', 
-                         'join_deny', 'join_member', 'max_limit', 'dcls_strt_day',
-                         'dcls_end_day', 'fin_co_subm_day']:
-                setattr(product, field, item.get(field, ''))
-            product.save()
+        data = response.json()
+        result = data.get('result')
+        
+        if not result:
+            return Response({
+                'error': 'API 응답에 result 데이터가 없습니다.'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
-            # 기존 옵션 삭제
-            product.options.all().delete()
+        baseList = result.get('baseList')
+        optionList = result.get('optionList')
         
-        options = [opt for opt in optionList if opt['fin_prdt_cd'] == product.fin_prdt_cd]
-        saved_options = []
-        for option in options:
-            try:
-                intr_rate = float(option.get('intr_rate', 0))
-            except (TypeError, ValueError):
-                intr_rate = 0.0
-                
-            try:
-                save_trm = int(option.get('save_trm', 0))
-            except (TypeError, ValueError):
-                save_trm = 0
-                
-            saved_option = DepositOption.objects.create(
-                product=product,
-                fin_prdt_cd=option['fin_prdt_cd'],
-                intr_rate_type=option.get('intr_rate_type', ''),
-                intr_rate=intr_rate,
-                save_trm=save_trm,
-                intr_rate2=float(option.get('intr_rate2', 0)),
-                rsrv_type=option.get('rsrv_type', '')
+        if not baseList or not optionList:
+            return Response({
+                'error': 'API 응답에 상품 데이터가 없습니다.'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        saved_products = []
+        for item in baseList:
+            product, created = DepositProduct.objects.get_or_create(
+                fin_prdt_cd=item['fin_prdt_cd'],
+                defaults={
+                    'kor_co_nm': item['kor_co_nm'],
+                    'fin_prdt_nm': item['fin_prdt_nm'],
+                    'etc_note': item.get('etc_note', ''),
+                    'join_way': item.get('join_way', ''),
+                    'join_deny': item.get('join_deny', ''),
+                    'join_member': item.get('join_member', ''),
+                    'max_limit': item.get('max_limit', None),
+                    'dcls_strt_day': item.get('dcls_strt_day', ''),
+                    'dcls_end_day': item.get('dcls_end_day', ''),
+                    'fin_co_subm_day': item.get('fin_co_subm_day', '')
+                }
             )
             
-            saved_options.append({
-                'fin_prdt_cd': saved_option.fin_prdt_cd,
-                'intr_rate_type': saved_option.intr_rate_type,
-                'intr_rate': saved_option.intr_rate,
-                'save_trm': saved_option.save_trm,
-                'intr_rate2': saved_option.intr_rate2,
-                'rsrv_type': saved_option.rsrv_type
+            if not created:
+                # 기존 상품 정보 업데이트
+                for field in ['kor_co_nm', 'fin_prdt_nm', 'etc_note', 'join_way', 
+                             'join_deny', 'join_member', 'max_limit', 'dcls_strt_day',
+                             'dcls_end_day', 'fin_co_subm_day']:
+                    setattr(product, field, item.get(field, ''))
+                product.save()
+                
+                # 기존 옵션 삭제
+                product.options.all().delete()
+            
+            options = [opt for opt in optionList if opt['fin_prdt_cd'] == product.fin_prdt_cd]
+            saved_options = []
+            for option in options:
+                try:
+                    intr_rate = float(option.get('intr_rate', 0))
+                except (TypeError, ValueError):
+                    intr_rate = 0.0
+                    
+                try:
+                    save_trm = int(option.get('save_trm', 0))
+                except (TypeError, ValueError):
+                    save_trm = 0
+                    
+                saved_option = DepositOption.objects.create(
+                    product=product,
+                    fin_prdt_cd=option['fin_prdt_cd'],
+                    intr_rate_type=option.get('intr_rate_type', ''),
+                    intr_rate=intr_rate,
+                    save_trm=save_trm,
+                    intr_rate2=float(option.get('intr_rate2', 0)),
+                    rsrv_type=option.get('rsrv_type', '')
+                )
+                
+                saved_options.append({
+                    'fin_prdt_cd': saved_option.fin_prdt_cd,
+                    'intr_rate_type': saved_option.intr_rate_type,
+                    'intr_rate': saved_option.intr_rate,
+                    'save_trm': saved_option.save_trm,
+                    'intr_rate2': saved_option.intr_rate2,
+                    'rsrv_type': saved_option.rsrv_type
+                })
+            
+            saved_products.append({
+                'fin_prdt_cd': product.fin_prdt_cd,
+                'kor_co_nm': product.kor_co_nm,
+                'fin_prdt_nm': product.fin_prdt_nm,
+                'options': saved_options
             })
         
-        saved_products.append({
-            'fin_prdt_cd': product.fin_prdt_cd,
-            'kor_co_nm': product.kor_co_nm,
-            'fin_prdt_nm': product.fin_prdt_nm,
-            'options': saved_options
+        return Response({
+            'message': '정기예금 데이터 저장완료',
+            'data': {
+                'count': len(saved_products),
+                'products': saved_products
+            }
         })
-    
-    return Response({
-        'message': '정기예금 데이터 저장완료',
-        'data': {
-            'count': len(saved_products),
-            'products': saved_products
-        }
-    })
+    except requests.exceptions.RequestException as e:
+        return Response({
+            'error': f'API 요청 중 오류가 발생했습니다: {str(e)}'
+        }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+    except Exception as e:
+        return Response({
+            'error': f'데이터 처리 중 오류가 발생했습니다: {str(e)}'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 # 정기적금 상품 정보 (저장/갱신)
