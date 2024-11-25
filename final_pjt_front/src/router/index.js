@@ -34,11 +34,6 @@ const routes = [
     ] 
   },
   {
-    path: '/library/tips',
-    name: 'library-tips',
-    component: () => import('@/views/LibraryTipsPageView.vue')
-  },
-  {
     path: '/library/contents',
     name: 'library-contents',
     component: () => import('@/views/LibraryContentsPageView.vue')

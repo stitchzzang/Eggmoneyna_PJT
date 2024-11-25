@@ -29,7 +29,6 @@
             <div class="nav-item">
               <router-link to="/library/tips">라이브러리</router-link>
               <div class="submenu">
-                <router-link to="/library/tips">알쓸금잡</router-link>
                 <router-link to="/library/contents">교육 콘텐츠</router-link>
                 <router-link to="/library/books">도서 추천</router-link>
               </div>
@@ -64,7 +63,6 @@
                   <span class="arrow">▼</span>
                 </div>
                 <div class="submenu" v-show="activeSubmenu === 'library'">
-                  <router-link to="/library/tips" @click="closeMenu">알쓸금잡</router-link>
                   <router-link to="/library/contents" @click="closeMenu">교육 콘텐츠</router-link>
                   <router-link to="/library/books" @click="closeMenu">도서 추천</router-link>
 
@@ -129,7 +127,6 @@
           <div class="sitemap-section">
             <h3>라이브러리</h3>
             <ul>
-              <li><router-link to="/library/tips">알쓸금잡</router-link></li>
               <li><router-link to="/library/contents">교육 콘텐츠</router-link></li>
               <li><router-link to="/library/books">도서 추천</router-link></li>
             </ul>
