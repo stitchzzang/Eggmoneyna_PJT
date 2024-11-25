@@ -92,3 +92,14 @@ def comment_detail(request, thread_pk, comment_pk):
             serializer.save()
             return Response(serializer.data)
 
+@api_view(['POST'])
+def thread_like(request, thread_id):
+    thread = get_object_or_404(Thread, id=thread_id)
+    if thread.likes.filter(id=request.user.id).exists():
+        thread.likes.remove(request.user)
+        is_liked = False
+    else:
+        thread.likes.add(request.user)
+        is_liked = True
+    return Response({'is_liked': is_liked, 'like_count': thread.like_count})
+
