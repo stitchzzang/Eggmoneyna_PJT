@@ -1,6 +1,7 @@
 <template>
   <div class="whole">
     <div class="container mt-4">
+      <h2>🔍 금융 상품 조회</h2>
       <!-- 상품 유형 선택 탭 -->
       <div class="product-type-tabs mb-4">
         <button 
@@ -40,7 +41,16 @@ const productType = ref('deposit')
   border-radius: 20px;  
 }
 
+.whole h2 {  
+  color: #056800;
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
 .product-type-tabs {
+  margin-top: 30px;
   display: flex;
   gap: 20px;
   justify-content: center;
@@ -50,14 +60,14 @@ const productType = ref('deposit')
   padding: 10px 30px;
   border: none;
   background: none;
-  font-size: 1.1em;
+  font-size: 1.4rem;
   cursor: pointer;
   border-bottom: 2px solid transparent;
 }
 
 .tab-btn.active {
-  color: #047404;
+  color: #008d57;
   font-weight: bold;
-  border-bottom: 2px solid #047404;
+  border-bottom: 2px solid #008d57;
 }
 </style>

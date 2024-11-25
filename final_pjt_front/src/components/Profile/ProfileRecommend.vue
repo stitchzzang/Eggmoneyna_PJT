@@ -159,6 +159,7 @@ const moveToTest = () => {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   letter-spacing: 1.3px;
+  margin-bottom: 10px;
 }
 
 .test-link.retake:hover {
