@@ -101,9 +101,13 @@ def login(request):
     user = authenticate(username=username, password=password)
     
     if user:
-        token, created = Token.objects.get_or_create(user=user)
+        # Token 대신 JWT 사용
+        refresh = RefreshToken.for_user(user)
         return Response({
-            'token': token.key,
+            'token': {
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            },
             'username': user.username,
             'name': user.name,
             'email': user.email,
@@ -116,16 +120,13 @@ def login(request):
 
 @api_view(['POST'])
 def logout(request):
-    user = request.user
-    if not user.is_authenticated:
-        return Response({'error': '인증되지 않은 사용자입니다.'}, 
-                      status=status.HTTP_401_UNAUTHORIZED)
-    
-    # 사용자의 토큰 삭제
-    Token.objects.filter(user=user).delete()
-    
-    return Response({'message': '로그아웃되었습니다.'}, 
-                  status=status.HTTP_200_OK)
+    try:
+        refresh_token = request.data["refresh_token"]
+        token = RefreshToken(refresh_token)
+        token.blacklist()
+        return Response({'message': '로그아웃되었습니다.'}, status=status.HTTP_200_OK)
+    except Exception:
+        return Response({'error': '로그아웃 실패'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['DELETE'])

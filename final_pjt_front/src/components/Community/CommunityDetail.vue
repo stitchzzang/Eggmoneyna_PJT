@@ -18,7 +18,14 @@
         <div class="post-content">
           {{ thread.content }}
         </div>
-        
+
+        <div class="like-section">
+          <button @click="toggleLike" class="like-button" :class="{ 'liked': thread.is_liked }">
+            {{ thread.is_liked ? '❤️' : '🤍' }}
+          </button>
+          <span class="like-text">좋아요  {{ thread.like_count }}</span>
+        </div>
+
         <div v-if="isAuthor" class="author-buttons">
           <button @click="startEditing" class="btn-edit">수정</button>
           <button @click="deleteThread" class="btn-delete">삭제</button>
@@ -66,7 +73,8 @@
               <div class="comment-content">{{ comment.content }}</div>
             </div>
             <div class="comment-date">{{ formatDate(comment.created_at) }}</div>
-            <div v-if="comment.username === auth.username" class="comment-buttons">
+            <!-- <div>{{ comment.username }} - {{ auth.userInfo.username }}</div> -->
+            <div v-if="comment.username === auth.userInfo.username" class="comment-buttons">
               <button @click="startEditComment(comment)" class="btn-edit-sm">수정</button>
               <button @click="deleteComment(comment.id)" class="btn-delete-sm">삭제</button>
             </div>
@@ -95,12 +103,7 @@ import axios from 'axios'
 import { onMounted, ref } from 'vue'
 import { useCounterStore } from '@/stores/counter' 
 import { useRoute, useRouter } from 'vue-router'
-import chickImage from '@/assets/chick.png'
-import masterImage from '@/assets/master_logo.png'
 
-const getMemberTypeImage = (memberType) => {
-  return memberType === 'regular' ? chickImage : masterImage
-}
 
 const store = useCounterStore()
 const route = useRoute()
@@ -122,7 +125,12 @@ const getThreadDetails = () => {
     }
   })
   .then((res) => {
-    thread.value = res.data
+    console.log(res.data)
+    thread.value = {
+      ...res.data,
+      is_liked: res.data.is_liked || false,
+      like_count: res.data.like_count || 0
+    }
   })
   .catch((err) => {
     console.log('게시글을 불러오는데 실패했습니다:', err)
@@ -296,6 +304,27 @@ const deleteComment = (commentId) => {
   .catch((err) => {
     console.log('댓글 삭제에 실패했습니다:', err)
   })
+}
+
+const toggleLike = async () => {
+  try {
+    const response = await axios({
+      method: 'post',
+      url: `${store.API_URL}/community/${route.params.id}/like/`,
+      headers: {
+        Authorization: `Token ${auth.token}`
+      }
+    })
+    
+    // 스레드 정보 업데이트
+    thread.value = {
+      ...thread.value,
+      is_liked: response.data.is_liked,
+      like_count: response.data.like_count
+    }
+  } catch (err) {
+    console.log('좋아요 처리 중 오류가 발생했습니다:', err)
+  }
 }
 </script>
 
@@ -496,4 +525,25 @@ const deleteComment = (commentId) => {
   font-size: 0.9em;
   margin-left: 5px;
 }
+
+.like-section {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0px;
+  margin: 20px 0;
+}
+
+.like-button {
+  background: none;
+  border: none;
+  padding: 8px;
+  font-size: 1.2em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
 </style>

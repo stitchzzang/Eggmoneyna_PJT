@@ -234,6 +234,14 @@ const logout = async () => {
 const toggleChatBot = () => {
   showChatBot.value = !showChatBot.value
 }
+
+onMounted(async () => {
+  try {
+    await authStore.initializeAuth()
+  } catch (error) {
+    console.error('사용자 정보 로딩 실패:', error)
+  }
+})
 </script>
 
 <style>

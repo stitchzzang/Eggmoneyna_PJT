@@ -116,7 +116,7 @@ const formatDate = (date) => {
 }
 
 .post-likes {
-  color: #ff4757;
+  color: #888;
   font-size: 0.9em;
 }
 
