@@ -22,7 +22,7 @@
                     <option value="">전체</option>
                     <option 
                       v-for="bank in banks" 
-                      :key="bank.id" 
+                      :key="bank.id"                          
                       :value="bank.id"
                     >
                       {{ bank.name }}

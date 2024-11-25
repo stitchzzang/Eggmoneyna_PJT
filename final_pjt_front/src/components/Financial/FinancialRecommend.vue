@@ -6,6 +6,7 @@
           뒤로가기
         </button>
       </div>
+      <hr>
       <h3>추천 상품</h3>
     </div>
 
@@ -26,17 +27,19 @@
     </div>
 
     <!-- 상세 정보 모달 -->
-    <ProductDetailModal
-      v-if="selectedProduct"
+    <ProductDetail
+      v-if="showModal"
       :product="selectedProduct"
-      @close="selectedProduct = null"
+      @close="closeModal"
     />
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import ProductDetail from '@/components/Financial/FinancialProductDetail.vue'
 
+const showModal = ref(false)
 const selectedProduct = ref(null)
 const recommendedProducts = ref([
   // 추천 알고리즘으로 받아올 상품 데이터
@@ -44,10 +47,20 @@ const recommendedProducts = ref([
 
 const showDetail = (product) => {
   selectedProduct.value = product
+  showModal.value = true
+}
+
+const closeModal = () => {
+  showModal.value = false
+  selectedProduct.value = null
 }
 </script>
 
 <style scoped>
+.btn {
+  margin-bottom: 10px;
+}
+
 .card {
   cursor: pointer;
   transition: transform 0.2s;
