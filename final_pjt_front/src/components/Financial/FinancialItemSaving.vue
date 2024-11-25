@@ -233,6 +233,10 @@ onMounted(async () => {
       id: product.product_code,
       name: product.product_name,
       bankName: product.bank_name,
+      description: product.product_description,
+      joinWay: product.join_way,
+      joinDeny: product.join_deny,
+      joinMember: product.join_member,
       submitDate: product.dcls_start_day,
       options: product.options.map(option => ({
         id: `${product.product_code}-${option.save_term}`,
