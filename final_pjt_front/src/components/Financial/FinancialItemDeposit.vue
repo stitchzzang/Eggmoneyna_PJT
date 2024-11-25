@@ -31,14 +31,6 @@
 
     <!-- 오른쪽 결과 테이블 섹션 -->
     <div class="results-section">
-      <div class="items-per-page-selector">
-        <select v-model="itemsPerPage" class="items-per-page-select">
-          <option v-for="count in [10, 20, 30, 40]" :key="count" :value="count">
-            {{ count }}개씩 보기
-          </option>
-        </select>
-      </div>
-
       <div class="table-header">
         <div class="header-item date-col">공시제출일</div>
         <div class="header-item bank-col">금융회사명</div>
@@ -74,25 +66,47 @@
         </div>
         
         <div class="pagination">
-          <button 
-            :disabled="currentPage === 1"
-            @click="currentPage--"
-            class="page-btn"
-          >
-            이전
-          </button>
-          
-          <span class="page-info">
-            {{ currentPage }} / {{ totalPages }}
-          </span>
-          
-          <button 
-            :disabled="currentPage === totalPages"
-            @click="currentPage++"
-            class="page-btn"
-          >
-            다음
-          </button>
+          <div class="pagination-controls">
+            <button 
+              :disabled="currentPage === 1"
+              @click="currentPage = 1"
+              class="page-btn"
+            >
+              ≪
+            </button>
+            <button 
+              :disabled="currentPage === 1"
+              @click="currentPage--"
+              class="page-btn"
+            >
+              ◀
+            </button>
+            
+            <span class="page-info">
+              {{ currentPage }} / {{ totalPages }}
+            </span>
+            
+            <button 
+              :disabled="currentPage === totalPages"
+              @click="currentPage++"
+              class="page-btn"
+            >
+              ▶
+            </button>
+            <button 
+              :disabled="currentPage === totalPages"
+              @click="currentPage = totalPages"
+              class="page-btn"
+            >
+              ≫
+            </button>
+          </div>
+
+          <select v-model="itemsPerPage" class="items-per-page-select">
+            <option v-for="count in [10, 20, 30, 40]" :key="count" :value="count">
+              {{ count }}개씩 보기
+            </option>
+          </select>
         </div>
       </div>
       <div v-else>
@@ -131,7 +145,7 @@ const selectedProduct = ref(null)
 
 const bankList = computed(() => {
   const banks = new Set(deposits.value.map(item => item.bankName))
-  return Array.from(banks)
+  return Array.from(banks).sort((a, b) => a.localeCompare(b, 'ko'))  // 한글 가나다순 정렬
 })
 
 const handleSearch = () => {
@@ -247,6 +261,83 @@ const closeModal = () => {
   display: flex;
   gap: 20px;
   width: 100%;
+  flex-direction: row;
+}
+
+@media screen and (max-width: 1200px) {
+  .products-container {
+    flex-direction: column;
+  }
+
+  .filter-sidebar {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .table-header, .deposit-item {  /* saving-item → deposit-item */
+    font-size: 0.9em;
+    padding: 8px 10px;
+  }
+
+  .interest-rates-header, .interest-rates {
+    grid-template-columns: repeat(4, 60px);
+    gap: 8px;
+  }
+
+  .item-bank {
+    width: 100px;
+  }
+
+  .item-date {
+    width: 80px;
+  }
+
+  .rate-item {
+    padding: 3px 5px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .pagination {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pagination-controls {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .items-per-page-select {
+    width: 100%;
+    max-width: 200px;
+  }
+
+  .table-header, .deposit-item {  /* saving-item → deposit-item */
+    font-size: 0.8em;
+    padding: 6px 8px;
+  }
+
+  .interest-rates-header, .interest-rates {
+    grid-template-columns: repeat(4, 50px);
+    gap: 5px;
+  }
+
+  .item-bank {
+    width: 80px;
+    margin-right: 10px;
+  }
+
+  .item-date {
+    width: 70px;
+    margin-right: 10px;
+  }
+
+  .item-name {
+    margin-right: 10px;
+  }
 }
 
 .filter-sidebar {
@@ -259,8 +350,8 @@ const closeModal = () => {
 
 .filter-title {
   margin-bottom: 20px;
-  color: #047404;
-  font-size: 1.2em;
+  color: #000000;
+  font-size: 1.3em;
   font-weight: bold;
 }
 
@@ -284,13 +375,19 @@ const closeModal = () => {
 }
 
 .search-btn {
-  width: 100%;
-  padding: 10px;
-  background-color: #047404;
+  padding: 10px 20px;
+  background: linear-gradient(45deg, #47e0cc, #049b8c) !important;
   color: white;
-  border: none;
-  border-radius: 4px;
+  border: 2px solid #00897B;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  font-size: 18px;
+  width: 100%;
+  margin-top: 5px;
+  opacity: 0.8;
+  transition: all 0.3s ease;
 }
 
 .search-btn:hover {
@@ -341,18 +438,25 @@ const closeModal = () => {
 
 .pagination {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   margin-top: 20px;
-  gap: 20px;
+  padding: 0 20px;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .page-btn {
-  padding: 8px 16px;
+  padding: 4px 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
   background-color: white;
   cursor: pointer;
+  font-size: 0.9em;
 }
 
 .page-btn:disabled {
@@ -361,7 +465,9 @@ const closeModal = () => {
 }
 
 .page-info {
-  font-size: 0.9em;
+  margin: 0 3px;
+  min-width: 60px;
+  text-align: center;
 }
 
 .table-header {
@@ -378,11 +484,13 @@ const closeModal = () => {
 }
 
 .date-col {
+  text-align: left;
   width: 100px;
   margin-right: 20px;
 }
 
 .bank-col {
+  text-align: left;
   width: 120px;
   margin-right: 20px;
 }
@@ -444,7 +552,7 @@ const closeModal = () => {
   border-radius: 4px;
   background-color: white;
   cursor: pointer;
-  font-size: 0.9em;
+  font-size: 1em;
 }
 
 .items-per-page-select:hover {
@@ -458,8 +566,10 @@ const closeModal = () => {
 }
 
 .product-link {
+  font-size: 17px;
   cursor: pointer;
-  color: #047404;
+  font-weight: semibold;
+  color: #000000;
 }
 
 .product-link:hover {

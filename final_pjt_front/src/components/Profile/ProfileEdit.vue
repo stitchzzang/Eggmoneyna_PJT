@@ -227,7 +227,7 @@ const passwordsMatch = computed(() => {
 button {
   padding: 12px 24px;
   border: none;
-  border-radius: 8px;
+  border-radius: 5px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -239,7 +239,7 @@ button {
   background: linear-gradient(45deg, #86da8a, #047404) !important;
   color: rgb(255, 255, 255);
   border: 2px solid #128004;
-  border-radius: 25px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 18px;
   font-weight: bold;
@@ -253,7 +253,7 @@ button {
   background: linear-gradient(45deg, #e9eea7, #d6e227) !important;
   color: rgb(0, 0, 0);
   border: 2px solid #989b0d;
-  border-radius: 25px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 18px;
   font-weight: bold;
@@ -266,7 +266,7 @@ button {
   background: linear-gradient(45deg, #a5a5a5, #4e4e4e) !important;
   color: rgb(255, 255, 255);
   border: 2px solid #363633;
-  border-radius: 25px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 18px;
   font-weight: bold;

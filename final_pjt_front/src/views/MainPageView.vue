@@ -5,31 +5,110 @@
     </div>
 
     <div class="weekly-products">
-      <h2 class="section-title">금주의 상품 추천</h2>
       <hr>
+      <h2 class="section-title">금주의 상품 추천</h2>
       <div class="product-grid">
-        <div class="product-card" v-for="i in 6" :key="i">
+        <div class="product-card" 
+             v-for="product in gridProducts" 
+             :key="product.id"
+             @click="openModal(product.finId)"
+             style="cursor: pointer">
           <div class="product-image">
-            <img src="@/assets/products1.png" alt="상품 이미지">
+            <img :src="product.image" :alt="product.name">
           </div>
           <div class="product-info">
-            <h3 class="product-name">상품명 {{ i }}</h3>
-            <p class="product-content">₩ 00,000</p>
+            <h3 class="product-name">{{ product.name }}</h3>
+            <p class="product-content">{{ product.rate }}</p>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- 상품 상세 모달 -->
+    <FinancialProductDetailModal
+      v-if="selectedProduct"
+      :product="selectedProduct"
+      @close="closeModal"
+    />
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue'
 import Carousel from '@/views/CarouselView.vue'
-export default {
-  name: 'HomePage',
-  components: {
-    Carousel,
+import FinancialProductDetailModal from '@/components/Financial/FinancialProductDetailModal.vue'
+import { useProductStore } from '@/stores/product'
+import grid1 from '@/assets/products1.png'
+import grid2 from '@/assets/products2.png'
+import grid3 from '@/assets/products3.png'
+import grid4 from '@/assets/products4.png'
+import grid5 from '@/assets/products5.png'
+import grid6 from '@/assets/products6.png'
+
+const productStore = useProductStore()
+const selectedProduct = ref(null)
+
+const gridProducts = [
+  {
+    id: 1,
+    name: 'KB - 특⭐한 적금',
+    rate: '연 2% ~ 6%',
+    image: grid1,
+    fin_prdt_cd: '10-003-1384-0001'  // 실제 금융상품 ID
+  },
+  {
+    id: 2,
+    name: 'NH - 올원e예금',
+    rate: '연 4.8%',
+    image: grid2,
+    finId: '10-003-1384-0001' // 실제 금융상품 ID
+  },
+  {
+    id: 3,
+    name: '우리은행 - WON플러스 예금',
+    rate: '연 2.7 ~ 3.0%',
+    image: grid3,
+    finId: 'WR0001B'  // 실제 금융상품 ID
+  },
+  {
+    id: 4,
+    name: 'IM뱅크 - 내가만든보너스적금',
+    rate: '연 3.65% ~ 4.45%',
+    image: grid4,
+    finId: '10527001001272000'  // 실제 금융상품 ID
+  },
+  {
+    id: 5,
+    name: '케이뱅크 - 코드K 자유적금',
+    rate: '연 3.8%',
+    image: grid5,
+    finId: '01012000200000000003'  // 실제 금융상품 ID
+  },
+  {
+    id: 6,
+    name: '광주은행 - 스마트모아Dream정기예금',
+    rate: '연 2.69 ~ 2.89%',
+    image: grid6,
+    finId: 'TD11300031000' // 실제 금융상품 ID
   }
-};
+]
+
+const openModal = async (finId) => {
+  try {
+    const product = await productStore.getProductById(finId)
+    if (product) {
+      selectedProduct.value = product
+    } else {
+      console.error('상품을 찾을 수 없습니다')
+    }
+  } catch (error) {
+    console.error('상품 정보를 불러오는데 실패했습니다:', error)
+  }
+}
+
+const closeModal = () => {
+  selectedProduct.value = null
+}
 </script>
 
 <style scoped>
@@ -48,11 +127,16 @@ export default {
 }
 
 .section-title {
-  text-align: left;
-  margin-bottom: 10px;
+  padding: 15px 10px;
+  background-color: #f8f9fa67;
+  border: 2px solid #08630096;
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 30px;
   font-size: 24px;
   font-weight: bold;
-  color: #333;
+  color: #2b2b2b;
 }
 
 .product-grid {

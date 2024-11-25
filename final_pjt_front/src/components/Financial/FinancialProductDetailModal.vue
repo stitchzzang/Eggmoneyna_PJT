@@ -24,6 +24,15 @@
               <span class="rate">{{ getInterestRate(product, term) }}%</span>
             </div>
           </div>
+          
+          <div class="subscribe-section">
+            <button 
+              :class="['action-btn', isSubscribed ? 'unsubscribe-btn' : 'subscribe-btn']" 
+              @click="handleSubscriptionToggle"
+            >
+              {{ isSubscribed ? '해지하기' : '가입하기' }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -31,12 +40,32 @@
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue'
+import { useProductStore } from '@/stores/product'
+
+const productStore = useProductStore()
+const props = defineProps({
   product: {
     type: Object,
     required: true
   }
 })
+
+// 현재 상품의 가입 상태 확인
+const isSubscribed = computed(() => {
+  return productStore.subscribedProducts.some(p => p.id === props.product.id)
+})
+
+// 가입/해지 토글 핸들러
+const handleSubscriptionToggle = () => {
+  if (isSubscribed.value) {
+    productStore.unsubscribeProduct(props.product.id)
+    alert('상품 해지가 완료되었습니다!')
+  } else {
+    productStore.subscribeProduct(props.product)
+    alert('상품 가입이 완료되었습니다!')
+  }
+}
 
 const getInterestRate = (product, term) => {
   const option = product.options.find(opt => opt.saveTerm === term)
@@ -116,5 +145,61 @@ const getInterestRate = (product, term) => {
 .rate {
   color: #047404;
   font-size: 1.2em;
+}
+
+.subscribe-section {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.action-btn {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.subscribe-btn {
+  transition: all 0.3s ease;
+  text-decoration: none;
+  padding: 10px 20px;
+  background: linear-gradient(45deg, #98d49a, #338133) !important;
+  color: white;
+  border: 2px solid #4b9e40;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s eas
+}
+
+.subscribe-btn:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(20, 163, 51, 0.4);
+}
+
+.unsubscribe-btn {
+  background: linear-gradient(45deg, #db7a7a, #eb1c1c);
+  border: 2px solid #b5221a;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  letter-spacing: 1.3px;
+  color: white;
+  opacity: 0.8;
+  padding: 8px 20px;
+  border-radius: 5px;
+}
+
+.unsubscribe-btn:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(250, 82, 82, 0.4);
 }
 </style>

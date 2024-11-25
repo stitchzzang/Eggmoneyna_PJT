@@ -3,8 +3,10 @@
         <div class="chat-messages">
             <div v-for="message in messages" :key="message.id" 
                  :class="['message-wrapper', message.sender === 'user' ? 'user-message' : 'ai-message']">
-                <div class="message-bubble">
+                <div class="message-bubble" v-if="message.sender === 'user'">
                     {{ message.text }}
+                </div>
+                <div class="message-bubble markdown-body" v-else v-html="markdownToHtml(message.text)">
                 </div>
             </div>
         </div>
@@ -24,48 +26,67 @@
 </template>
 
 <script>
-import axios from 'axios';
+import OpenAI from 'openai';
+import { marked } from 'marked';
+
 export default {
     data() {
         return {
             userInput: '',
-            messages: []
+            messages: [],
+            openai: null
         };
+    },
+    created() {
+        this.openai = new OpenAI({
+            apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+            dangerouslyAllowBrowser: true
+        });
     },
     methods: {
         async sendMessage() {
-            const userMessage = this.userInput.trim();
-            if (!userMessage) return;
-
-            this.addMessage('user', userMessage);
-
-            const aiResponse = await this.getAiResponse(userMessage);
-            this.addMessage('ai', aiResponse);
-
+            if (!this.userInput.trim()) return;
+            
+            this.addMessage('user', this.userInput);
+            const userMessage = this.userInput;
             this.userInput = '';
+
+            try {
+                const aiResponse = await this.getAiResponse(userMessage);
+                this.addMessage('ai', aiResponse);
+            } catch (error) {
+                console.error('Error:', error);
+                this.addMessage('ai', '죄송합니다. 오류가 발생했습니다.');
+            }
         },
         addMessage(sender, text) {
-            this.messages.push({id: Date.now(), sender, text});
+            if (!text) return;
+            this.messages.push({
+                id: Date.now(),
+                sender,
+                text
+            });
+            this.$nextTick(() => {
+                this.scrollToBottom();
+            });
+        },
+        scrollToBottom() {
+            const chatMessages = document.querySelector('.chat-messages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         },
         async getAiResponse(message) {
             try {
-                const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-                
-                const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+                const response = await this.openai.chat.completions.create({
                     model: "gpt-4o-mini",
                     messages: [
-                        {'role': "user", 'content': message},
-                        {"role": "system", "content": "You are a helpful assistant."},],
-                    max_tokens: 150,
-                    temperature: 0.7
-                }, {
-                    headers: {
-                        'Authorization': `Bearer ${apiKey}`,
-                        'Content-Type': 'application/json'
-                    }
+                    {"role": "system", "content": "You are a helpful assistant who explains financial topics simply and clearly for beginners."},
+                    {"role": "user", "content": message}
+                ],
+                max_tokens: 1000,
+                temperature: 0.7  // 간단하고 직관적인 답변을 유도
                 });
                 
-                return response.data.choices[0].message.content.trim();
+                return response.choices[0].message.content.trim();
             } catch (error) {
                 console.error('AI 응답 오류:', error);
                 if (error.response?.status === 429) {
@@ -73,21 +94,31 @@ export default {
                 }
                 return `오류가 발생했습니다: ${error.message}`;
             }
+        },
+        markdownToHtml(text) {
+            return marked(text);
         }
+    },
+    updated() {
+        this.scrollToBottom();
     }
 }
 </script>
 
 <style scoped>
 .chatbot-container {
-    width: 320px;
-    height: 450px;
-    background: rgba(255, 255, 255, 0.95);
+    position: fixed;
+    bottom: 120px;
+    right: 20px;
+    width: 400px;
+    height: 600px;
+    background: rgba(255, 255, 255, 0.842);
     backdrop-filter: blur(10px);
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
+    z-index: 1000;
 }
 
 .chat-messages {
@@ -110,12 +141,14 @@ export default {
 }
 
 .message-bubble {
-    max-width: 70%;
-    padding: 10px 15px;
+    max-width: 75%;
+    padding: 12px 18px;
     border-radius: 15px;
-    font-size: 14px;
-    line-height: 1.4;
+    font-size: 15px;
+    line-height: 1.8;
     word-break: break-word;
+    white-space: pre-line;
+    text-align: left;
 }
 
 .user-message .message-bubble {
@@ -125,9 +158,8 @@ export default {
 }
 
 .ai-message .message-bubble {
-    background: #f0f0f0;
-    color: #333;
-    border-bottom-left-radius: 5px;
+    background: #f8f9fa;
+    padding: 15px 20px;
 }
 
 .chat-input-container {
@@ -145,7 +177,7 @@ export default {
     border: 1px solid #dee2e6;
     border-radius: 20px;
     outline: none;
-    font-size: 14px;
+    font-size: 16px;
     background: white;
 }
 
@@ -161,7 +193,7 @@ export default {
     border-radius: 15px;
     cursor: pointer;
     font-weight: bold;
-    font-size: 13px;    /* 폰트 크기 줄임 */
+    font-size: 15px;    /* 폰트 크기 줄임 */
     transition: all 0.3s ease;
 }
 
@@ -186,5 +218,32 @@ export default {
 .chat-messages::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.1);
     border-radius: 3px;
+}
+
+.markdown-body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.markdown-body pre {
+    background-color: #f6f8fa;
+    border-radius: 6px;
+    padding: 13px;
+    overflow: auto;
+}
+
+.markdown-body code {
+    background-color: rgba(175, 184, 193, 0.2);
+    border-radius: 6px;
+    padding: 0.2em 0.4em;
+    font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+}
+
+.markdown-body p {
+    margin-bottom: 13px;
+}
+
+.markdown-body ul, .markdown-body ol {
+    padding-left: 2em;
+    margin-bottom: 13px;
 }
 </style>

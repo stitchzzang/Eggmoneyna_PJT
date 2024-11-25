@@ -27,7 +27,7 @@
             </div>
 
             <div class="nav-item">
-              <router-link to="/library/tips">라이브러리</router-link>
+              <router-link to="/library/contents">라이브러리</router-link>
               <div class="submenu">
                 <router-link to="/library/contents">교육 콘텐츠</router-link>
                 <router-link to="/library/books">도서 추천</router-link>
@@ -59,7 +59,7 @@
 
               <div class="mobile-menu-item">
                 <div class="menu-title" @click="toggleSubmenu('library')">
-                  <router-link to="/library/tips" @click="closeMenu">라이브러리</router-link>
+                  <router-link to="/library/contents" @click="closeMenu">라이브러리</router-link>
                   <span class="arrow">▼</span>
                 </div>
                 <div class="submenu" v-show="activeSubmenu === 'library'">
@@ -125,7 +125,7 @@
           </div>
 
           <div class="sitemap-section">
-            <h3>라이브러리</h3>
+            <router-link to="/library/contents"><h3>라이브러리</h3></router-link>
             <ul>
               <li><router-link to="/library/contents">교육 콘텐츠</router-link></li>
               <li><router-link to="/library/books">도서 추천</router-link></li>
@@ -1040,5 +1040,13 @@ body {
   bottom: 100%;
   right: 0;
   margin-bottom: 20px;
+}
+
+/* 채팅 아이콘 관련 스타일 */
+.chat-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;  /* 채팅창보다 낮은 z-index */
 }
 </style>
