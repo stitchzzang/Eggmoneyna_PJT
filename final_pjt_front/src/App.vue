@@ -101,7 +101,7 @@
           <div v-if="auth.isAuthenticated" class="user-menu">
             <div class="user-info">
               <router-link :to="{ path: '/profilepage' }" class="username">
-                <strong>🐣 {{ auth.user }}</strong> 님 안녕하세요!
+                <strong>🐣 {{ auth.name }}</strong> 님 안녕하세요!
               </router-link>
             </div>
             <button @click="logout" class="logout-button">로그아웃</button>
