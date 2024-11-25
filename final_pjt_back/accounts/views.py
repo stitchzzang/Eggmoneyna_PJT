@@ -1,14 +1,14 @@
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
 from .serializers import CustomRegisterSerializer, CustomUserDetailsSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
-from rest_framework.permissions import IsAuthenticated
+from django.utils import timezone
 from django.contrib.auth.hashers import make_password
 
 
@@ -64,6 +64,9 @@ def signup(request):
                     'email': user.email,
                     'name': user.name,
                     'member_type': user.member_type,
+                    'birth_date': user.birth_date,
+                    'gender': user.gender,
+                    'income_level': user.income_level,
                 },
                 'token': {
                     'refresh': str(refresh),
@@ -108,10 +111,16 @@ def login(request):
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
             },
-            'username': user.username,
-            'name': user.name,
-            'email': user.email,
-            'member_type': user.member_type
+            'user': {
+                'username': user.username,
+                'name': user.name,
+                'email': user.email,
+                'member_type': user.member_type,
+                'birth_date': user.birth_date,
+                'gender': user.gender,
+                'income_level': user.income_level,
+                'financial_score': user.financial_score,
+            }
         })
     else:
         return Response({'error': '아이디 또는 비밀번호가 잘못되었습니다.'}, 
@@ -183,6 +192,10 @@ def update_user_info(request):
     
     # 나머지 필드 업데이트
     if email:
+        # 이메일 중복 검사 추가
+        if get_user_model().objects.exclude(pk=user.pk).filter(email=email).exists():
+            return Response({'error': '이미 등록된 이메일입니다.'}, 
+                          status=status.HTTP_400_BAD_REQUEST)
         user.email = email
     if birth_date:
         user.birth_date = birth_date
@@ -196,4 +209,34 @@ def update_user_info(request):
         return Response({'message': '회원정보가 성공적으로 업데이트되었습니다.'}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def calculate_financial_score(request):
+    user = request.user
+    consumption_score = request.data.get('totalScore')
+    
+    if not consumption_score:
+        return Response({'error': '소비습관 점수가 필요합니다.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    serializer = CustomUserDetailsSerializer(user)
+    scores = serializer.calculate_scores(consumption_score)
+    
+    # 계산된 점수들을 DB에 저장
+    user.financial_score = scores['financial_score']
+    user.age_score = scores['age_score']
+    user.income_score = scores['income_score']
+    user.consumption_score = scores['consumption_score']
+    user.test_date = timezone.now()
+    user.save()
+    
+    return Response(scores)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_financial_score(request):
+    serializer = CustomUserDetailsSerializer(request.user)
+    return Response(serializer.data)
 

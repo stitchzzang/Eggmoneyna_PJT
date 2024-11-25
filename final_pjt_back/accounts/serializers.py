@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from .models import User
+from django.utils import timezone
 
 class CustomRegisterSerializer(RegisterSerializer):
     # 필수 필드 추가
@@ -65,6 +66,12 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
     # 비밀번호 필드
     password = serializers.CharField(write_only=True, required=False)
     
+    age = serializers.SerializerMethodField()
+    financial_score = serializers.IntegerField(read_only=True)
+    age_score = serializers.IntegerField(read_only=True)
+    income_score = serializers.IntegerField(read_only=True)
+    consumption_score = serializers.IntegerField(read_only=True)
+    
     class Meta:
         model = UserModel
         fields = (
@@ -78,6 +85,52 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
             'income_level',
             'terms_agreement',
             'privacy_agreement',
-            'password'
+            'password',
+            'age',
+            'financial_score',
+            'age_score',
+            'income_score',
+            'consumption_score'
         )
         read_only_fields = ('terms_agreement', 'privacy_agreement')
+
+    def get_age(self, obj):
+        today = timezone.now().date()
+        birth_date = obj.birth_date
+        age = today.year - birth_date.year
+        if today.month < birth_date.month or (today.month == birth_date.month and today.day < birth_date.day):
+            age -= 1
+        return age
+
+    def calculate_scores(self, consumption_score):
+        user = self.instance
+        age = self.get_age(user)
+        
+        # 연령대 점수 계산
+        if 20 <= age <= 39:
+            age_score = 50
+        elif 40 <= age <= 59:
+            age_score = 100
+        else:
+            age_score = 75
+            
+        # 소득수준 점수 계산
+        income_scores = {
+            'low': 30,
+            'middle': 60,
+            'high': 100
+        }
+        income_score = income_scores[user.income_level]
+        
+        # 소비습관 점수 계산
+        consumption_final_score = round((consumption_score/24)*50)
+        
+        # 최종 점수 계산
+        final_score = round(age_score * 0.2 + income_score * 0.3 + consumption_final_score * 0.5)
+        
+        return {
+            'age_score': age_score,
+            'income_score': income_score,
+            'consumption_score': consumption_final_score,
+            'financial_score': final_score
+        }

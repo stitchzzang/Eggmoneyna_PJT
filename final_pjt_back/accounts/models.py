@@ -56,6 +56,13 @@ class User(AbstractUser):
         verbose_name='소득수준'
     )
     
+    # 금융성향 테스트 결과 필드 추가
+    financial_score = models.IntegerField(null=True, blank=True, verbose_name='금융성향 점수')
+    age_score = models.IntegerField(null=True, blank=True, verbose_name='연령대 점수')
+    income_score = models.IntegerField(null=True, blank=True, verbose_name='소득수준 점수')
+    consumption_score = models.IntegerField(null=True, blank=True, verbose_name='소비습관 점수')
+    test_date = models.DateTimeField(null=True, blank=True, verbose_name='테스트 진행일')
+    
     # 필수 필드 설정
     REQUIRED_FIELDS = ['email', 'name', 'birth_date', 'gender']
 
