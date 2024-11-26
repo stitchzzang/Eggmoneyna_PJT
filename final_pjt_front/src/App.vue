@@ -234,6 +234,11 @@ const logout = async () => {
 const toggleChatBot = () => {
   showChatBot.value = !showChatBot.value
 }
+
+// created 훅 대신 즉시 실행 함수 사용
+onMounted(async () => {
+  await authStore.initializeAuth()
+})
 </script>
 
 <style>
