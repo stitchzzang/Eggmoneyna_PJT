@@ -54,23 +54,36 @@ $ pip install -r requirements.txt
 $ python manage.py migrate
 ```
 
-4. 관리자 계정 생성 : createsuperuser 실행
+4. `users.json`, `threads.json` 파일 내용 DB에 저장
 ```bash
-$ python manage.py createsuperuser
-```
-- admin 계정 생성 후, 관리자 페이지 접속 가능
-- 관리자 페이지 접속 주소 : http://127.0.0.1:8000/admin/
-- `threads.json` 파일 `"user_id": 1`이므로 임시 계정 생성 필요
-
-5. `threads.json` 파일 내용 DB에 저장
-```bash
+$ python manage.py loaddata users.json
 $ python manage.py loaddata threads.json
 ```
+- user가 thread를 작성하는 것이므로, user 데이터가 먼저 생성되어야 함
 
-6. Django 서버 실행
+5. Django 서버 실행
 ```bash
 $ python manage.py runserver
 ```
+
+> 참고
+- 만약 migrate 실행 시 오류가 발생하는 경우, DB 관련 파일들 삭제 후 다시 시작
+```bash
+# DB 삭제
+$ rm db.sqlite3
+
+# migration 기록 삭제
+$ rm final_pjt_back/accounts/migrations/0*.py  
+$ rm final_pjt_back/threads/migrations/0*.py 
+```
+
+> `.env` 파일 형식   
+```
+VITE_KAKAO_MAP_API_KEY=<API KEY>
+KOREAEXIM_API_KEY=<API KEY>
+VITE_OPENAI_API_KEY=<API KEY>
+```
+
 
 ## 기타 환경 설정
 > `pip install -r requirements.txt` 시 설치에 오류나는 경우 해결법
@@ -83,13 +96,6 @@ $ python manage.py runserver
 - 설치 시 "C++ 빌드 도구" 선택
 - https://visualstudio.microsoft.com/ko/visual-cpp-build-tools/
 
-
-
-> env 파일 추가 설명
-- 파일 형식
-```
-VITE_KAKAO_MAP_API_KEY=<카카오맵 API 키>
-```
 
 
 
@@ -129,8 +135,6 @@ VITE_KAKAO_MAP_API_KEY=<카카오맵 API 키>
 4. 인증키 발급신청 항목 선택
 5. 발급 신청 과정 진행
 6. 인증키 발급 완료 후, 인증키 확인
-
-
 
 
 

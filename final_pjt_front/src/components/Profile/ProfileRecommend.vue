@@ -20,7 +20,16 @@
           </li>
         </ul>
       </div>
-
+      <div class="score-summary">
+        <h3>테스트 결과 상세</h3>
+        <div class="score-details">
+          <p>나이 점수: {{ store.ageScore ? (Math.round(store.ageScore * 0.2 * 100) / 100).toFixed(2) : '0.00' }} (20%)</p>
+          <p>소득 점수: {{ store.incomeScore ? (Math.round(store.incomeScore * 0.3 * 100) / 100).toFixed(2) : '0.00' }} (30%)</p>
+          <p>투자성향 점수: {{ store.habitScore ? (Math.round(store.habitScore * 0.5 * 100) / 100).toFixed(2) : '0.00' }} (50%)</p>
+          <p class="final-score">최종 점수: {{ store.finalScore ? store.finalScore.toFixed(2) : '0.00' }}</p>
+        </div>
+      </div>
+      <hr>
       <button @click="moveToTest" class="test-link retake">
         다시 테스트하기
       </button>
@@ -36,6 +45,7 @@
 
 <script setup>
 import { useProfileStore } from '@/stores/profile'
+import { computed } from 'vue'
 
 const store = useProfileStore()
 
@@ -164,5 +174,27 @@ const moveToTest = () => {
 
 .test-link.retake:hover {
   background-color: #5a6268;
+}
+
+.score-summary {
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+}
+
+.score-details {
+  margin-top: 15px;
+}
+
+.score-details p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.final-score {
+  font-weight: bold;
+  color: #056800;
+  font-size: 18px !important;
 }
 </style>

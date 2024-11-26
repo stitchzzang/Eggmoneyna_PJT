@@ -7,4 +7,6 @@ urlpatterns = [
     path('delete/', views.delete),
     path('user/', views.get_user_info),
     path('update/', views.update_user_info),
+    path('financial-score/', views.calculate_financial_score, name='calculate_financial_score'),
+    path('get-financial-score/', views.get_financial_score, name='get_financial_score'),
 ]

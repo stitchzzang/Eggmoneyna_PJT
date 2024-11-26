@@ -235,9 +235,18 @@ const toggleChatBot = () => {
   showChatBot.value = !showChatBot.value
 }
 
+
 // created 훅 대신 즉시 실행 함수 사용
 onMounted(async () => {
   await authStore.initializeAuth()
+
+onMounted(async () => {
+  try {
+    await authStore.initializeAuth()
+  } catch (error) {
+    console.error('사용자 정보 로딩 실패:', error)
+  }
+
 })
 </script>
 
