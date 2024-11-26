@@ -44,11 +44,32 @@
           
           <div class="chart-section">
             <h3>금리 비교</h3>
-            <div class="chart-container">
-              <Bar 
-                :data="chartData" 
-                :options="chartOptions"
-              />
+            <!-- 예금/적금 구분 -->
+            <div v-if="!product.options[0].rsrvTypeNm">
+              <!-- 예금 차트 -->
+              <div class="chart-container">
+                <Bar 
+                  :data="depositChartData" 
+                  :options="chartOptions"
+                />
+              </div>
+            </div>
+            <div v-else>
+              <!-- 적금 차트 -->
+              <div class="chart-container">
+                <h4>자유적립식</h4>
+                <Bar 
+                  :data="freeChartData" 
+                  :options="chartOptions"
+                />
+              </div>
+              <div class="chart-container mt-4">
+                <h4>정액적립식</h4>
+                <Bar 
+                  :data="fixedChartData" 
+                  :options="chartOptions"
+                />
+              </div>
             </div>
           </div>
           
@@ -78,6 +99,7 @@ import {
   CategoryScale,
   LinearScale
 } from 'chart.js'
+import ChartDataLabels from 'chartjs-plugin-datalabels'
 
 ChartJS.register(
   CategoryScale,
@@ -85,8 +107,15 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ChartDataLabels
 )
+
+const isSubscribed = ref(false)
+
+const handleSubscriptionToggle = () => {
+  isSubscribed.value = !isSubscribed.value
+}
 
 defineEmits(['close'])
 
@@ -105,61 +134,213 @@ const getBasicRate = (term) => {
   return option ? Number(option.interestRate) : 0
 }
 
-// 현재 상품의 우대 금리
-const getPremiumRate = (term) => {
-  const option = props.product.options?.find(opt => opt.saveTerm === term)
-  return option ? Number(option.intr_rate2) : 0
+// 적립 방식별 금리 계산 함수들 추가
+const getBasicRateByType = (term, rsrvType) => {
+  const option = props.product.options?.find(opt => 
+    opt.saveTerm === term && opt.rsrvTypeNm === rsrvType
+  )
+  return option ? Number(option.interestRate) : 0
 }
 
-// 차트 데이터
-const chartData = computed(() => {
-  const selectedTerm = 12 // 12개월 기준
+const calculateAverageRateByType = (term, rsrvType) => {
+  const matchingProducts = props.product.options?.filter(opt => 
+    opt.saveTerm === term && 
+    opt.rsrvTypeNm === rsrvType
+  )
+
+  if (!matchingProducts || matchingProducts.length === 0) return 0
+
+  const sum = matchingProducts.reduce((acc, product) => {
+    return acc + Number(product.interestRate)
+  }, 0)
+
+  return (sum / matchingProducts.length).toFixed(2)
+}
+
+const getPremiumRateByType = (term, rsrvType) => {
+  const option = props.product.options?.find(opt => 
+    opt.saveTerm === term && opt.rsrvTypeNm === rsrvType
+  )
+  return option ? Number(option.intrRate2 || 0).toFixed(2) : 0
+}
+
+// 자유적립식 차트 데이터
+const freeChartData = computed(() => {
+  const terms = [6, 12, 24, 36]
   
-  const basicRate = getBasicRate(selectedTerm)
-  const premiumRate = getPremiumRate(selectedTerm)
-  const averageRate = 3.5 // 임시 평균값 (나중에 실제 평균으로 교체)
-
-  console.log('Rates:', { basicRate, premiumRate, averageRate })
-
   return {
-    labels: ['금리 비교'],
+    labels: terms.map(term => `${term}개월`),
     datasets: [
       {
         label: '평균 금리',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        data: [averageRate]
+        backgroundColor: 'rgba(255, 99, 132, 0.8)',
+        data: terms.map(term => calculateAverageRateByType(term, '자유적립식')),
+        borderColor: 'rgb(255, 99, 132)',
+        borderWidth: 1
       },
       {
         label: '저축 금리',
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
-        data: [basicRate]
+        backgroundColor: 'rgba(53, 162, 235, 0.8)',
+        data: terms.map(term => getBasicRateByType(term, '자유적립식')),
+        borderColor: 'rgb(53, 162, 235)',
+        borderWidth: 1
       },
       {
-        label: '우대 금리',
-        backgroundColor: 'rgba(75, 192, 192, 0.5)',
-        data: [premiumRate]
+        label: '최고 우대 금리',
+        backgroundColor: 'rgba(75, 192, 192, 0.8)',
+        data: terms.map(term => getPremiumRateByType(term, '자유적립식')),
+        borderColor: 'rgb(75, 192, 192)',
+        borderWidth: 1
       }
     ]
   }
 })
 
+// 정액적립식 차트 데이터
+const fixedChartData = computed(() => {
+  const terms = [6, 12, 24, 36]
+  
+  return {
+    labels: terms.map(term => `${term}개월`),
+    datasets: [
+      {
+        label: '평균 금리',
+        backgroundColor: 'rgba(255, 99, 132, 0.8)',
+        data: terms.map(term => calculateAverageRateByType(term, '정액적립식')),
+        borderColor: 'rgb(255, 99, 132)',
+        borderWidth: 1
+      },
+      {
+        label: '저축 금리',
+        backgroundColor: 'rgba(53, 162, 235, 0.8)',
+        data: terms.map(term => getBasicRateByType(term, '정액적립식')),
+        borderColor: 'rgb(53, 162, 235)',
+        borderWidth: 1
+      },
+      {
+        label: '최고 우대 금리',
+        backgroundColor: 'rgba(75, 192, 192, 0.8)',
+        data: terms.map(term => getPremiumRateByType(term, '정액적립식')),
+        borderColor: 'rgb(75, 192, 192)',
+        borderWidth: 1
+      }
+    ]
+  }
+})
+
+// 차금용 차트 데이터 수정
+const depositChartData = computed(() => {
+  const terms = [6, 12, 24, 36]
+  
+  return {
+    labels: terms.map(term => `${term}개월`),
+    datasets: [
+      {
+        label: '평균 금리',
+        backgroundColor: 'rgba(255, 99, 132, 0.8)',
+        data: terms.map(term => {
+          const matchingProducts = props.product.options?.filter(opt => 
+            opt.saveTerm === term
+          )
+          if (!matchingProducts || matchingProducts.length === 0) return 0
+          const sum = matchingProducts.reduce((acc, product) => {
+            return acc + Number(product.interestRate)
+          }, 0)
+          return (sum / matchingProducts.length).toFixed(2)
+        }),
+        borderColor: 'rgb(255, 99, 132)',
+        borderWidth: 1
+      },
+      {
+        label: '저축 금리',
+        backgroundColor: 'rgba(53, 162, 235, 0.8)',
+        data: terms.map(term => getBasicRate(term)),
+        borderColor: 'rgb(53, 162, 235)',
+        borderWidth: 1
+      },
+      {
+        label: '최고 우대 금리',
+        backgroundColor: 'rgba(75, 192, 192, 0.8)',
+        data: terms.map(term => {
+          const option = props.product.options?.find(opt => opt.saveTerm === term)
+          return option ? Number(option.intrRate2 || 0).toFixed(2) : 0
+        }),
+        borderColor: 'rgb(75, 192, 192)',
+        borderWidth: 1
+      }
+    ]
+  }
+})
+
+// 차트 옵션 수정
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
   scales: {
     y: {
-      beginAtZero: true,
+      beginAtZero: false,
+      min: 2,
+      max: 4.5,
+      ticks: {
+        stepSize: 0.5,
+      },
       title: {
         display: true,
         text: '금리 (%)'
+      }
+    },
+    x: {
+      title: {
+        display: true,
+        text: '가입기간'
       }
     }
   },
   plugins: {
     legend: {
       position: 'top'
+    },
+    title: {
+      display: true,
+      text: '가입기간별 금리 비교'
+    },
+    tooltip: {
+      enabled: true,
+      callbacks: {
+        label: function(context) {
+          return `${context.dataset.label}: ${context.raw}%`
+        }
+      }
+    },
+    datalabels: {
+      display: true,
+      anchor: 'end',
+      align: 'end',
+      offset: 0,
+      formatter: (value) => value + '%',
+      font: {
+        weight: 'bold',
+        size: 11
+      },
+      color: '#333',
+      padding: {
+        top: 5,
+        bottom: 5
+      },
+      textAlign: 'center'
     }
-  }
+  },
+  layout: {
+    padding: {
+      top: 20,
+      right: 20,
+      bottom: 0,
+      left: 20
+    }
+  },
+  categoryPercentage: 0.8,
+  barPercentage: 0.3,
+  barThickness: 40,
 }
 </script>
 
@@ -180,10 +361,10 @@ const chartOptions = {
 .modal-content {
   background-color: white;
   border-radius: 8px;
-  padding: 20px;
-  width: 90%;
-  max-width: 600px;
-  max-height: 80vh;
+  padding: 30px;
+  width: 95%;
+  max-width: 1000px;
+  max-height: 90vh;
   overflow-y: auto;
 }
 
@@ -267,7 +448,6 @@ const chartOptions = {
   font-size: 18px;
   font-weight: bold;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s eas
 }
 
 .subscribe-btn:hover {
@@ -303,22 +483,43 @@ const chartOptions = {
 }
 
 .chart-section {
-  margin-top: 20px;
-  padding: 20px;
+  margin-top: 30px;
+  padding: 40px;
   background-color: #f8f9fa;
   border-radius: 8px;
 }
 
 .chart-container {
   position: relative;
-  height: 300px;
+  height: 400px;
   width: 100%;
-  margin-top: 15px;
+  background-color: white;
+  padding: 30px 40px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.chart-container + .chart-container {
+  margin-top: 40px;  /* 차트 간의 간격 */
+}
+
+.chart-container h4 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.mt-4 {
+  margin-top: 2.5rem !important;  /* 간격 더 늘림 */
+}
+
+/* 모달 내용물의 최대 높이 조정 */
 .modal-content {
   max-height: 90vh;
   overflow-y: auto;
+  padding: 30px;
 }
 
 /* 모바일 반응형 */
