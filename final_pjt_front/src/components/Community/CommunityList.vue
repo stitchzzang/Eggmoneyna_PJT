@@ -48,8 +48,9 @@ const emit = defineEmits(['select-post'])
   max-width: 900px;
   margin: 0 auto;
   padding: 10px 20px;
-  background-color: rgba(247, 249, 250, 0.675);
+  background-color: rgba(247, 249, 250, 0.733);
   border-radius: 25px;
+  font-size: 1.05rem;
 }
 
 .list-row, :deep(.post-item) {
@@ -62,6 +63,7 @@ const emit = defineEmits(['select-post'])
 .list-row {
   font-weight: bold;
 }
+
 
 .column, :deep(.post-column) {
   overflow: hidden;
