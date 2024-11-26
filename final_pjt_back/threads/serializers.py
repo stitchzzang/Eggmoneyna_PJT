@@ -4,18 +4,25 @@ from .models import Thread, Comment
 class ThreadSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
     name = serializers.CharField(source='user.name', read_only=True)
-    likes_count = serializers.IntegerField(source='likes.count', read_only=True)
     comment_count = serializers.SerializerMethodField()
     member_type = serializers.CharField(source='user.member_type', read_only=True)
+    likes_count = serializers.IntegerField(source='likes.count', read_only=True)
+    is_liked = serializers.SerializerMethodField()
 
     class Meta:
         model = Thread
         fields = ('id', 'user', 'username', 'name', 'member_type', 'title', 'content', 
-                 'created_at', 'updated_at', 'likes_count', 'comment_count')
+                 'created_at', 'updated_at', 'comment_count', 'likes_count', 'is_liked')
         read_only_fields = ('user', 'created_at', 'updated_at')
 
     def get_comment_count(self, obj):
         return obj.comment_set.count()
+
+    def get_is_liked(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            return obj.likes.filter(id=request.user.id).exists()
+        return False
 
 class ThreadListSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)

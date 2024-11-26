@@ -57,6 +57,7 @@ REST_FRAMEWORK = {
     # Authentication
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     # permission / AllowAny : 모든 사용자를 허용하겠다.
     'DEFAULT_PERMISSION_CLASSES': [

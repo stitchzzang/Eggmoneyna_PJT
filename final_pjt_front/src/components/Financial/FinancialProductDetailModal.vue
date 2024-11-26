@@ -9,6 +9,7 @@
       <div class="modal-body">
         <div class="product-info">
           <div class="info-row">
+            <!-- <span>{{ product }}</span> -->
             <span class="info-label">은행명:</span>
             <span class="info-value">{{ product.bankName }}</span>
           </div>
@@ -16,6 +17,22 @@
             <span class="info-label">공시일:</span>
             <span class="info-value">{{ product.submitDate }}</span>
           </div>
+          <div class="info-row">
+            <span class="info-label">상세조건:</span>
+            <span class="info-value">{{ product.description }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">가입 방법:</span>
+            <span class="info-value">{{ product.joinWay }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">가입 조건:</span>
+            <span class="info-value">
+              {{ product.joinDeny === '1' ? product.joinMember : '제한 없음' }}
+            </span>
+          </div>
+
+
           
           <h3>금리 정보</h3>
           <div class="interest-rates-grid">
@@ -50,6 +67,8 @@ const props = defineProps({
     required: true
   }
 })
+
+
 
 // 현재 상품의 가입 상태 확인
 const isSubscribed = computed(() => {
@@ -202,4 +221,10 @@ const getInterestRate = (product, term) => {
   transform: translateY(-2px);
   box-shadow: 0 2px 8px rgba(250, 82, 82, 0.4);
 }
+
+.info-row {
+  white-space: pre-line; /* 줄바꿈을 유지하면서 텍스트를 여러 줄로 출력 */
+  word-wrap: break-word; /* 긴 단어가 넘치지 않게 줄 바꿈 */
+}
+
 </style>

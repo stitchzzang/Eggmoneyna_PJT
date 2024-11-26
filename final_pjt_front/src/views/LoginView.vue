@@ -60,19 +60,14 @@ const togglePassword = () => {
 
 const submitForm = async () => {
   try {
-    const response = await axios.post('http://127.0.0.1:8000/accounts/login/', {
+    const success = await auth.login({
       username: username.value,
       password: password.value
     })
+    console.log('로그인 성공 여부:', success)
+    console.log('현재 인증 상태:', auth.isAuthenticated)
     
-    console.log('로그인 응답:', response.data)
-
-    if (response.data.key) {
-      await auth.login({
-        username: username.value,
-        password: password.value
-      })
-      
+    if (success) {
       const redirectPath = localStorage.getItem('redirectPath')
       if (redirectPath) {
         localStorage.removeItem('redirectPath')
@@ -81,14 +76,12 @@ const submitForm = async () => {
         router.push('/')
       }
     }
-    
   } catch (error) {
+    console.error('로그인 에러:', error)
     if (error.response) {
-      console.error('서버 응답:', error.response.data)
-      alert(error.response.data.detail || "아이디 또는 비밀번호가 일치하지 않습니다. 다시 확인해 주세요.")
+      alert(error.response.data.detail || "아이디 또는 비밀번호가 일치하지 않습니다.")
     } else {
-      console.error('서버 연결 실패:', error)
-      alert('서버에 연결할 수 없습니다. 서버가 실행중인지 확인해주세요.')
+      alert('서버에 연결할 수 없습니다.')
     }
   }
 }

@@ -1,0 +1,302 @@
+[
+  {
+    "model": "accounts.user",
+    "pk": 1,
+    "fields": {
+      "email": "user1@example.com",
+      "name": "강철민",
+      "username": "user1",
+      "birth_date": "1985-05-10",
+      "gender": "M",
+      "member_type": "regular",
+      "income_level": "middle",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 2,
+    "fields": {
+      "email": "user2@example.com",
+      "name": "별이",
+      "username": "user2",
+      "birth_date": "1992-08-22",
+      "gender": "F",
+      "member_type": "expert",
+      "income_level": "high",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 3,
+    "fields": {
+      "email": "user3@example.com",
+      "name": "어드벤처리",
+      "username": "user3",
+      "birth_date": "1980-12-15",
+      "gender": "M",
+      "member_type": "regular",
+      "income_level": "low",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 4,
+    "fields": {
+      "email": "user4@example.com",
+      "name": "핑크토끼",
+      "username": "user4",
+      "birth_date": "1990-03-30",
+      "gender": "F",
+      "member_type": "regular",
+      "income_level": "middle",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 5,
+    "fields": {
+      "email": "user5@example.com",
+      "name": "피지컬강자",
+      "username": "user5",
+      "birth_date": "1995-06-25",
+      "gender": "M",
+      "member_type": "expert",
+      "income_level": "high",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 6,
+    "fields": {
+      "email": "user6@example.com",
+      "name": "햇살소녀",
+      "username": "user6",
+      "birth_date": "1988-07-14",
+      "gender": "F",
+      "member_type": "regular",
+      "income_level": "middle",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 7,
+    "fields": {
+      "email": "user7@example.com",
+      "name": "초코송이",
+      "username": "user7",
+      "birth_date": "1993-02-02",
+      "gender": "M",
+      "member_type": "regular",
+      "income_level": "middle",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 8,
+    "fields": {
+      "email": "user8@example.com",
+      "name": "로즈퀸",
+      "username": "user8",
+      "birth_date": "1998-11-01",
+      "gender": "F",
+      "member_type": "expert",
+      "income_level": "high",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 9,
+    "fields": {
+      "email": "user9@example.com",
+      "name": "하늘하늘",
+      "username": "user9",
+      "birth_date": "1983-04-19",
+      "gender": "M",
+      "member_type": "regular",
+      "income_level": "low",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 10,
+    "fields": {
+      "email": "user10@example.com",
+      "name": "달콤한도토리",
+      "username": "user10",
+      "birth_date": "1991-09-09",
+      "gender": "F",
+      "member_type": "regular",
+      "income_level": "middle",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 11,
+    "fields": {
+      "email": "user11@example.com",
+      "name": "빛나는별",
+      "username": "user11",
+      "birth_date": "1987-01-12",
+      "gender": "F",
+      "member_type": "expert",
+      "income_level": "high",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 12,
+    "fields": {
+      "email": "user12@example.com",
+      "name": "승리의신",
+      "username": "user12",
+      "birth_date": "1994-04-23",
+      "gender": "M",
+      "member_type": "regular",
+      "income_level": "middle",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 13,
+    "fields": {
+      "email": "user13@example.com",
+      "name": "하이파이브",
+      "username": "user13",
+      "birth_date": "1986-02-17",
+      "gender": "F",
+      "member_type": "regular",
+      "income_level": "middle",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 14,
+    "fields": {
+      "email": "user14@example.com",
+      "name": "바람의검",
+      "username": "user14",
+      "birth_date": "1990-05-20",
+      "gender": "M",
+      "member_type": "expert",
+      "income_level": "high",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 15,
+    "fields": {
+      "email": "user15@example.com",
+      "name": "치즈버거",
+      "username": "user15",
+      "birth_date": "1997-07-18",
+      "gender": "F",
+      "member_type": "regular",
+      "income_level": "middle",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 16,
+    "fields": {
+      "email": "user16@example.com",
+      "name": "하늘의별",
+      "username": "user16",
+      "birth_date": "1999-09-11",
+      "gender": "F",
+      "member_type": "regular",
+      "income_level": "low",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 17,
+    "fields": {
+      "email": "user17@example.com",
+      "name": "블랙아이",
+      "username": "user17",
+      "birth_date": "1989-03-05",
+      "gender": "M",
+      "member_type": "expert",
+      "income_level": "high",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 18,
+    "fields": {
+      "email": "user18@example.com",
+      "name": "바다의빛",
+      "username": "user18",
+      "birth_date": "1982-10-10",
+      "gender": "F",
+      "member_type": "regular",
+      "income_level": "middle",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 19,
+    "fields": {
+      "email": "user19@example.com",
+      "name": "초코라떼",
+      "username": "user19",
+      "birth_date": "1994-06-26",
+      "gender": "M",
+      "member_type": "regular",
+      "income_level": "middle",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 20,
+    "fields": {
+      "email": "user20@example.com",
+      "name": "피닉스",
+      "username": "user20",
+      "birth_date": "1996-01-30",
+      "gender": "F",
+      "member_type": "expert",
+      "income_level": "high",
+      "terms_agreement": true,
+      "privacy_agreement": true
+    }
+  }
+]
