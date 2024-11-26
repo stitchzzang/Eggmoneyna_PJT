@@ -88,6 +88,7 @@
 </template>
 
 <script setup>
+import { useProductStore } from '@/stores/product'
 import { ref, computed } from 'vue'
 import { Bar } from 'vue-chartjs'
 import {
@@ -113,9 +114,18 @@ ChartJS.register(
 
 const isSubscribed = ref(false)
 
+const productStore = useProductStore()
+
 const handleSubscriptionToggle = () => {
+  if (isSubscribed.value) {
+    productStore.unsubscribeProduct(props.product.id)
+  } else {
+    productStore.subscribeProduct(props.product)
+  }
   isSubscribed.value = !isSubscribed.value
 }
+
+
 
 defineEmits(['close'])
 
@@ -280,7 +290,7 @@ const chartOptions = {
     y: {
       beginAtZero: false,
       min: 2,
-      max: 4.5,
+      max: 6,
       ticks: {
         stepSize: 0.5,
       },

@@ -1,35 +1,67 @@
+# 1st_PJT
+
+## Front : Vue 실행하기
+1. front 파일로 들어가기
+```bash
+$ cd final_pjt_front
+```
+
+2. 필요 라이브러리 설치하기
+```bash
+$ npm i
+$ npm i axios
+$ npm i -g vue
+$ npm i -g @vue/cli
+```
+- `npm i axios`
+  - Django의 데이터를 불러오기 위해 `axios 라이브러리` 설치
+
+- `npm i -g vue`
+  - Vue.js의 핵심 라이브러리인 `vue` 설치
+  - Vue.js 프레임워크 자체를 사용하기 위해 필요
+
+- `npm i -g @vue/cli`
+  - Vue CLI 설치
+  - Vue 프로젝트를 쉽게 생성하고 관리하도록 도와주는 도구
+
+- Vue에서 Django의 `requirements.txt` 파일과 같은 역할을 하는 것은 `package.json` 파일
+- 추후에 `npm i` 만 실행하면 이 명령어 하나로 `package.json` 파일에 있는 모든 라이브러리를 설치 가능
+
+3. vue 실행하기
+```bash
+npm dev run
+```
+
+
+## Back : Django 실행하기
 ## Back : Django 실행하기
 1. venv 가상환경 생성
 ```bash
 $ python -m venv venv
 ```
-V. 서비스 대표 기능들에 대한 설명 
-- 구현 기능
 
 2. 가상환경 실행
 ```bash
 $ source venv/Scripts/activate
 ```
-- 부가 기능
 
 2. `requirementst.txt` 파일 내용 다운로드
 ```bash
 $ pip install -r requirements.txt
 ```
-VI. 생성형 AI 를 활용한 부분 
-- Cursor 활용
-- ChatGPT OpenAIAPI 챗봇 구현
 
 3. DB 생성 : migrate 실행
 ```bash
 $ python manage.py migrate
 ```
+
 4. `users.json`, `threads.json` 파일 내용 DB에 저장
 ```bash
-$ python manage.py loaddata users.json
-$ python manage.py loaddata threads.json
+$ python manage.py loaddata users.json threads.json
 ```
 - user가 thread를 작성하는 것이므로, user 데이터가 먼저 생성되어야 함
+
+
 5. Django 서버 실행
 ```bash
 $ python manage.py runserver
@@ -39,6 +71,7 @@ $ python manage.py runserver
 ```bash
 # DB 삭제
 $ rm db.sqlite3
+
 # migration 기록 삭제
 $ rm final_pjt_back/accounts/migrations/0*.py  
 $ rm final_pjt_back/threads/migrations/0*.py 
@@ -48,6 +81,9 @@ $ rm final_pjt_back/threads/migrations/0*.py
 VITE_KAKAO_MAP_API_KEY=<API KEY>
 KOREAEXIM_API_KEY=<API KEY>
 VITE_OPENAI_API_KEY=<API KEY>
+PROD_API_KEY=<API KEY>
+VITE_YOUTUBE_API_KEY=<API KEY>
+ALADIN_API_KEY=<API KEY>
 ```
 ## 기타 환경 설정
 > `pip install -r requirements.txt` 시 설치에 오류나는 경우 해결법
@@ -78,11 +114,13 @@ VITE_OPENAI_API_KEY=<API KEY>
     script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${import.meta.env.VITE_KAKAO_MAP_API_KEY}&libraries=services&autoload=false`
     ```
 - 참고 사이트
-  - https://apis.map.kakao.com/web/sample/keywordList/
+  - https://apis.map.kakao.com/web/sample/keywordList/  
+
 <hr>  
+
 > 한국 수출입 은행 API 키 발급 방법
 1. 한국 수출입 은행 사이트에 접속
-  - https://www.koreaexim.go.kr/index
+    - https://www.koreaexim.go.kr/index
 2. 상단 메뉴바 : 정보공개 > 공공데이터개방 > OpenAPI
 3. `현재환율API` 선택
 4. 인증키 발급신청 항목 선택
@@ -90,4 +128,3 @@ VITE_OPENAI_API_KEY=<API KEY>
 6. 인증키 발급 완료 후, 인증키 확인
 - 참고 사이트
   https://www.koreaexim.go.kr/index
->>>>>>> 366576c9082c91d1bb6186a95d7c8e9f0f0841b9
