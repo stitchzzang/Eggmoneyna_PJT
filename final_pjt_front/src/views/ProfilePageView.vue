@@ -72,7 +72,7 @@ const currentComponent = computed(() => {
   display: flex;
   gap: 2rem;
   padding: 2rem;
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
   min-height: 80vh;
 }
