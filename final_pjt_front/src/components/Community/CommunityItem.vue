@@ -46,7 +46,6 @@ const formatDate = (date) => {
   return new Date(date).toLocaleDateString('ko-KR')
 }
 </script>
-
 <style scoped>
 /* 공통 레이아웃 */
 .post-item {
@@ -126,3 +125,4 @@ const formatDate = (date) => {
   margin-left: 5px;
 }
 </style>
+

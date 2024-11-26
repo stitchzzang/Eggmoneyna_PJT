@@ -28,6 +28,8 @@ export const useAuthStore = defineStore('auth', {
         this.token = token
         axios.defaults.headers.common['Authorization'] = `Token ${token}`
         await this.fetchUserInfo()
+      }
+    },
 
     async fetchUserInfo() {
       try {
@@ -85,20 +87,6 @@ export const useAuthStore = defineStore('auth', {
         localStorage.removeItem('token')
         localStorage.removeItem('user')
         delete axios.defaults.headers.common['Authorization']
-      }
-    },
-
-    async initializeAuth() {
-      const token = localStorage.getItem('token')
-      if (token) {
-        this.token = token
-        axios.defaults.headers.common['Authorization'] = `Token ${token}`
-        try {
-          await this.fetchUserInfo()
-        } catch (error) {
-          console.error('초기 사용자 정보 로딩 실패:', error)
-          this.logout()
-        }
       }
     }
   }

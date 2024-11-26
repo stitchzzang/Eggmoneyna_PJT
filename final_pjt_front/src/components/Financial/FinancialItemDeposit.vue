@@ -116,7 +116,7 @@
 
     <!-- 모달 컴포넌트 추가 -->
     <FinancialProductDetailModal
-      v-if="showModal"
+      v-if="selectedProduct"
       :product="selectedProduct"
       @close="closeModal"
     />
@@ -255,7 +255,6 @@ const openModal = (product) => {
 }
 
 const closeModal = () => {
-  showModal.value = false
   selectedProduct.value = null
 }
 </script>
