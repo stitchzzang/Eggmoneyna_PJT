@@ -1,6 +1,14 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
+axios.interceptors.request.use(config => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = `Token ${token}`
+  }
+  return config
+})
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     token: localStorage.getItem('token') || null,
@@ -13,6 +21,16 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
+
+    async initializeAuth() {
+      const token = localStorage.getItem('token')
+      if (token) {
+        this.token = token
+        axios.defaults.headers.common['Authorization'] = `Token ${token}`
+        await this.fetchUserInfo()
+      }
+    },
+
     async fetchUserInfo() {
       try {
         if (!this.token) return null
@@ -30,6 +48,7 @@ export const useAuthStore = defineStore('auth', {
           this.logout()
         }
         throw error
+
       }
     },
 
@@ -68,20 +87,6 @@ export const useAuthStore = defineStore('auth', {
         localStorage.removeItem('token')
         localStorage.removeItem('user')
         delete axios.defaults.headers.common['Authorization']
-      }
-    },
-
-    async initializeAuth() {
-      const token = localStorage.getItem('token')
-      if (token) {
-        this.token = token
-        axios.defaults.headers.common['Authorization'] = `Token ${token}`
-        try {
-          await this.fetchUserInfo()
-        } catch (error) {
-          console.error('초기 사용자 정보 로딩 실패:', error)
-          this.logout()
-        }
       }
     }
   }

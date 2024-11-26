@@ -27,7 +27,16 @@
     <hr>
     <!-- 금리 비교 그래프 -->
     <div v-if="productStore.subscribedProducts.length > 1" class="chart-section">
-      <h3>금리 비교</h3>
+      <div class="chart-header">
+        <h3>금리 비교</h3>
+        <select v-model="selectedTerm" class="period-filter">
+          <option value="all">전체 기간</option>
+          <option value="6">6개월</option>
+          <option value="12">12개월</option>
+          <option value="24">24개월</option>
+          <option value="36">36개월</option>
+        </select>
+      </div>
       <div class="chart-container">
         <Bar
           :data="chartData"
@@ -39,7 +48,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useProductStore } from '@/stores/product'
 import { Bar } from 'vue-chartjs'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js'
@@ -49,42 +58,76 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const productStore = useProductStore()
 
-// 차트 데이터 계산
+const selectedTerm = ref('all')
+
+// 선택된 기간에 따른 금리 데이터 계산
+const getInterestRateForTerm = (product, term) => {
+  if (term === 'all') {
+    return getMaxInterestRate(product)
+  }
+  const termOption = product.options.find(opt => opt.saveTerm === parseInt(term))
+  return termOption ? termOption.interestRate : 0
+}
+
+// 차트 데이터 수정
 const chartData = computed(() => ({
   labels: productStore.subscribedProducts.map(p => p.name),
-  datasets: [
-    {
-      label: '최고 금리(%)',
-      data: productStore.subscribedProducts.map(p => getMaxInterestRate(p)),
-      backgroundColor: [
-        'rgba(4, 116, 4, 0.7)',
-        'rgba(75, 192, 192, 0.7)',
-        'rgba(153, 102, 255, 0.7)',
-        'rgba(255, 159, 64, 0.7)'
-      ],
-      borderColor: [
-        'rgb(4, 116, 4)',
-        'rgb(75, 192, 192)',
-        'rgb(153, 102, 255)',
-        'rgb(255, 159, 64)'
-      ],
-      borderWidth: 1
-    }
-  ]
+  datasets: [{
+    label: `금리 (${selectedTerm.value === 'all' ? '최고' : selectedTerm.value + '개월'})`,
+    data: productStore.subscribedProducts.map(p => getInterestRateForTerm(p, selectedTerm.value)),
+    backgroundColor: [
+      'rgba(4, 116, 4, 0.7)',
+      'rgba(75, 192, 192, 0.7)',
+      'rgba(175, 44, 164, 0.7)',
+      'rgba(153, 102, 255, 0.7)',
+      'rgba(255, 159, 64, 0.7)',
+    ],
+    borderColor: [
+      'rgb(4, 116, 4)',
+      'rgb(75, 192, 192)',
+      'rgba(175, 44, 164)',
+      'rgb(153, 102, 255)',
+      'rgb(255, 159, 64)'
+    ],
+    borderWidth: 1
+  }]
 }))
 
-// 차트 옵션
+// 차트 옵션 수정
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
     legend: {
       display: true,
-      position: 'top'
+      position: 'top',
+      labels: {
+        usePointStyle: false,
+        boxWidth: 40,
+        boxHeight: 20,
+        generateLabels: function(chart) {
+          const datasets = chart.data.datasets;
+          return datasets.map(dataset => ({
+            text: dataset.label,
+            fillStyle: 'white',
+            strokeStyle: 'black',
+            lineWidth: 1,
+            hidden: !chart.isDatasetVisible(0),
+            index: 0
+          }));
+        }
+      }
     },
     title: {
       display: true,
-      text: '가입 상품 금리 비교'
+      text: '상품별 금리 비교'
+    },
+    tooltip: {
+      callbacks: {
+        label: (context) => {
+          return `금리: ${context.raw}%`
+        }
+      }
     }
   },
   scales: {
@@ -111,6 +154,10 @@ const handleUnsubscribe = (productId) => {
 </script>
 
 <style scoped>
+.period-filter {
+  padding: 5px;
+}
+
 .profile-products {
   padding: 20px;
   max-width: 1200px;
