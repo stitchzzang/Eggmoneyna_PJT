@@ -340,48 +340,17 @@ def save_saving_products(request):
 def get_deposit_products(request):
     try:
         products = DepositProduct.objects.all()
-        
-        detailed_data = []
-        for product in products:
-            product_data = {
-                'dcls_month': product.dcls_month,
-                'fin_co_no': product.fin_co_no,
-                'fin_prdt_cd': product.fin_prdt_cd,
-                'kor_co_nm': product.kor_co_nm,
-                'fin_prdt_nm': product.fin_prdt_nm,
-                'join_way': product.join_way,
-                'mtrt_int': product.mtrt_int,
-                'spcl_cnd': product.spcl_cnd,
-                'join_deny': product.join_deny,
-                'join_member': product.join_member,
-                'etc_note': product.etc_note,
-                'max_limit': product.max_limit,
-                'dcls_strt_day': product.dcls_strt_day,
-                'dcls_end_day': product.dcls_end_day,
-                'fin_co_subm_day': product.fin_co_subm_day,
-                'options': [{
-                    'dcls_month': option.dcls_month,
-                    'fin_co_no': option.fin_co_no,
-                    'fin_prdt_cd': option.fin_prdt_cd,
-                    'intr_rate_type': option.intr_rate_type,
-                    'intr_rate_type_nm': option.intr_rate_type_nm,
-                    'save_trm': option.save_trm,
-                    'intr_rate': option.intr_rate,
-                    'intr_rate2': option.intr_rate2
-                } for option in product.options.all()]
-            }
-            detailed_data.append(product_data)
+        serializer = DepositProductSerializer(products, many=True)
         
         return Response({
             'status': 'success',
-            'message': '정기예금 상품 목록을 성공적으로 조회했습니다.',
-            'total_count': len(detailed_data),
-            'data': detailed_data
+            'message': '정기적금 상품 목록을 성공적으로 조회했습니다.',
+            'data': serializer.data
         })
     except Exception as e:
         return Response({
             'status': 'error',
-            'message': f'정기예금 상품 조회 중 오류가 발생했습니다: {str(e)}'
+            'message': f'정기적금 상품 조회 중 오류가 발생했습니다: {str(e)}'
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -390,44 +359,12 @@ def get_deposit_products(request):
 def get_saving_products(request):
     try:
         products = SavingProduct.objects.all()
-        
-        detailed_data = []
-        for product in products:
-            product_data = {
-                'dcls_month': product.dcls_month,
-                'fin_co_no': product.fin_co_no,
-                'fin_prdt_cd': product.fin_prdt_cd,
-                'kor_co_nm': product.kor_co_nm,
-                'fin_prdt_nm': product.fin_prdt_nm,
-                'join_way': product.join_way,
-                'mtrt_int': product.mtrt_int,
-                'spcl_cnd': product.spcl_cnd,
-                'join_deny': product.join_deny,
-                'join_member': product.join_member,
-                'etc_note': product.etc_note,
-                'max_limit': product.max_limit,
-                'dcls_strt_day': product.dcls_strt_day,
-                'dcls_end_day': product.dcls_end_day,
-                'fin_co_subm_day': product.fin_co_subm_day,
-                'options': [{
-                    'dcls_month': option.dcls_month,
-                    'fin_prdt_cd': option.fin_prdt_cd,
-                    'intr_rate_type': option.intr_rate_type,
-                    'intr_rate_type_nm': option.intr_rate_type_nm,
-                    'save_trm': option.save_trm,
-                    'intr_rate': option.intr_rate,
-                    'intr_rate2': option.intr_rate2,
-                    'rsrv_type': option.rsrv_type,
-                    'rsrv_type_nm': option.rsrv_type_nm
-                } for option in product.options.all()]
-            }
-            detailed_data.append(product_data)
+        serializer = SavingProductSerializer(products, many=True)
         
         return Response({
             'status': 'success',
             'message': '정기적금 상품 목록을 성공적으로 조회했습니다.',
-            'total_count': len(detailed_data),
-            'data': detailed_data
+            'data': serializer.data
         })
     except Exception as e:
         return Response({

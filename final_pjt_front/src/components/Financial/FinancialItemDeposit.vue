@@ -17,10 +17,9 @@
         <label class="filter-label">예치기간 선택</label>
         <select v-model="selectedTerm" class="filter-select">
           <option value="">전체</option>
-          <option value="6">6개월</option>
-          <option value="12">12개월</option>
-          <option value="24">24개월</option>
-          <option value="36">36개월</option>
+          <option v-for="term in availableTerms" :key="term" :value="term">
+            {{ term }}개월
+          </option>
         </select>
       </div>
 
@@ -37,7 +36,7 @@
         <div class="header-item name-col">상품명</div>
         <div class="interest-rates-header">
           <div 
-            v-for="term in [6, 12, 24, 36]" 
+            v-for="term in availableTerms" 
             :key="term"
             class="header-item rate-col"
             @click="sortByRate(term)"
@@ -58,10 +57,13 @@
           </span>
           
           <div class="interest-rates">
-            <span class="rate-item">{{ getInterestRate(deposit, 6) ? `${getInterestRate(deposit, 6)}%` : '-' }}</span>
-            <span class="rate-item">{{ getInterestRate(deposit, 12) ? `${getInterestRate(deposit, 12)}%` : '-' }}</span>
-            <span class="rate-item">{{ getInterestRate(deposit, 24) ? `${getInterestRate(deposit, 24)}%` : '-' }}</span>
-            <span class="rate-item">{{ getInterestRate(deposit, 36) ? `${getInterestRate(deposit, 36)}%` : '-' }}</span>
+            <span 
+              v-for="term in availableTerms" 
+              :key="term" 
+              class="rate-item"
+            >
+              {{ getInterestRate(deposit, term) ? `${getInterestRate(deposit, term)}%` : '-' }}
+            </span>
           </div>
         </div>
         
@@ -227,18 +229,32 @@ onMounted(async () => {
     const response = await axios.get('http://127.0.0.1:8000/deposit-products/')
     if (response.data && response.data.data) {
       deposits.value = response.data.data.map(product => ({
-        id: product.product_code,
-        name: product.product_name,
-        bankName: product.bank_name,
-        description: product.product_description,
+        id: product.id,
+        name: product.fin_prdt_nm,
+        bankName: product.kor_co_nm,
+        description: product.etc_note,
         joinWay: product.join_way,
         joinDeny: product.join_deny,
-        joinMember: product.join_member,  
-        submitDate: product.dcls_start_day,
+        joinMember: product.join_member,
+        submitDate: product.dcls_strt_day,
+        disclosureMonth: product.dcls_month,
+        finCoNo: product.fin_co_no,
+        productCode: product.fin_prdt_cd,
+        maturityInterest: product.mtrt_int,
+        specialCondition: product.spcl_cnd,
+        maxLimit: product.max_limit,
+        disclosureEndDate: product.dcls_end_day,
+        finCoSubmitDay: product.fin_co_subm_day,
         options: product.options.map(option => ({
-          id: `${product.product_code}-${option.save_term}`,
-          interestRate: option.basic_rate,
-          saveTerm: option.save_term
+          id: `${product.fin_prdt_cd}-${option.save_trm}`,
+          interestRate: option.intr_rate,
+          saveTerm: option.save_trm,
+          disclosureMonth: option.dcls_month,
+          finCoNo: option.fin_co_no,
+          productCode: option.fin_prdt_cd,
+          interestRateType: option.intr_rate_type,
+          interestRateTypeName: option.intr_rate_type_nm,
+          interestRate2: option.intr_rate2
         }))
       }))
       filteredDeposits.value = deposits.value
@@ -257,6 +273,17 @@ const openModal = (product) => {
 const closeModal = () => {
   selectedProduct.value = null
 }
+
+// computed 속성 추가
+const availableTerms = computed(() => {
+  const terms = new Set()
+  deposits.value.forEach(deposit => {
+    deposit.options.forEach(option => {
+      terms.add(option.saveTerm)
+    })
+  })
+  return Array.from(terms).sort((a, b) => a - b)  // 오름차순 정렬
+})
 </script>
 
 <style scoped>

@@ -17,10 +17,11 @@
         <label class="filter-label">예치기간 선택</label>
         <select v-model="selectedTerm" class="filter-select">
           <option value="">전체</option>
-          <option value="6">6개월</option>
-          <option value="12">12개월</option>
-          <option value="24">24개월</option>
-          <option value="36">36개월</option>
+          <option v-for="term in availableTerms" 
+                  :key="term" 
+                  :value="term">
+            {{ term }}개월
+          </option>
         </select>
       </div>
 
@@ -37,7 +38,7 @@
         <div class="header-item name-col">상품명</div>
         <div class="interest-rates-header">
           <div 
-            v-for="term in [6, 12, 24, 36]" 
+            v-for="term in availableTerms" 
             :key="term"
             class="header-item rate-col"
             @click="sortByRate(term)"
@@ -58,10 +59,13 @@
           </span>
           
           <div class="interest-rates">
-            <span class="rate-item">{{ getInterestRate(saving, 6) ? `${getInterestRate(saving, 6)}%` : '-' }}</span>
-            <span class="rate-item">{{ getInterestRate(saving, 12) ? `${getInterestRate(saving, 12)}%` : '-' }}</span>
-            <span class="rate-item">{{ getInterestRate(saving, 24) ? `${getInterestRate(saving, 24)}%` : '-' }}</span>
-            <span class="rate-item">{{ getInterestRate(saving, 36) ? `${getInterestRate(saving, 36)}%` : '-' }}</span>
+            <span 
+              v-for="term in availableTerms" 
+              :key="term" 
+              class="rate-item"
+            >
+              {{ getInterestRate(saving, term) ? `${getInterestRate(saving, term)}%` : '-' }}
+            </span>
           </div>
         </div>
         
@@ -230,18 +234,33 @@ onMounted(async () => {
   try {
     const response = await axios.get('http://127.0.0.1:8000/saving-products/')
     savings.value = response.data.data.map(product => ({
-      id: product.product_code,
-      name: product.product_name,
-      bankName: product.bank_name,
-      description: product.product_description,
+      id: product.id,
+      name: product.fin_prdt_nm,
+      bankName: product.kor_co_nm,
+      description: product.etc_note,
       joinWay: product.join_way,
       joinDeny: product.join_deny,
       joinMember: product.join_member,
-      submitDate: product.dcls_start_day,
+      submitDate: product.dcls_strt_day,
+      dclsMonth: product.dcls_month,
+      finCoNo: product.fin_co_no,
+      finPrdtCd: product.fin_prdt_cd,
+      mtrtInt: product.mtrt_int,
+      spclCnd: product.spcl_cnd,
+      maxLimit: product.max_limit,
+      dclsEndDay: product.dcls_end_day,
+      finCoSubmDay: product.fin_co_subm_day,
       options: product.options.map(option => ({
-        id: `${product.product_code}-${option.save_term}`,
-        interestRate: option.basic_rate,
-        saveTerm: option.save_term
+        id: `${product.fin_prdt_cd}-${option.save_trm}`,
+        interestRate: option.intr_rate,
+        saveTerm: option.save_trm,
+        dclsMonth: option.dcls_month,
+        finPrdtCd: option.fin_prdt_cd,
+        intrRateType: option.intr_rate_type,
+        intrRateTypeNm: option.intr_rate_type_nm,
+        intrRate2: option.intr_rate2,
+        rsrvType: option.rsrv_type,
+        rsrvTypeNm: option.rsrv_type_nm
       }))
     }))
     filteredSavings.value = savings.value
@@ -253,6 +272,17 @@ onMounted(async () => {
 // itemsPerPage가 변경될 때 첫 페이지로 돌아가도록 watch 추가
 watch(itemsPerPage, () => {
   currentPage.value = 1
+})
+
+// computed 속성 추가
+const availableTerms = computed(() => {
+  const terms = new Set()
+  savings.value.forEach(saving => {
+    saving.options.forEach(option => {
+      terms.add(option.saveTerm)
+    })
+  })
+  return Array.from(terms).sort((a, b) => a - b)
 })
 </script>
 
