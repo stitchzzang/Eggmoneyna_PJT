@@ -153,7 +153,7 @@ const editForm = ref({
 })
 
 const isAuthor = computed(() => {
-  return thread.value?.username === auth.username
+  return thread.value?.username === auth.userInfo.username
 })
 
 const startEditing = () => {

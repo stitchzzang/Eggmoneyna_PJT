@@ -85,7 +85,7 @@ def save_deposit_products(request):
     
     try:
         response = requests.get(url, params=params)
-        response.raise_for_status()  # HTTP 오류 발생시 예외 발생
+        response.raise_for_status()
         
         data = response.json()
         result = data.get('result')
@@ -108,12 +108,16 @@ def save_deposit_products(request):
             product, created = DepositProduct.objects.get_or_create(
                 fin_prdt_cd=item['fin_prdt_cd'],
                 defaults={
+                    'dcls_month': item.get('dcls_month', ''),
+                    'fin_co_no': item.get('fin_co_no', ''),
                     'kor_co_nm': item['kor_co_nm'],
                     'fin_prdt_nm': item['fin_prdt_nm'],
-                    'etc_note': item.get('etc_note', ''),
                     'join_way': item.get('join_way', ''),
+                    'mtrt_int': item.get('mtrt_int', ''),
+                    'spcl_cnd': item.get('spcl_cnd', ''),
                     'join_deny': item.get('join_deny', ''),
                     'join_member': item.get('join_member', ''),
+                    'etc_note': item.get('etc_note', ''),
                     'max_limit': item.get('max_limit', None),
                     'dcls_strt_day': item.get('dcls_strt_day', ''),
                     'dcls_end_day': item.get('dcls_end_day', ''),
@@ -122,18 +126,20 @@ def save_deposit_products(request):
             )
             
             if not created:
-                # 기존 상품 정보 업데이트
-                for field in ['kor_co_nm', 'fin_prdt_nm', 'etc_note', 'join_way', 
-                             'join_deny', 'join_member', 'max_limit', 'dcls_strt_day',
+                for field in ['dcls_month', 'fin_co_no', 'kor_co_nm', 'fin_prdt_nm', 
+                             'join_way', 'mtrt_int', 'spcl_cnd', 'join_deny', 
+                             'join_member', 'etc_note', 'max_limit', 'dcls_strt_day',
                              'dcls_end_day', 'fin_co_subm_day']:
                     setattr(product, field, item.get(field, ''))
                 product.save()
-                
-                # 기존 옵션 삭제
-                product.options.all().delete()
             
+            # 기존 옵션 삭제
+            product.options.all().delete()
+            
+            # 해당 상품의 옵션들 필터링
             options = [opt for opt in optionList if opt['fin_prdt_cd'] == product.fin_prdt_cd]
             saved_options = []
+            
             for option in options:
                 try:
                     intr_rate = float(option.get('intr_rate', 0))
@@ -144,47 +150,69 @@ def save_deposit_products(request):
                     save_trm = int(option.get('save_trm', 0))
                 except (TypeError, ValueError):
                     save_trm = 0
-                    
+                
                 saved_option = DepositOption.objects.create(
                     product=product,
+                    dcls_month=option.get('dcls_month', ''),
+                    fin_co_no=option.get('fin_co_no', ''),
                     fin_prdt_cd=option['fin_prdt_cd'],
                     intr_rate_type=option.get('intr_rate_type', ''),
-                    intr_rate=intr_rate,
+                    intr_rate_type_nm=option.get('intr_rate_type_nm', ''),
                     save_trm=save_trm,
-                    intr_rate2=float(option.get('intr_rate2', 0)),
-                    rsrv_type=option.get('rsrv_type', '')
+                    intr_rate=intr_rate,
+                    intr_rate2=float(option.get('intr_rate2', 0))
                 )
                 
                 saved_options.append({
+                    'id': saved_option.id,
+                    'dcls_month': saved_option.dcls_month,
+                    'fin_co_no': saved_option.fin_co_no,
                     'fin_prdt_cd': saved_option.fin_prdt_cd,
                     'intr_rate_type': saved_option.intr_rate_type,
-                    'intr_rate': saved_option.intr_rate,
+                    'intr_rate_type_nm': saved_option.intr_rate_type_nm,
                     'save_trm': saved_option.save_trm,
-                    'intr_rate2': saved_option.intr_rate2,
-                    'rsrv_type': saved_option.rsrv_type
+                    'intr_rate': saved_option.intr_rate,
+                    'intr_rate2': saved_option.intr_rate2
                 })
             
             saved_products.append({
+                'id': product.id,
+                'dcls_month': product.dcls_month,
+                'fin_co_no': product.fin_co_no,
                 'fin_prdt_cd': product.fin_prdt_cd,
                 'kor_co_nm': product.kor_co_nm,
                 'fin_prdt_nm': product.fin_prdt_nm,
+                'join_way': product.join_way,
+                'mtrt_int': product.mtrt_int,
+                'spcl_cnd': product.spcl_cnd,
+                'join_deny': product.join_deny,
+                'join_member': product.join_member,
+                'etc_note': product.etc_note,
+                'max_limit': product.max_limit,
+                'dcls_strt_day': product.dcls_strt_day,
+                'dcls_end_day': product.dcls_end_day,
+                'fin_co_subm_day': product.fin_co_subm_day,
                 'options': saved_options
             })
         
         return Response({
+            'status': 'success',
             'message': '정기예금 데이터 저장완료',
             'data': {
                 'count': len(saved_products),
                 'products': saved_products
             }
         })
+        
     except requests.exceptions.RequestException as e:
         return Response({
-            'error': f'API 요청 중 오류가 발생했습니다: {str(e)}'
+            'status': 'error',
+            'message': f'API 요청 중 오류가 발생했습니다: {str(e)}'
         }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
     except Exception as e:
         return Response({
-            'error': f'데이터 처리 중 오류가 발생했습니다: {str(e)}'
+            'status': 'error',
+            'message': f'데이터 처리 중 오류가 발생했습니다: {str(e)}'
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -213,12 +241,16 @@ def save_saving_products(request):
         product, created = SavingProduct.objects.get_or_create(
             fin_prdt_cd=item['fin_prdt_cd'],
             defaults={
+                'dcls_month': item.get('dcls_month', ''),
+                'fin_co_no': item.get('fin_co_no', ''),
                 'kor_co_nm': item['kor_co_nm'],
                 'fin_prdt_nm': item['fin_prdt_nm'],
-                'etc_note': item.get('etc_note', ''),
                 'join_way': item.get('join_way', ''),
+                'mtrt_int': item.get('mtrt_int', ''),
+                'spcl_cnd': item.get('spcl_cnd', ''),
                 'join_deny': item.get('join_deny', ''),
                 'join_member': item.get('join_member', ''),
+                'etc_note': item.get('etc_note', ''),
                 'max_limit': item.get('max_limit', None),
                 'dcls_strt_day': item.get('dcls_strt_day', ''),
                 'dcls_end_day': item.get('dcls_end_day', ''),
@@ -227,9 +259,10 @@ def save_saving_products(request):
         )
         
         if not created:
-            # 기존 상품 정보 업데이트
-            for field in ['kor_co_nm', 'fin_prdt_nm', 'etc_note', 'join_way', 
-                         'join_deny', 'join_member', 'max_limit', 'dcls_strt_day',
+            # 모든 필드 업데이트
+            for field in ['dcls_month', 'fin_co_no', 'kor_co_nm', 'fin_prdt_nm', 
+                         'join_way', 'mtrt_int', 'spcl_cnd', 'join_deny', 
+                         'join_member', 'etc_note', 'max_limit', 'dcls_strt_day',
                          'dcls_end_day', 'fin_co_subm_day']:
                 setattr(product, field, item.get(field, ''))
             product.save()
@@ -252,23 +285,44 @@ def save_saving_products(request):
                 
             saved_option = SavingOption.objects.create(
                 product=product,
+                dcls_month=option.get('dcls_month', ''),
                 fin_prdt_cd=option['fin_prdt_cd'],
                 intr_rate_type=option.get('intr_rate_type', ''),
                 intr_rate=intr_rate,
-                save_trm=save_trm
+                save_trm=save_trm,
+                intr_rate_type_nm=option.get('intr_rate_type_nm', ''),
+                intr_rate2=float(option.get('intr_rate2', 0)),
+                rsrv_type=option.get('rsrv_type', ''),
+                rsrv_type_nm=option.get('rsrv_type_nm', '')
             )
             
             saved_options.append({
                 'fin_prdt_cd': saved_option.fin_prdt_cd,
                 'intr_rate_type': saved_option.intr_rate_type,
+                'intr_rate_type_nm': saved_option.intr_rate_type_nm,
+                'rsrv_type': saved_option.rsrv_type,
+                'rsrv_type_nm': saved_option.rsrv_type_nm,
+                'save_trm': saved_option.save_trm,
                 'intr_rate': saved_option.intr_rate,
-                'save_trm': saved_option.save_trm
+                'intr_rate2': saved_option.intr_rate2,
             })
         
         saved_products.append({
-            'fin_prdt_cd': product.fin_prdt_cd,
+            'id': product.id,
+            'dcls_month': product.dcls_month,
+            'fin_co_no': product.fin_co_no,
             'kor_co_nm': product.kor_co_nm,
             'fin_prdt_nm': product.fin_prdt_nm,
+            'join_way': product.join_way,
+            'mtrt_int': product.mtrt_int,
+            'spcl_cnd': product.spcl_cnd,
+            'join_deny': product.join_deny,
+            'join_member': product.join_member,
+            'etc_note': product.etc_note,
+            'max_limit': product.max_limit,
+            'dcls_strt_day': product.dcls_strt_day,
+            'dcls_end_day': product.dcls_end_day,
+            'fin_co_subm_day': product.fin_co_subm_day,
             'options': saved_options
         })
     
@@ -287,26 +341,33 @@ def get_deposit_products(request):
     try:
         products = DepositProduct.objects.all()
         
-        # 각 상품의 상세 정보를 포함한 데이터 구성
         detailed_data = []
         for product in products:
             product_data = {
-                'product_code': product.fin_prdt_cd,
-                'bank_name': product.kor_co_nm,
-                'product_name': product.fin_prdt_nm,
-                'product_description': product.etc_note,
+                'dcls_month': product.dcls_month,
+                'fin_co_no': product.fin_co_no,
+                'fin_prdt_cd': product.fin_prdt_cd,
+                'kor_co_nm': product.kor_co_nm,
+                'fin_prdt_nm': product.fin_prdt_nm,
                 'join_way': product.join_way,
+                'mtrt_int': product.mtrt_int,
+                'spcl_cnd': product.spcl_cnd,
                 'join_deny': product.join_deny,
                 'join_member': product.join_member,
+                'etc_note': product.etc_note,
                 'max_limit': product.max_limit,
-                'dcls_start_day': product.dcls_strt_day,
+                'dcls_strt_day': product.dcls_strt_day,
                 'dcls_end_day': product.dcls_end_day,
+                'fin_co_subm_day': product.fin_co_subm_day,
                 'options': [{
-                    'save_term': option.save_trm,
-                    'interest_rate_type': option.intr_rate_type,
-                    'basic_rate': option.intr_rate,
-                    'prime_rate': option.intr_rate2,
-                    'reserve_type': option.rsrv_type
+                    'dcls_month': option.dcls_month,
+                    'fin_co_no': option.fin_co_no,
+                    'fin_prdt_cd': option.fin_prdt_cd,
+                    'intr_rate_type': option.intr_rate_type,
+                    'intr_rate_type_nm': option.intr_rate_type_nm,
+                    'save_trm': option.save_trm,
+                    'intr_rate': option.intr_rate,
+                    'intr_rate2': option.intr_rate2
                 } for option in product.options.all()]
             }
             detailed_data.append(product_data)
@@ -330,25 +391,34 @@ def get_saving_products(request):
     try:
         products = SavingProduct.objects.all()
         
-        # 각 상품의 상세 정보를 포함한 데이터 구성
         detailed_data = []
         for product in products:
             product_data = {
-                'product_code': product.fin_prdt_cd,
-                'bank_name': product.kor_co_nm,
-                'product_name': product.fin_prdt_nm,
-                'product_description': product.etc_note,
+                'dcls_month': product.dcls_month,
+                'fin_co_no': product.fin_co_no,
+                'fin_prdt_cd': product.fin_prdt_cd,
+                'kor_co_nm': product.kor_co_nm,
+                'fin_prdt_nm': product.fin_prdt_nm,
                 'join_way': product.join_way,
+                'mtrt_int': product.mtrt_int,
+                'spcl_cnd': product.spcl_cnd,
                 'join_deny': product.join_deny,
                 'join_member': product.join_member,
+                'etc_note': product.etc_note,
                 'max_limit': product.max_limit,
-                'dcls_start_day': product.dcls_strt_day,
+                'dcls_strt_day': product.dcls_strt_day,
                 'dcls_end_day': product.dcls_end_day,
                 'fin_co_subm_day': product.fin_co_subm_day,
                 'options': [{
-                    'save_term': option.save_trm,
-                    'interest_rate_type': option.intr_rate_type,
-                    'basic_rate': option.intr_rate,
+                    'dcls_month': option.dcls_month,
+                    'fin_prdt_cd': option.fin_prdt_cd,
+                    'intr_rate_type': option.intr_rate_type,
+                    'intr_rate_type_nm': option.intr_rate_type_nm,
+                    'save_trm': option.save_trm,
+                    'intr_rate': option.intr_rate,
+                    'intr_rate2': option.intr_rate2,
+                    'rsrv_type': option.rsrv_type,
+                    'rsrv_type_nm': option.rsrv_type_nm
                 } for option in product.options.all()]
             }
             detailed_data.append(product_data)

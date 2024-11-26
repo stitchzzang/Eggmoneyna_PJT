@@ -3,12 +3,13 @@ import { ref, computed } from 'vue'
 import axios from 'axios'
 
 export const useProfileStore = defineStore('profile', () => {
-  // localStorage에서 저장된 테스트 결과 불러오기
+  // localStorage에서 저장된 테스트 결과와 habitScore 불러오기
   const savedResult = localStorage.getItem('testResult')
+  const savedHabitScore = localStorage.getItem('habitScore')
+  const habitScore = ref(savedHabitScore ? parseInt(savedHabitScore) : 0)
   const testResult = ref(savedResult ? JSON.parse(savedResult) : null)
   const currentView = ref('edit')
   const userInfo = ref(null)  // 사용자 정보 저장용
-  const habitScore = ref(0)
   const totalScore = ref(0)
   
   const setTotalScore = (score) => {
@@ -19,13 +20,32 @@ export const useProfileStore = defineStore('profile', () => {
     testResult.value = result
     localStorage.setItem('testResult', JSON.stringify(result))
     
-    // 금융성향 점수 계산 및 저장
-    const score = await saveFinancialScore()
-    if (score) {
-      // 추천 상품 정보 추가
-      const recommendations = getRecommendedProducts(score)
-      testResult.value = { ...testResult.value, ...recommendations }
-      localStorage.setItem('testResult', JSON.stringify(testResult.value))
+    // 사용자 정보를 먼저 가져옵니다
+    try {
+      await fetchUserInfo()
+      const score = calculateFinancialScore()
+      if (score) {
+        const token = localStorage.getItem('token')
+        await axios.put('http://127.0.0.1:8000/accounts/update/', {
+          total_score: score.finalScore,
+          age_score: score.ageScore,
+          income_score: score.incomeScore,
+          consumption_score: score.habitScore,
+          test_date: new Date().toISOString()
+        }, {
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        })
+
+        // 추천 상품 정보 추가
+        const recommendations = getRecommendedProducts(score.finalScore)
+        testResult.value = { ...testResult.value, ...recommendations }
+        localStorage.setItem('testResult', JSON.stringify(testResult.value))
+      }
+    } catch (error) {
+      console.error('점수 업데이트 실패:', error)
+      throw error
     }
   }
 
@@ -65,8 +85,8 @@ export const useProfileStore = defineStore('profile', () => {
 
   // 새로운 코드 추가
   const calculateFinancialScore = () => {
-    if (!userInfo.value || !testResult.value) {
-      console.log('userInfo 또는 testResult가 없습니다:', { userInfo: userInfo.value, testResult: testResult.value })
+    if (!userInfo.value) {
+      console.log('userInfo가 없습니다:', userInfo.value)
       return null
     }
 
@@ -87,7 +107,9 @@ export const useProfileStore = defineStore('profile', () => {
     }
 
     // habitScore 참조 방식 수정
+    // console.log('원래습관점수: ', habitScore.value)
     const habitScoreValue = Math.round((habitScore.value / 24) * 50)
+    // console.log('최종습관점수: ', habitScoreValue)
 
     // 최종 점수 계산
     const finalScore = Math.round(
@@ -95,14 +117,14 @@ export const useProfileStore = defineStore('profile', () => {
       (incomeScore * 0.3) + 
       (habitScoreValue)  // 수정된 변수 사용
     )
-
-
+    
     return {
       ageScore,
       incomeScore,
       habitScore: habitScoreValue,  // 수정된 변수 사용
       finalScore
     }
+
   }
 
 
@@ -121,42 +143,77 @@ export const useProfileStore = defineStore('profile', () => {
 
   // 금융 상품 추천 함수 추가
   const getRecommendedProducts = (score) => {
-    if (score >= 80) {
+    if (score >= 90) {
       return {
-        type: '공격투자형',
-        image: '/images/aggressive.png',
-        description: '위험을 감수하고 높은 수익을 추구하는 투자자 유형입니다.',
+        type: '안정적 장기 투자 선호형',
+        image: '/images/conservative.png',
+        description: '안정성과 장기 투자를 선호하는 유형입니다.',
         recommendations: [
-          { name: '주식형 펀드', description: '높은 위험, 높은 수익을 추구하는 상품' },
-          { name: '해외주식ETF', description: '글로벌 시장 투자로 높은 수익 기대' }
+          { 
+            name: '3~5년 장기 예금', 
+            description: '장기적인 자산 증식을 원하는 사람에게 적합한 예금 상품입니다. 3년 또는 5년 동안 자금을 예치하며, 안정적인 이자 수익을 얻을 수 있습니다. 예금자 보호가 보장되어 원금 손실 우려가 없고, 이자는 고정금리로 제공되어 예측 가능한 수익을 제공합니다.'
+          },
+          { 
+            name: '우대 금리 적금', 
+            description: '일정 기간 동안 금액을 매달 정해진 금액만큼 저축하는 적금 상품입니다. 특정 조건을 충족할 경우 우대 금리를 제공하여 기본 이자율보다 높은 수익을 기대할 수 있습니다. 예금자 보호가 보장되며, 정기적인 금액 적립을 통해 안정적인 자산 증식이 가능합니다.'
+          }
         ]
       }
-    } else if (score >= 60) {
+    } else if (score >= 70) {
       return {
-        type: '적극투자형',
+        type: '중기적 계획적 저축형',
         image: '/images/moderate.png',
-        description: '적절한 위험을 감수하고 안정적인 수익을 추구하는 유형입니다.',
+        description: '중기적으로 계획적인 저축을 선호하는 유형입니다.',
         recommendations: [
-          { name: '혼합형 펀드', description: '중위험 중수익 추구' },
-          { name: '채권형 ETF', description: '안정적인 수익 추구' }
+          { 
+            name: '6개월~12개월 정기 예금', 
+            description: '중기적으로 자금을 예치하여 이자를 얻고 싶은 사람에게 적합한 예금 상품입니다. 예치 기간이 짧아 비교적 빠른 시간 내에 만기를 맞추어 이자를 수령할 수 있습니다. 예금자 보호가 보장되며, 이자는 고정금리로 지급되어 예측 가능한 수익을 제공합니다.'
+          },
+          { 
+            name: '정기 적금', 
+            description: '매달 일정 금액을 저축하여 만기 시 원금과 이자를 받는 적금 상품입니다. 정해진 기간 동안 자금을 적립하여 일정 목표를 달성하고자 하는 사람에게 적합합니다. 중기적인 저축 목표를 가진 사람들에게 안정적인 수익을 제공합니다.'
+          }
+        ]
+      }
+    } else if (score >= 50) {
+      return {
+        type: '단기 자금 유연 운용형',
+        image: '/images/flexible.png',
+        description: '단기적으로 자금 활용을 선호하는 유형입니다.',
+        recommendations: [
+          { 
+            name: '1~6개월 정기 예금', 
+            description: '짧은 기간 동안 자금을 예치하고, 일정 이자 수익을 얻을 수 있는 예금 상품입니다. 급하게 자금을 운용하고자 하는 경우 적합하며, 예금 기간이 짧고 이자 수익을 빠르게 얻을 수 있습니다. 예금자 보호가 보장됩니다.'
+          },
+          { 
+            name: '자유 적금', 
+            description: '매달 일정 금액을 자유롭게 납입할 수 있는 적금 상품입니다. 정해진 금액을 고정적으로 납입하지 않고, 여유 자금에 맞게 자유롭게 적립할 수 있어 유연한 자금 운용이 가능합니다. 자금을 유연하게 운용하고자 하는 사람에게 적합합니다.'
+          }
         ]
       }
     } else {
       return {
-        type: '안정추구형',
-        image: '/images/conservative.png',
-        description: '안전한 투자를 선호하는 보수적인 유형입니다.',
+        type: '즉시 유동성 필요형',
+        image: '/images/liquid.png',
+        description: '즉시 자금 유동성이 필요하고 자산 운용이 자유로운 성향입니다.',
         recommendations: [
-          { name: '예금/적금', description: '원금 보장형 상품' },
-          { name: '국채', description: '안정적인 수익 추구' }
+          { 
+            name: '입출금 자유 예금', 
+            description: '자금을 언제든지 입출금할 수 있는 예금 상품입니다. 예치한 자금을 필요할 때 즉시 출금할 수 있어 자금 유동성이 중요한 사람에게 적합합니다. 이자율은 고정적이지 않고 낮지만, 유동성이 중요할 경우 유용한 상품입니다.'
+          },
+          { 
+            name: '입출금 자유 적금', 
+            description: '적금에 입출금 기능이 결합된 상품으로, 일정 금액을 매달 납입하면서도 언제든지 자금을 입출금할 수 있습니다. 급하게 자금을 사용할 필요가 있을 때 유용하며, 유동성을 중시하는 사람에게 적합한 상품입니다.'
+          }
         ]
       }
     }
   }
 
-  // setHabitScore 함수 추가
+  // setHabitScore 함수 수정
   const setHabitScore = (score) => {
     habitScore.value = score
+    localStorage.setItem('habitScore', score.toString())
   }
 
   return {
