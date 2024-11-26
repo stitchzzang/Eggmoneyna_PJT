@@ -234,19 +234,21 @@ const calculateResult = () => {
   const resultData = getResultType(totalScore.value)
   result.value = resultData
 
-  // store에 테스트 결과와 함께 habitScore도 저장
+  // store의 setHabitScore를 호출하여 점수 저장
+  store.setHabitScore(totalScore.value)
+  
+  // store에 테스트 결과 저장
   store.setTestResult({
     type: resultData.type,
     image: resultData.image,
     description: resultData.description,
     recommendations: resultData.recommendations,
   })
-  store.habitScore = totalScore
   
-  // 4초 후 추천 페이지로 이동
+  // 3초 후 추천 페이지로 이동
   setTimeout(() => {
     store.currentView = 'recommend'
-  }, 4000)
+  }, 3000)
 }
 
 const getResultType = (score) => {

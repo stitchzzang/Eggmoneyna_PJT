@@ -67,7 +67,8 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
     password = serializers.CharField(write_only=True, required=False)
     
     age = serializers.SerializerMethodField()
-    financial_score = serializers.IntegerField(read_only=True)
+    total_score = serializers.IntegerField(read_only=True)
+    test_date = serializers.DateTimeField(read_only=True)
     age_score = serializers.IntegerField(read_only=True)
     income_score = serializers.IntegerField(read_only=True)
     consumption_score = serializers.IntegerField(read_only=True)
@@ -87,7 +88,8 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
             'privacy_agreement',
             'password',
             'age',
-            'financial_score',
+            'total_score',
+            'test_date',
             'age_score',
             'income_score',
             'consumption_score'
@@ -132,5 +134,5 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
             'age_score': age_score,
             'income_score': income_score,
             'consumption_score': consumption_final_score,
-            'financial_score': final_score
+            'total_score': final_score
         }

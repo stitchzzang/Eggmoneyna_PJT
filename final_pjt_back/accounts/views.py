@@ -211,32 +211,81 @@ def update_user_info(request):
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def calculate_financial_score(request):
+#     user = request.user
+#     consumption_score = request.data.get('totalScore')
+    
+#     if not consumption_score:
+#         return Response({'error': '소비습관 점수가 필요합니다.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+#     serializer = CustomUserDetailsSerializer(user)
+#     scores = serializer.calculate_scores(consumption_score)
+    
+#     # 계산된 점수들을 DB에 저장
+#     user.financial_score = scores['financial_score']
+#     user.age_score = scores['age_score']
+#     user.income_score = scores['income_score']
+#     user.consumption_score = scores['consumption_score']
+#     user.test_date = timezone.now()
+#     user.save()
+    
+#     return Response(scores)
+
+
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def get_financial_score(request):
+#     serializer = CustomUserDetailsSerializer(request.user)
+#     return Response(serializer.data)
+
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def calculate_financial_score(request):
-    user = request.user
-    consumption_score = request.data.get('totalScore')
+def update_financial_test(request):
+    """
+    금융성향 테스트 결과를 업데이트하는 뷰
     
-    if not consumption_score:
-        return Response({'error': '소비습관 점수가 필요합니다.'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    serializer = CustomUserDetailsSerializer(user)
-    scores = serializer.calculate_scores(consumption_score)
-    
-    # 계산된 점수들을 DB에 저장
-    user.financial_score = scores['financial_score']
-    user.age_score = scores['age_score']
-    user.income_score = scores['income_score']
-    user.consumption_score = scores['consumption_score']
-    user.test_date = timezone.now()
-    user.save()
-    
-    return Response(scores)
-
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def get_financial_score(request):
-    serializer = CustomUserDetailsSerializer(request.user)
-    return Response(serializer.data)
+    요청 데이터 형식:
+    {
+        "consumption_score": 24  # 소비습관 테스트 점수 (0-24점)
+    }
+    """
+    try:
+        # 현재 로그인한 사용자 가져오기
+        user = request.user
+        
+        # 요청에서 소비습관 점수 가져오기
+        consumption_raw_score = request.data.get('consumption_score')
+        if consumption_raw_score is None:
+            return Response(
+                {'error': '소비습관 점수가 제공되지 않았습니다.'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        # UserDetailsSerializer 인스턴스 생성
+        serializer = CustomUserDetailsSerializer(instance=user)
+        
+        # 점수 계산
+        scores = serializer.calculate_scores(consumption_raw_score)
+        
+        # 사용자 정보 업데이트
+        user.update_test_results(
+            financial_score=scores['financial_score'],
+            age_score=scores['age_score'],
+            income_score=scores['income_score'],
+            consumption_score=scores['consumption_score']
+        )
+        
+        return Response({
+            'message': '금융성향 테스트 결과가 성공적으로 업데이트되었습니다.',
+            'scores': scores
+        }, status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        return Response(
+            {'error': f'테스트 결과 업데이트 중 오류가 발생했습니다: {str(e)}'}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 

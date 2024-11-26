@@ -57,11 +57,20 @@ class User(AbstractUser):
     )
     
     # 금융성향 테스트 결과 필드 추가
-    financial_score = models.IntegerField(null=True, blank=True, verbose_name='금융성향 점수')
+    total_score = models.IntegerField(null=True, blank=True, verbose_name='금융성향 점수')
     age_score = models.IntegerField(null=True, blank=True, verbose_name='연령대 점수')
     income_score = models.IntegerField(null=True, blank=True, verbose_name='소득수준 점수')
     consumption_score = models.IntegerField(null=True, blank=True, verbose_name='소비습관 점수')
     test_date = models.DateTimeField(null=True, blank=True, verbose_name='테스트 진행일')
+    
+    def update_test_results(self, financial_score, age_score, income_score, consumption_score):
+        """테스트 결과를 업데이트하는 메서드"""
+        self.age_score = age_score
+        self.income_score = income_score
+        self.consumption_score = consumption_score
+        self.total_score = financial_score + age_score + income_score + consumption_score
+        self.test_date = timezone.now()
+        self.save()
     
     # 필수 필드 설정
     REQUIRED_FIELDS = ['email', 'name', 'birth_date', 'gender']
