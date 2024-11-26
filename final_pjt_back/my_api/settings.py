@@ -215,3 +215,4 @@ load_dotenv(env_path)
 # 환경변수에서 API 키 가져오기
 KOREAEXIM_API_KEY = os.getenv('KOREAEXIM_API_KEY')
 PROD_API_KEY = os.environ.get('PROD_API_KEY')
+ALADIN_API_KEY = os.environ.get('ALADIN_API_KEY')

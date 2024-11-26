@@ -72,6 +72,75 @@ def exchange(request):
         }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
 
+@api_view(['GET'])
+def get_economic_books(request):
+    try:
+        # 페이지 번호와 페이지당 도서 수를 요청에서 가져옴
+        page = request.GET.get('page', 1)
+        items_per_page = request.GET.get('items_per_page', 50)  # 기본값 50개로 증가
+        
+        try:
+            page = int(page)
+            items_per_page = min(int(items_per_page), 50)  # 최대 50개로 제한
+        except ValueError:
+            page = 1
+            items_per_page = 50
+
+        BASE_URL = "http://www.aladin.co.kr/ttb/api/ItemSearch.aspx"
+        params = {
+            'TTBKey': settings.ALADIN_API_KEY,
+            'QueryType': 'Keyword',
+            'Query': '경제',
+            'MaxResults': items_per_page,
+            'start': page,  # 페이지 번호 적용
+            'SearchTarget': 'Book',
+            'Category': '170',
+            'output': 'js',
+            'Version': '20131101',
+            'Sort': 'Salespoint'
+        }
+
+        response = requests.get(BASE_URL, params=params, timeout=10)
+        response.raise_for_status()
+        books_data = response.json()
+
+        if not books_data.get('item'):
+            return Response({
+                'status': 'error',
+                'message': '검색 결과가 없습니다.'
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        books = [{
+            'title': item['title'],
+            'author': item['author'],
+            'publisher': item['publisher'],
+            'pubDate': item['pubDate'],
+            'cover': item['cover'],
+            'description': item.get('description', '설명 없음'),
+            'priceStandard': item['priceStandard'],
+            'link': item['link'],
+            'isbn13': item.get('isbn13', ''),
+            'categoryName': item.get('categoryName', '')
+        } for item in books_data['item']]
+
+        return Response({
+            'status': 'success',
+            'message': '경제 도서 정보를 성공적으로 가져왔습니다.',
+            'data': books
+        })
+
+    except requests.exceptions.RequestException as e:
+        return Response({
+            'status': 'error',
+            'message': f'알라딘 API 요청 중 오류가 발생했습니다: {str(e)}'
+        }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+    except Exception as e:
+        return Response({
+            'status': 'error',
+            'message': f'도서 정보 처리 중 오류가 발생했습니다: {str(e)}'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 # 정기예금 상품 정보 (저장/갱신)
 # 은행명, 상품명, 가입 방법, 금리 옵션 정보 
 @api_view(['GET'])
