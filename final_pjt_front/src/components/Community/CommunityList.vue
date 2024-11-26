@@ -14,7 +14,7 @@
 
       <!-- 게시글 목록 -->
       <CommunityItem
-        v-for="(thread, index) in sortedThreads"
+        v-for="(thread, index) in threads"
         :key="thread.id"
         :thread="thread"
         :index="index + 1"
@@ -24,31 +24,18 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import CommunityItem from './CommunityItem.vue'
 
-// props만 정의
 const props = defineProps({
   threads: {
     type: Array,
-    required: true
+    required: true,
+    default: () => []
   }
 })
 
-// 정렬된 threads computed 속성 추가
-const sortedThreads = computed(() => {
-  if (!props.threads) return []
-  
-  return [...props.threads].sort((a, b) => {
-    return new Date(b.created_at) - new Date(a.created_at)
-  })
-})
-
-defineEmits(['select-post'])
-
-const formatDate = (date) => {
-  return new Date(date).toLocaleDateString('ko-KR')
-}
+const emit = defineEmits(['select-post'])
 </script>
 
 <style scoped>

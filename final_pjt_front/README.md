@@ -1,5 +1,3 @@
-# 1st_PJT
-
 ## Front : Vue 실행하기
 1. front 파일로 들어가기
 ```bash

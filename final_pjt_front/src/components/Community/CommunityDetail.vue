@@ -14,21 +14,37 @@
             <span>수정일: {{ formatDate(thread.updated_at) }}</span>
           </div>
         </div>
-
+        
         <div class="post-content">
           {{ thread.content }}
         </div>
-
-        <div class="like-section">
-          <button @click="toggleLike" class="like-button" :class="{ 'liked': thread.is_liked }">
-            {{ thread.is_liked ? '❤️' : '🤍' }}
-          </button>
-          <span class="like-text">좋아요  {{ thread.like_count }}</span>
-        </div>
-
-        <div v-if="isAuthor" class="author-buttons">
-          <button @click="startEditing" class="btn-edit">수정</button>
-          <button @click="deleteThread" class="btn-delete">삭제</button>
+        
+        <div class="action-row">
+          <div class="like-section">
+            <div class="like-container">
+              <input type="checkbox" id="checkbox" v-model="thread.is_liked" @change="toggleLike" />
+              <label for="checkbox" class="heart-label">
+                <svg id="heart-svg" viewBox="467 392 58 57" xmlns="http://www.w3.org/2000/svg">
+                  <g id="Group" fill="none" fill-rule="evenodd" transform="translate(467 392)">
+                    <path d="M29.144 20.773c-.063-.13-4.227-8.67-11.44-2.59C7.63 28.795 28.94 43.256 29.143 43.394c.204-.138 21.513-14.6 11.44-25.213-7.214-6.08-11.377 2.46-11.44 2.59z" 
+                          id="heart" fill="#AAB8C2"/>
+                    <circle id="main-circ" fill="#E2264D" opacity="0" cx="29.5" cy="29.5" r="1.5"/>
+                    <g id="grp7" opacity="0" transform="translate(7 6)">
+                      <circle id="oval1" fill="#9CD8C3" cx="2" cy="6" r="2"/>
+                      <circle id="oval2" fill="#8CE8C3" cx="5" cy="2" r="2"/>
+                    </g>
+                    <!-- grp2~grp6도 동일한 패턴으로 추가 -->
+                  </g>
+                </svg>
+              </label>
+              <span class="like-text">{{ thread.like_count }}</span>
+            </div>
+          </div>
+          
+          <div v-if="isAuthor" class="author-buttons">
+            <button @click="startEditing" class="btn-edit">수정</button>
+            <button @click="deleteThread" class="btn-delete">삭제</button>
+          </div>
         </div>
       </div>
 
@@ -153,7 +169,7 @@ const editForm = ref({
 })
 
 const isAuthor = computed(() => {
-  return thread.value?.username === auth.username
+  return thread.value?.username === auth.userInfo.username
 })
 
 const startEditing = () => {
@@ -323,7 +339,7 @@ const toggleLike = async () => {
       like_count: response.data.like_count
     }
   } catch (err) {
-    console.log('좋아요 처리 중 오류가 발생했습니다:', err)
+    console.log('좋아요 처리 중 오가 발생했습니다:', err)
   }
 }
 </script>
@@ -516,8 +532,6 @@ const toggleLike = async () => {
 .author-buttons {
   display: flex;
   gap: 10px;
-  justify-content: flex-end;
-  margin-top: 20px;
 }
 
 .author-tag {
@@ -527,23 +541,218 @@ const toggleLike = async () => {
 }
 
 .like-section {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0px;
-  margin: 20px 0;
+  margin: 0;
 }
 
-.like-button {
-  background: none;
-  border: none;
-  padding: 8px;
-  font-size: 1.2em;
-  cursor: pointer;
+.like-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #f8f9fab6;
+  border-radius: 10px;
+  padding: 8px 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.like-text {
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.heart-label {
   display: flex;
   align-items: center;
-  border-radius: 50%;
-  transition: all 0.3s ease;
+}
+
+#checkbox {
+  display: none;
+}
+
+svg {
+  cursor: pointer;
+  overflow: visible;
+  width: 45px;
+  height: 45px;
+  vertical-align: middle;
+}
+
+svg #heart {
+  transform-origin: center;
+  animation: animateHeartOut .3s linear forwards;
+}
+
+svg #main-circ {
+  transform-origin: 29.5px 29.5px;
+}
+
+#checkbox:checked + label svg #heart {
+  transform: scale(.2);
+  fill: #E2264D;
+  animation: animateHeart .3s linear forwards .25s;
+}
+
+#checkbox:checked + label svg #main-circ {
+  transition: all 2s;
+  animation: animateCircle .3s linear forwards;
+  opacity: 1;
+}
+
+/* 애니메이션 키프레임 추가 */
+@keyframes animateCircle {
+  40% {
+    transform: scale(10);
+    opacity: 1;
+    fill: #DD4688;
+  }
+  55% {
+    transform: scale(11);
+    opacity: 1;
+    fill: #D46ABF;
+  }
+  65% {
+    transform: scale(12);
+    opacity: 1;
+    fill: #CC8EF5;
+  }
+  75% {
+    transform: scale(13);
+    opacity: 1;
+    fill: transparent;
+    stroke: #CC8EF5;
+    stroke-width: .5;
+  }
+  85% {
+    transform: scale(17);
+    opacity: 1;
+    fill: transparent;
+    stroke: #CC8EF5;
+    stroke-width: .2;
+  }
+  95% {
+    transform: scale(18);
+    opacity: 1;
+    fill: transparent;
+    stroke: #CC8EF5;
+    stroke-width: .1;
+  }
+  100% {
+    transform: scale(19);
+    opacity: 1;
+    fill: transparent;
+    stroke: #CC8EF5;
+    stroke-width: 0;
+  }
+}
+
+@keyframes animateHeart {
+  0% {
+    transform: scale(.2);
+  }
+  40% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes animateHeartOut {
+  0% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.edit-form {
+  width: 100%;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+}
+
+.edit-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1.2em;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.edit-textarea {
+  width: 100%;
+  min-height: 300px;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  resize: vertical;
+  font-size: 1em;
+  line-height: 1.6;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* 저장, 취소 버튼 완전히 동일한 스타일 */
+.button-group .btn-edit,
+.button-group .btn-close {
+  width: 100px !important;
+  height: 40px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  border-radius: 5px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  border: none !important;
+  color: white !important;
+}
+
+/* 저장 버튼 색상 */
+.button-group .btn-edit {
+  background: linear-gradient(45deg, #86da8a, #047404) !important;
+  border: 2px solid #128004 !important;
+}
+
+/* 취소 버튼 색상 - 회색 계열 */
+.button-group .btn-close {
+  background: linear-gradient(45deg, #8f9296, #495057) !important;
+  border: px solid #495057 !important;
+}
+
+/* 호버 효과 */
+.button-group .btn-edit:hover,
+.button-group .btn-close:hover {
+  transform: translateY(-2px) !important;
+  opacity: 0.9 !important;
+}
+
+.like-text {
+  font-size: 16px;
+  color: #495057;
+  font-weight: 500;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.action-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
 }
 
 </style>
