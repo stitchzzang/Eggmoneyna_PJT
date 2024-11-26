@@ -274,15 +274,9 @@ watch(itemsPerPage, () => {
   currentPage.value = 1
 })
 
-// computed 속성 추가
+// computed 속성 수정
 const availableTerms = computed(() => {
-  const terms = new Set()
-  savings.value.forEach(saving => {
-    saving.options.forEach(option => {
-      terms.add(option.saveTerm)
-    })
-  })
-  return Array.from(terms).sort((a, b) => a - b)
+  return [6, 12, 24, 36]  // 고정된 기간 값
 })
 </script>
 

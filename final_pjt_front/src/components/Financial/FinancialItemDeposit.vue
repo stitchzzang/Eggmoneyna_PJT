@@ -247,8 +247,8 @@ onMounted(async () => {
         finCoSubmitDay: product.fin_co_subm_day,
         options: product.options.map(option => ({
           id: `${product.fin_prdt_cd}-${option.save_trm}`,
-          interestRate: option.intr_rate,
-          saveTerm: option.save_trm,
+          interestRate: parseFloat(option.intr_rate),  // 문자열을 숫자로 변환
+          saveTerm: parseInt(option.save_trm),         // 문자열을 숫자로 변환
           disclosureMonth: option.dcls_month,
           finCoNo: option.fin_co_no,
           productCode: option.fin_prdt_cd,
@@ -276,13 +276,7 @@ const closeModal = () => {
 
 // computed 속성 추가
 const availableTerms = computed(() => {
-  const terms = new Set()
-  deposits.value.forEach(deposit => {
-    deposit.options.forEach(option => {
-      terms.add(option.saveTerm)
-    })
-  })
-  return Array.from(terms).sort((a, b) => a - b)  // 오름차순 정렬
+  return [6, 12, 24, 36]
 })
 </script>
 
