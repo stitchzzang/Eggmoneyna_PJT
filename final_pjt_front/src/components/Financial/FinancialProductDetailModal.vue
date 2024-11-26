@@ -32,13 +32,23 @@
             </span>
           </div>
 
-
+          <hr>
           
           <h3>금리 정보</h3>
           <div class="interest-rates-grid">
             <div v-for="term in [6, 12, 24, 36]" :key="term" class="rate-info">
               <span class="term">{{ term }}개월</span>
-              <span class="rate">{{ getInterestRate(product, term) }}%</span>
+              <span class="rate">{{ getBasicRate(term) }}%</span>
+            </div>
+          </div>
+          
+          <div class="chart-section">
+            <h3>금리 비교</h3>
+            <div class="chart-container">
+              <Bar 
+                :data="chartData" 
+                :options="chartOptions"
+              />
             </div>
           </div>
           
@@ -57,10 +67,29 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useProductStore } from '@/stores/product'
+import { ref, computed } from 'vue'
+import { Bar } from 'vue-chartjs'
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale
+} from 'chart.js'
 
-const productStore = useProductStore()
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+)
+
+defineEmits(['close'])
+
 const props = defineProps({
   product: {
     type: Object,
@@ -68,27 +97,69 @@ const props = defineProps({
   }
 })
 
+console.log('Product data:', props.product)
 
-
-// 현재 상품의 가입 상태 확인
-const isSubscribed = computed(() => {
-  return productStore.subscribedProducts.some(p => p.id === props.product.id)
-})
-
-// 가입/해지 토글 핸들러
-const handleSubscriptionToggle = () => {
-  if (isSubscribed.value) {
-    productStore.unsubscribeProduct(props.product.id)
-    alert('상품 해지가 완료되었습니다!')
-  } else {
-    productStore.subscribeProduct(props.product)
-    alert('상품 가입이 완료되었습니다!')
-  }
+// 현재 상품의 기본 금리
+const getBasicRate = (term) => {
+  const option = props.product.options?.find(opt => opt.saveTerm === term)
+  return option ? Number(option.interestRate) : 0
 }
 
-const getInterestRate = (product, term) => {
-  const option = product.options.find(opt => opt.saveTerm === term)
-  return option ? option.interestRate : '-'
+// 현재 상품의 우대 금리
+const getPremiumRate = (term) => {
+  const option = props.product.options?.find(opt => opt.saveTerm === term)
+  return option ? Number(option.intr_rate2) : 0
+}
+
+// 차트 데이터
+const chartData = computed(() => {
+  const selectedTerm = 12 // 12개월 기준
+  
+  const basicRate = getBasicRate(selectedTerm)
+  const premiumRate = getPremiumRate(selectedTerm)
+  const averageRate = 3.5 // 임시 평균값 (나중에 실제 평균으로 교체)
+
+  console.log('Rates:', { basicRate, premiumRate, averageRate })
+
+  return {
+    labels: ['금리 비교'],
+    datasets: [
+      {
+        label: '평균 금리',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        data: [averageRate]
+      },
+      {
+        label: '저축 금리',
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        data: [basicRate]
+      },
+      {
+        label: '우대 금리',
+        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+        data: [premiumRate]
+      }
+    ]
+  }
+})
+
+const chartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  scales: {
+    y: {
+      beginAtZero: true,
+      title: {
+        display: true,
+        text: '금리 (%)'
+      }
+    }
+  },
+  plugins: {
+    legend: {
+      position: 'top'
+    }
+  }
 }
 </script>
 
@@ -144,26 +215,30 @@ const getInterestRate = (product, term) => {
 .interest-rates-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
-  margin-top: 10px;
+  gap: 1rem;
+  margin: 1rem 0;
+  width: 100%;
 }
 
 .rate-info {
   background-color: #f8f9fa;
-  padding: 10px;
-  border-radius: 4px;
+  padding: 1rem;
+  border-radius: 8px;
   text-align: center;
+  min-width: 120px;
 }
 
 .term {
-  display: block;
   font-weight: bold;
-  margin-bottom: 5px;
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #666;
 }
 
 .rate {
-  color: #047404;
   font-size: 1.2em;
+  color: #1089FF;
+  font-weight: bold;
 }
 
 .subscribe-section {
@@ -225,6 +300,32 @@ const getInterestRate = (product, term) => {
 .info-row {
   white-space: pre-line; /* 줄바꿈을 유지하면서 텍스트를 여러 줄로 출력 */
   word-wrap: break-word; /* 긴 단어가 넘치지 않게 줄 바꿈 */
+}
+
+.chart-section {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.chart-container {
+  position: relative;
+  height: 300px;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.modal-content {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .interest-rates-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 </style>

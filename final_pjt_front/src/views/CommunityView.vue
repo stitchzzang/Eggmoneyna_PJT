@@ -19,6 +19,7 @@
       <!-- 게시글 목록 -->
       <CommunityList 
         :threads="paginatedThreads"
+        :total-count="sortedThreads.length"
       />
 
       <!-- 페이지네이션 -->
@@ -95,7 +96,7 @@ const showDeleteModal = ref(false)
 const postToDelete = ref(null)
 const store = useCounterStore()
 const currentPage = ref(1)
-const itemsPerPage = 10
+const itemsPerPage = ref(10)
 
 // 게시글 목록 조회
 onMounted(async () => {
@@ -190,16 +191,25 @@ const cancelDelete = () => {
   postToDelete.value = null
 }
 
-// 페이지네이션된 게시글 목록
+// 전체 데이터를 날짜순으로 정렬
+const sortedThreads = computed(() => {
+  return [...store.threads].sort((a, b) => {
+    const dateA = new Date(a.created_at).getTime()
+    const dateB = new Date(b.created_at).getTime()
+    return dateB - dateA  // 최신순 정렬
+  })
+})
+
+// 현재 페이지에 표시할 데이터
 const paginatedThreads = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage
-  const end = start + itemsPerPage
-  return store.threads.slice(start, end)
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  const end = start + itemsPerPage.value
+  return sortedThreads.value.slice(start, end)
 })
 
 // 전체 페이지 수 계산
 const totalPages = computed(() => {
-  return Math.ceil(store.threads.length / itemsPerPage)
+  return Math.ceil(store.threads.length / itemsPerPage.value)
 })
 
 // 표시할 페이지 번호 계산
@@ -319,9 +329,6 @@ const displayedPages = computed(() => {
 .login-message {
   text-align: center;
   padding: 20px;
-  /* background-color: #f8f9fa; */
-  /* border: 1px solid #ddd; */
-  /* border-radius: 8px; */
   margin: 250px auto;
   color: #666;
   font-size: 1.2em;
