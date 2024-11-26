@@ -9,14 +9,14 @@
       <div class="carousel-inner">
         <div class="carousel-item active">
           <img src="@/assets/main.png" class="d-block w-100" alt="Slide 1">
-
         </div>
         <div class="carousel-item">
-          <img src="@/assets/testimg.png" class="d-block w-100" alt="Slide 2">
-
+          <router-link to="/profilepage/profiletest">
+            <img src="@/assets/carousel2.png" class="d-block w-100" alt="Slide 2">
+          </router-link>
         </div>
         <div class="carousel-item">
-          <img src="@/assets/carousel2.png" class="d-block w-100" alt="Slide 3">
+          <img src="@/assets/carousel3.png" class="d-block w-100" alt="Slide 3">
         </div>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
@@ -196,5 +196,16 @@
   .carousel-caption {
     font-size: 16px;
   }
+}
+
+/* 링크 스타일 추가 */
+.carousel-item router-link {
+  cursor: pointer;
+  display: block;
+}
+
+.carousel-item img:hover {
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
 }
 </style>
