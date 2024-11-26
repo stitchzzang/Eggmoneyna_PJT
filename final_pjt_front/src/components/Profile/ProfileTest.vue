@@ -245,10 +245,10 @@ const calculateResult = () => {
     recommendations: resultData.recommendations,
   })
   
-  // 3초 후 추천 페이지로 이동
-  setTimeout(() => {
-    store.currentView = 'recommend'
-  }, 3000)
+  // // 5초 후 추천 페이지로 이동
+  // setTimeout(() => {
+  //   store.currentView = 'recommend'
+  // }, 5000)
 }
 
 const getResultType = (score) => {
