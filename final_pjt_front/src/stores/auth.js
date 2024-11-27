@@ -88,6 +88,21 @@ export const useAuthStore = defineStore('auth', {
         localStorage.removeItem('user')
         delete axios.defaults.headers.common['Authorization']
       }
+    },
+
+    async deleteAccount() {
+      try {
+        if (this.token) {
+          await axios.delete('http://127.0.0.1:8000/accounts/delete/')
+          // 계정 삭제 후 로그아웃 처리
+          await this.logout()
+          return true
+        }
+        return false
+      } catch (error) {
+        console.error('계정 삭제 실패:', error)
+        throw error
+      }
     }
   }
 })
