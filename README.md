@@ -82,7 +82,7 @@
 
 ▶️ [Figma-Link](https://www.figma.com/design/ubUUGmkQ1ZScLdoiwwKU7M/SSAFY-1%ED%95%99%EA%B8%B0-%EA%B4%80%ED%86%B5%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8?node-id=0-1&node-type=canvas&t=gjHbt71JViXdOFWv-0)
 
-![alt text](1st_PJT/image.png)
+![alt text](1st_PJT/1st_PJT/image.png)
 
 
 ## III. 데이터베이스 모델링(ERD)
