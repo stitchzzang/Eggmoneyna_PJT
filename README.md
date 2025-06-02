@@ -1,7 +1,8 @@
-# 🐣 EggMoneyNa - 금융 상품 추천 서비스 
-📅 **프로젝트 기간**: 2024.11.18 ~ 2024.11.26
+# 🐤 TEAM 인자매 "에그머니나(EggMoneyNa)"     
+## 💻 SSAFY 12기 관통 프로젝트
+<img src="https://github.com/user-attachments/assets/f8f2d544-61a7-4aef-bccc-7fee159d5289" width="150" style="display: block; margin-left: 0;" />
 
-
+> **금융 초보를 위한 금융 상품 추천 서비스!**
 
 [1. 팀원 소개](#i-팀원-소개)  
 [2. 설계 내용](#ii-설계-내용아키텍처-등-및-실제-구현-정도)  
